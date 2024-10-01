@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:trackit/screens/pointScreen1.dart';
+import 'package:trackit/color/colors.dart';
+import 'package:trackit/screens/widget_collection.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 4), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => Pointscreen1(), 
+          builder: (_) => WidgetCollection(), 
         ),
       );
     });
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.black, 
+        color: AppColors.backgrey, 
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

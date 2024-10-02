@@ -1,0 +1,206 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:trackit/color/colors.dart';
+
+class RoutineScreen extends StatefulWidget {
+  @override
+  _RoutineScreenState createState() => _RoutineScreenState();
+}
+
+class _RoutineScreenState extends State<RoutineScreen> {
+  double sliderValue = 1.0; // Slider value to select options
+  String currentHabit = "Wake up Early"; // Selected habit
+  int habitIndex = 0; // Current index of habit
+
+  // Habit data mapping
+  Map<String, List<String>> habitOptions = {
+    "Wake up Early": ['5AM or earlier', '6AM', '7AM', '8AM', '9AM or later'],
+    "Drink Water": ['1L', '2L', '3L', '4L', '5L'],
+    "Run": ['1KM', '2KM', '5KM', '10KM', '15KM'],
+    "Gym Workout": ['30 min', '45 min', '1 hr', '1.5 hr', '2 hr'],
+    "Meditate": ['5 min', '10 min', '15 min', '20 min', '30 min'],
+    "Read Books": ['10 pages', '20 pages', '30 pages', '50 pages', '100 pages'],
+    "Social Media\nLimit": ['1 hr', '2 hr', '3 hr', '4 hr', '5 hr'],
+    "Take Shower": ['1 min', '5 min', '10 min', '15 min', '20 min'],
+  };
+
+  // List of habits with their icons
+  List<Habit> habits = [
+    Habit(name: "Wake up Early", icon: FontAwesomeIcons.sun),
+    Habit(name: "Drink Water", icon: FontAwesomeIcons.glassWater),
+    Habit(name: "Run", icon: FontAwesomeIcons.running),
+    Habit(name: "Gym Workout", icon: Icons.sports_gymnastics),
+    Habit(name: "Meditate", icon: FontAwesomeIcons.medkit),
+    Habit(name: "Read Books", icon: Icons.book),
+    Habit(name: "Social Media\nLimit", icon: FontAwesomeIcons.mobile),
+    Habit(name: "Take Shower", icon: FontAwesomeIcons.shower),
+  ];
+
+  void nextHabit() {
+    setState(() {
+      habitIndex = (habitIndex + 1) % habits.length; // Go to next habit
+      currentHabit = habits[habitIndex].name; // Update current habit
+      sliderValue = 1.0; // Reset slider when changing habit
+    });
+  }
+
+  void previousHabit() {
+    setState(() {
+      habitIndex = (habitIndex - 1 + habits.length) % habits.length; // Go to previous habit
+      currentHabit = habits[habitIndex].name; // Update current habit
+      sliderValue = 1.0; // Reset slider when changing habit
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromARGB(15, 255, 255, 255),
+              Color.fromARGB(39, 0, 0, 0),
+              Color.fromARGB(14, 255, 255, 255),
+              Color.fromARGB(39, 0, 0, 0),
+              Color.fromARGB(14, 255, 255, 255),
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30, left: 5, right: 5),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: previousHabit,
+                    icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'What is your goal for $currentHabit?',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.secondaryColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20.0),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      // Display habits in two columns
+                      ...List.generate((habits.length / 2).ceil(), (rowIndex) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Use spaceEvenly for even spacing
+                            children: [
+                              Expanded(
+                                child: habitWidget(rowIndex * 2), // First habit
+                              ),
+                              if (rowIndex * 2 + 1 < habits.length)
+                              SizedBox(width: 50,), // Check for second habit
+                                Expanded(
+                                  child: habitWidget(rowIndex * 2 + 1), // Second habit
+                                ),
+                            ],
+                          ),
+                        );
+                      }),
+                      SizedBox(height: 30),
+                      // Display selected habit option
+                      Text(
+                        habitOptions[currentHabit]![sliderValue.toInt()],
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.secondaryColor,
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                      // Slider for selecting value
+                      Slider(
+                        value: sliderValue,
+                        min: 0,
+                        max: 4,
+                        divisions: 4,
+                        onChanged: (newValue) {
+                          setState(() {
+                            sliderValue = newValue;
+                          });
+                        },
+                        activeColor: AppColors.secondaryColor,
+                        inactiveColor: AppColors.grey,
+                      ),
+                      SizedBox(height: 30),
+                      // Confirm button
+                      ElevatedButton(
+                        onPressed: () {
+                          nextHabit(); 
+                        },
+                        child: Text(
+                          'Confirm',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.secondaryColor,
+                          foregroundColor: AppColors.backgroundColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget habitWidget(int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start, // Align items to start
+      children: [
+        Icon(
+          habits[index].icon,
+          color: currentHabit == habits[index].name ? Colors.white : AppColors.grey,
+        ),
+        SizedBox(width: 10),
+        Flexible( // Use Flexible to allow the text to wrap
+          child: Text(
+            habits[index].name,
+            style: TextStyle(
+              color: currentHabit == habits[index].name ? Colors.white : AppColors.grey,
+              fontSize: 16,
+              overflow: TextOverflow.ellipsis, // Prevent overflow
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Habit {
+  final String name; // Name of the habit
+  final IconData icon; // Icon representing the habit
+
+  Habit({required this.name, required this.icon});
+}

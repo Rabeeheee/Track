@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:trackit/screens/Questions/apreciate.dart';
+import 'package:trackit/screens/Questions/routine.dart';
+import 'package:trackit/screens/Questions/servey.dart';
+import 'package:trackit/screens/loginpage/Login.dart';
+import 'package:trackit/screens/loginpage/getstart.dart';
 import 'package:trackit/screens/splash_screen.dart';
 
 void main(){
@@ -10,7 +15,7 @@ class TrackIt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SplashScreen(),
+      home: RoutineScreen(),
     );
   }
 }

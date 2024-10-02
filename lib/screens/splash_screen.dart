@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trackit/color/colors.dart';
-import 'package:trackit/screens/widget_collection.dart';
+import 'package:trackit/screens/points/widget_collection.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

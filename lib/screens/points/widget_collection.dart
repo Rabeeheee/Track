@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:trackit/points/point1.dart';
-import 'package:trackit/points/point2.dart';
-import 'package:trackit/points/point3.dart';
-import 'package:trackit/points/point4.dart';
-import 'package:trackit/points/point5.dart';
-import 'package:trackit/points/point6.dart';
+import 'package:trackit/screens/points/point1.dart';
+import 'package:trackit/screens/points/point2.dart';
+import 'package:trackit/screens/points/point3.dart';
+import 'package:trackit/screens/points/point4.dart';
+import 'package:trackit/screens/points/point5.dart';
+import 'package:trackit/screens/points/point6.dart';
 
 
 class WidgetCollection extends StatefulWidget {

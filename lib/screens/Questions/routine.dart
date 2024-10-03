@@ -24,6 +24,18 @@ class _RoutineScreenState extends State<RoutineScreen> {
     "Take Shower": ['1 min', '5 min', '10 min', '15 min', '20 min'],
   };
 
+  // Progress values mapping for each habit
+  Map<String, double> habitProgress = {
+    "Wake up Early": 0.49, // 1 out of 8 habits
+    "Drink Water": 0.56, // 2 out of 8 habits
+    "Run": 0.63, // 3 out of 8 habits
+    "Gym Workout": 0.7, // 4 out of 8 habits
+    "Meditate": 0.77, // 5 out of 8 habits
+    "Read Books": 0.84, // 6 out of 8 habits
+    "Social Media\nLimit": 0.91, // 7 out of 8 habits
+    "Take Shower": 0.98, // 8 out of 8 habits
+  };
+
   // List of habits with their icons
   List<Habit> habits = [
     Habit(name: "Wake up Early", icon: FontAwesomeIcons.sun),
@@ -38,18 +50,25 @@ class _RoutineScreenState extends State<RoutineScreen> {
 
   void nextHabit() {
     setState(() {
-      habitIndex = (habitIndex + 1) % habits.length; // Go to next habit
-      currentHabit = habits[habitIndex].name; // Update current habit
-      sliderValue = 1.0; // Reset slider when changing habit
+      if (habitIndex < habits.length - 1) {
+        habitIndex++;
+      } else {
+        // Optional: Handle what happens when reaching the last habit
+      }
+      updateCurrentHabit();
     });
   }
 
   void previousHabit() {
     setState(() {
-      habitIndex = (habitIndex - 1 + habits.length) % habits.length; // Go to previous habit
-      currentHabit = habits[habitIndex].name; // Update current habit
-      sliderValue = 1.0; // Reset slider when changing habit
+      habitIndex = (habitIndex - 1 + habits.length) % habits.length;
+      updateCurrentHabit();
     });
+  }
+
+  void updateCurrentHabit() {
+    currentHabit = habits[habitIndex].name;
+    sliderValue = 1.0; // Reset slider when changing habit
   }
 
   @override
@@ -74,6 +93,24 @@ class _RoutineScreenState extends State<RoutineScreen> {
           padding: const EdgeInsets.only(top: 30, left: 5, right: 5),
           child: Column(
             children: [
+              Container(
+                width: 350,
+                height: 10,
+                decoration: BoxDecoration(
+                  color: AppColors.grey,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: LinearProgressIndicator(
+                    // Set progress based on current habit's progress value
+                    value: habitProgress[currentHabit], // Progress value
+                    backgroundColor: Colors.transparent,
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(AppColors.secondaryColor),
+                  ),
+                ),
+              ),
               Row(
                 children: [
                   IconButton(
@@ -103,16 +140,17 @@ class _RoutineScreenState extends State<RoutineScreen> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 20),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Use spaceEvenly for even spacing
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Expanded(
                                 child: habitWidget(rowIndex * 2), // First habit
                               ),
                               if (rowIndex * 2 + 1 < habits.length)
-                              SizedBox(width: 50,), // Check for second habit
-                                Expanded(
-                                  child: habitWidget(rowIndex * 2 + 1), // Second habit
-                                ),
+                                SizedBox(width: 50), // Check for second habit
+                              Expanded(
+                                child: habitWidget(
+                                    rowIndex * 2 + 1), // Second habit
+                              ),
                             ],
                           ),
                         );
@@ -146,7 +184,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
                       // Confirm button
                       ElevatedButton(
                         onPressed: () {
-                          nextHabit(); 
+                          nextHabit();
                         },
                         child: Text(
                           'Confirm',
@@ -175,21 +213,28 @@ class _RoutineScreenState extends State<RoutineScreen> {
   }
 
   Widget habitWidget(int index) {
+    if (index >= habits.length)
+      return SizedBox(); // Return an empty widget if index is out of range
+
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start, // Align items to start
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Icon(
           habits[index].icon,
-          color: currentHabit == habits[index].name ? Colors.white : AppColors.grey,
+          color: currentHabit == habits[index].name
+              ? Colors.white
+              : AppColors.grey,
         ),
         SizedBox(width: 10),
-        Flexible( // Use Flexible to allow the text to wrap
+        Flexible(
           child: Text(
             habits[index].name,
             style: TextStyle(
-              color: currentHabit == habits[index].name ? Colors.white : AppColors.grey,
+              color: currentHabit == habits[index].name
+                  ? Colors.white
+                  : AppColors.grey,
               fontSize: 16,
-              overflow: TextOverflow.ellipsis, // Prevent overflow
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ),

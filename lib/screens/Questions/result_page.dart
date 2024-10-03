@@ -1,50 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:trackit/color/colors.dart';
 
-class ResultPage extends StatelessWidget {
-  final List<int> responses;
+class ResultScreen extends StatelessWidget {
+  final double overallRating;
+  final double wisdomRating;
+  final double strengthRating;
+  final double focusRating;
+  final double confidenceRating;
+  final double disciplineRating;
 
-  ResultPage({required this.responses});
+  ResultScreen({
+    required this.overallRating,
+    required this.wisdomRating,
+    required this.strengthRating,
+    required this.focusRating,
+    required this.confidenceRating,
+    required this.disciplineRating,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Calculate the total points
-    int totalPoints = responses.reduce((a, b) => a + b);
-
-    // Generate a rating based on total points
-    String rating;
-    if (totalPoints >= 30) {
-      rating = 'Excellent';
-    } else if (totalPoints >= 20) {
-      rating = 'Good';
-    } else if (totalPoints >= 10) {
-      rating = 'Average';
-    } else {
-      rating = 'Needs Improvement';
-    }
-
     return Scaffold(
-      appBar: AppBar(title: Text('Survey Results')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Your Total Points: $totalPoints',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Your Rating: $rating',
-                style: TextStyle(fontSize: 20),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
-             
-            ],
-          ),
+      appBar: AppBar(title: Text("Results")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Overall Rating: ${overallRating.toStringAsFixed(2)}%'),
+            SizedBox(height: 10),
+            Text('Wisdom Rating: ${wisdomRating.toStringAsFixed(2)} / 5'),
+            SizedBox(height: 10),
+            Text('Strength Rating: ${strengthRating.toStringAsFixed(2)} / 5'),
+            SizedBox(height: 10),
+            Text('Focus Rating: ${focusRating.toStringAsFixed(2)} / 5'),
+            SizedBox(height: 10),
+            Text('Confidence Rating: ${confidenceRating.toStringAsFixed(2)} / 5'),
+            SizedBox(height: 10),
+            Text('Discipline Rating: ${disciplineRating.toStringAsFixed(2)} / 5'),
+          ],
         ),
       ),
     );

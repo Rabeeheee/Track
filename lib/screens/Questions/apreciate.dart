@@ -5,12 +5,14 @@ import 'package:trackit/screens/Questions/routine.dart';
 class Apreciate extends StatelessWidget {
   final VoidCallback onContinue;
   final int habitIndex;
-  final List<String> habits;
+  final List<dynamic> habits;
+   final Map<String, double> ratings; 
 
   const Apreciate({
     required this.onContinue,
     required this.habitIndex,
     required this.habits,
+      required this.ratings,
   });
 
   @override
@@ -89,7 +91,7 @@ class Apreciate extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RoutineScreen(),
+                          builder: (context) => RoutineScreen(userResponses: [],),
                         ));
                       },
                       child: const Text(

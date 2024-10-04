@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trackit/color/colors.dart';
+import 'package:trackit/screens/Questions/result_screen.dart';
 
 class RoutineScreen extends StatefulWidget {
+  final List<int> userResponses; // Add this line
+
+  RoutineScreen({required this.userResponses}); // Update constructor
+
   @override
   _RoutineScreenState createState() => _RoutineScreenState();
 }
+
+
 
 class _RoutineScreenState extends State<RoutineScreen> {
   double sliderValue = 1.0; // Slider value to select options
@@ -26,14 +33,14 @@ class _RoutineScreenState extends State<RoutineScreen> {
 
   // Progress values mapping for each habit
   Map<String, double> habitProgress = {
-    "Wake up Early": 0.49, // 1 out of 8 habits
-    "Drink Water": 0.56, // 2 out of 8 habits
-    "Run": 0.63, // 3 out of 8 habits
-    "Gym Workout": 0.7, // 4 out of 8 habits
-    "Meditate": 0.77, // 5 out of 8 habits
-    "Read Books": 0.84, // 6 out of 8 habits
-    "Social Media\nLimit": 0.91, // 7 out of 8 habits
-    "Take Shower": 0.98, // 8 out of 8 habits
+    "Wake up Early": 0.49,
+    "Drink Water": 0.56,
+    "Run": 0.63,
+    "Gym Workout": 0.7,
+    "Meditate": 0.77,
+    "Read Books": 0.84,
+    "Social Media\nLimit": 0.91,
+    "Take Shower": 0.98,
   };
 
   // List of habits with their icons
@@ -53,7 +60,20 @@ class _RoutineScreenState extends State<RoutineScreen> {
       if (habitIndex < habits.length - 1) {
         habitIndex++;
       } else {
-        // Optional: Handle what happens when reaching the last habit
+        // Calculate the ratings
+        Map<String, double> ratings = calculateRatings();
+
+        // Navigate to the ResultScreen with calculated ratings
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResultScreen(
+              ratings: ratings,
+              habitResult: currentHabit, // Pass the current habit result
+            ),
+          ),
+        );
+        return; // Stop the execution here as we are navigating
       }
       updateCurrentHabit();
     });
@@ -69,6 +89,18 @@ class _RoutineScreenState extends State<RoutineScreen> {
   void updateCurrentHabit() {
     currentHabit = habits[habitIndex].name;
     sliderValue = 1.0; // Reset slider when changing habit
+  }
+
+  Map<String, double> calculateRatings() {
+    // Calculate the ratings as percentages based on slider value
+    return {
+      'overallRating': (sliderValue / 4) * 100,
+      'wisdomRating': (sliderValue / 4) * 100,
+      'strengthRating': (sliderValue / 4) * 100,
+      'focusRating': (sliderValue / 4) * 100,
+      'confidenceRating': (sliderValue / 4) * 100,
+      'disciplineRating': (sliderValue / 4) * 100,
+    };
   }
 
   @override
@@ -103,8 +135,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: LinearProgressIndicator(
-                    // Set progress based on current habit's progress value
-                    value: habitProgress[currentHabit], // Progress value
+                    value: habitProgress[currentHabit],
                     backgroundColor: Colors.transparent,
                     valueColor:
                         AlwaysStoppedAnimation<Color>(AppColors.secondaryColor),
@@ -244,8 +275,8 @@ class _RoutineScreenState extends State<RoutineScreen> {
 }
 
 class Habit {
-  final String name; // Name of the habit
-  final IconData icon; // Icon representing the habit
+  final String name;
+  final IconData icon;
 
   Habit({required this.name, required this.icon});
 }

@@ -4,6 +4,7 @@ import 'package:trackit/progressprovider.dart';
 import 'package:trackit/screens/Questions/Apreciate.dart';
 import 'package:trackit/screens/Questions/Linear_progress.dart';
 import 'package:trackit/color/colors.dart';
+import 'package:trackit/screens/Questions/result_screen.dart';
 import 'package:trackit/screens/Questions/survey_option.dart';
 
 // Survey Question model
@@ -37,32 +38,32 @@ class _SurveyScreenState extends State<SurveyScreen> {
   final List<double> questionWeights = List.filled(questions.length, 0.07); // Adjust weights accordingly
 
   void navigateToNextQuestion(String answer) {
-    setState(() {
-      final currentQuestion = questions[currentQuestionIndex];
-      int answerIndex = currentQuestion.options.indexOf(answer);
-      userResponses[currentQuestionIndex] = (answerIndex >= 0) ? 5 - answerIndex : 0;
+  setState(() {
+    final currentQuestion = questions[currentQuestionIndex];
+    int answerIndex = currentQuestion.options.indexOf(answer);
+    userResponses[currentQuestionIndex] = (answerIndex >= 0) ? 5 - answerIndex : 0;
 
-      Provider.of<ProgressProvider>(context, listen: false).updateIndex(currentQuestionIndex);
+    Provider.of<ProgressProvider>(context, listen: false).updateIndex(currentQuestionIndex);
 
-      if (currentQuestionIndex == questions.length - 1) {
-        // At the end of the survey, calculate ratings
-        Map<String, double> ratings = RatingCalculator.calculateRatings(userResponses);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Apreciate(
-              onContinue: () {},
-              habitIndex: 0,
-              habits: [],
-              ratings: ratings,
-            ),
+    if (currentQuestionIndex == questions.length - 1) {
+      // At the end of the survey, calculate ratings
+      Map<String, double> ratings = RatingCalculator.calculateRatings(userResponses);
+
+      // Navigate to the ResultScreen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ResultScreen(
+            ratings: ratings, // Pass calculated ratings to the result screen
           ),
-        );
-      } else {
-        currentQuestionIndex++;
-      }
-    });
-  }
+        ),
+      );
+    } else {
+      currentQuestionIndex++;
+    }
+  });
+}
+
 
   void navigateToPreviousQuestion() {
     if (currentQuestionIndex > 0) {
@@ -140,6 +141,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
 }
 
 // Rating Calculator class
+// Adjust this method in the RatingCalculator class
 class RatingCalculator {
   static Map<String, double> calculateRatings(List<int> userResponses) {
     if (userResponses.isEmpty) {
@@ -153,16 +155,27 @@ class RatingCalculator {
       };
     }
 
+    // Total responses and weights for each question.
     double totalPoints = userResponses.reduce((a, b) => a + b).toDouble();
     double maxScore = userResponses.length * 5;
 
+    // Calculate ratings based on specific logic
+    double overallRating = (totalPoints / maxScore) * 100;
+
+    // Distributing ratings based on specific logic
+    double wisdomRating = overallRating * 0.5; // Example weight
+    double strengthRating = overallRating * 0.2; // Example weight
+    double focusRating = overallRating * 0.2; // Example weight
+    double confidenceRating = overallRating * 0.1; // Example weight
+    double disciplineRating = overallRating * 0.1; // Example weight
+
     return {
-      'overallRating': (totalPoints / maxScore) * 100,
-      'wisdomRating': (totalPoints / maxScore) * 100,
-      'strengthRating': (totalPoints / maxScore) * 100,
-      'focusRating': (totalPoints / maxScore) * 100,
-      'confidenceRating': (totalPoints / maxScore) * 100,
-      'disciplineRating': (totalPoints / maxScore) * 100,
+      'overallRating': overallRating,
+      'wisdomRating': wisdomRating,
+      'strengthRating': strengthRating,
+      'focusRating': focusRating,
+      'confidenceRating': confidenceRating,
+      'disciplineRating': disciplineRating,
     };
   }
 }

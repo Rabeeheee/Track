@@ -91,7 +91,7 @@ class Apreciate extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RoutineScreen(userResponses: [],),
+                          builder: (context) => RoutineScreen(userResponses: [], habitProgress: {},),
                         ));
                       },
                       child: const Text(

@@ -4,20 +4,20 @@ import 'package:trackit/color/colors.dart';
 import 'package:trackit/screens/Questions/result_screen.dart';
 
 class RoutineScreen extends StatefulWidget {
-  final List<int> userResponses; // Add this line
+  final List<int> userResponses;
 
-  RoutineScreen({required this.userResponses}); // Update constructor
+  RoutineScreen({required this.userResponses, required Map habitProgress});
 
   @override
   _RoutineScreenState createState() => _RoutineScreenState();
 }
 
-
-
 class _RoutineScreenState extends State<RoutineScreen> {
-  double sliderValue = 1.0; // Slider value to select options
-  String currentHabit = "Wake up Early"; // Selected habit
   int habitIndex = 0; // Current index of habit
+  String currentHabit = "Wake up Early"; // Selected habit
+
+  // List of slider values for each habit
+  List<double> sliderValues = List<double>.filled(8, 1.0);
 
   // Habit data mapping
   Map<String, List<String>> habitOptions = {
@@ -60,20 +60,19 @@ class _RoutineScreenState extends State<RoutineScreen> {
       if (habitIndex < habits.length - 1) {
         habitIndex++;
       } else {
-        // Calculate the ratings
+        // Calculate the ratings for habits
         Map<String, double> ratings = calculateRatings();
 
-        // Navigate to the ResultScreen with calculated ratings
+        // Navigate to the ResultScreen with the calculated ratings
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ResultScreen(
               ratings: ratings,
-              habitResult: currentHabit, // Pass the current habit result
             ),
           ),
         );
-        return; // Stop the execution here as we are navigating
+        return;
       }
       updateCurrentHabit();
     });
@@ -88,22 +87,75 @@ class _RoutineScreenState extends State<RoutineScreen> {
 
   void updateCurrentHabit() {
     currentHabit = habits[habitIndex].name;
-    sliderValue = 1.0; // Reset slider when changing habit
   }
 
-  Map<String, double> calculateRatings() {
-    // Calculate the ratings as percentages based on slider value
-    return {
-      'overallRating': (sliderValue / 4) * 100,
-      'wisdomRating': (sliderValue / 4) * 100,
-      'strengthRating': (sliderValue / 4) * 100,
-      'focusRating': (sliderValue / 4) * 100,
-      'confidenceRating': (sliderValue / 4) * 100,
-      'disciplineRating': (sliderValue / 4) * 100,
-    };
+  Map<String, List<String>> habitToCategories = {
+  "Wake up Early": ['disciplineRating'],
+  "Drink Water": ['focusRating'],
+  "Run": ['strengthRating', 'confidenceRating'], // Map to both strength and confidence
+  "Gym Workout": ['strengthRating', 'confidenceRating'], // Same here
+  "Meditate": ['wisdomRating'],
+  "Read Books": ['wisdomRating'],
+  "Social Media\nLimit": ['focusRating'],
+  "Take Shower": ['disciplineRating'],
+};
+
+Map<String, double> calculateRatings() {
+  double overallRating = 0;
+  double wisdomRating = 0;
+  double strengthRating = 0;
+  double focusRating = 0;
+  double confidenceRating = 0;
+  double disciplineRating = 0;
+
+  // Calculate the overall and individual ratings based on habit progress
+  for (int i = 0; i < habits.length; i++) {
+    double habitValue = sliderValues[i]; // Get the individual slider value for each habit
+    double ratingPercentage = (habitValue / 4) * 100; // Assuming max slider value is 4
+
+    overallRating += ratingPercentage;
+
+    // Iterate through each category the habit belongs to
+    habitToCategories[habits[i].name]?.forEach((category) {
+      switch (category) {
+        case 'wisdomRating':
+          wisdomRating += ratingPercentage;
+          break;
+        case 'strengthRating':
+          strengthRating += ratingPercentage;
+          break;
+        case 'focusRating':
+          focusRating += ratingPercentage;
+          break;
+        case 'confidenceRating':
+          confidenceRating += ratingPercentage;
+          break;
+        case 'disciplineRating':
+          disciplineRating += ratingPercentage;
+          break;
+      }
+    });
   }
 
-  @override
+  overallRating /= habits.length;
+  wisdomRating /= 2; // Two habits related to wisdom
+  strengthRating /= 2; // Two habits related to strength
+  focusRating /= 2; // Two habits related to focus
+  disciplineRating /= 2; // Two habits related to discipline
+  confidenceRating /= 2; // Normalized by habit count
+
+  return {
+    'overallRating': overallRating,
+    'wisdomRating': wisdomRating,
+    'strengthRating': strengthRating,
+    'focusRating': focusRating,
+    'confidenceRating': confidenceRating,
+    'disciplineRating': disciplineRating,
+  };
+}
+
+
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
@@ -189,7 +241,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
                       SizedBox(height: 30),
                       // Display selected habit option
                       Text(
-                        habitOptions[currentHabit]![sliderValue.toInt()],
+                        habitOptions[currentHabit]![sliderValues[habitIndex].toInt()],
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -199,13 +251,13 @@ class _RoutineScreenState extends State<RoutineScreen> {
                       SizedBox(height: 30),
                       // Slider for selecting value
                       Slider(
-                        value: sliderValue,
+                        value: sliderValues[habitIndex],
                         min: 0,
                         max: 4,
                         divisions: 4,
                         onChanged: (newValue) {
                           setState(() {
-                            sliderValue = newValue;
+                            sliderValues[habitIndex] = newValue ;
                           });
                         },
                         activeColor: AppColors.secondaryColor,

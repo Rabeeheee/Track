@@ -6,14 +6,18 @@ class Apreciate extends StatelessWidget {
   final VoidCallback onContinue;
   final int habitIndex;
   final List<dynamic> habits;
-   final Map<String, double> ratings; 
+  final Map<String, double> ratings;
+  final List<int> userResponses; 
 
   const Apreciate({
     required this.onContinue,
     required this.habitIndex,
     required this.habits,
-      required this.ratings,
+    required this.ratings,
+    required this.userResponses,
+    required Map<String, double> surveyRatings, required Map routineRatings, 
   });
+
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +95,9 @@ class Apreciate extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RoutineScreen(userResponses: [], habitProgress: {},),
+                          builder: (context) => RoutineScreen(
+                            userResponses: userResponses, habitProgress: {}, // Pass the userResponses here
+                          ),
                         ));
                       },
                       child: const Text(

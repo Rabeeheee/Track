@@ -13,11 +13,25 @@ class RoutineScreen extends StatefulWidget {
 }
 
 class _RoutineScreenState extends State<RoutineScreen> {
+  late final Map<String, double> surveyRatings = {
+    'overallRating': 0.0,
+    'wisdomRating': 0.0,
+    'strengthRating': 0.0,
+    'focusRating': 0.0,
+    'confidenceRating': 0.0,
+    'disciplineRating': 0.0,
+  };
   int habitIndex = 0; // Current index of habit
   String currentHabit = "Wake up Early"; // Selected habit
 
   // List of slider values for each habit
   List<double> sliderValues = List<double>.filled(8, 1.0);
+
+@override
+void initstate(){
+  super.initState();
+
+}
 
   // Habit data mapping
   Map<String, List<String>> habitOptions = {
@@ -55,28 +69,45 @@ class _RoutineScreenState extends State<RoutineScreen> {
     Habit(name: "Take Shower", icon: FontAwesomeIcons.shower),
   ];
 
-  void nextHabit() {
-    setState(() {
-      if (habitIndex < habits.length - 1) {
-        habitIndex++;
-      } else {
-        // Calculate the ratings for habits
-        Map<String, double> ratings = calculateRatings();
 
-        // Navigate to the ResultScreen with the calculated ratings
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ResultScreen(
-              ratings: ratings,
-            ),
-          ),
-        );
-        return;
-      }
-      updateCurrentHabit();
-    });
+  Map<String, double> getSurveyRatings() {
+    return {
+      'overallRating': (surveyRatings['overallRating']! / 5) * 100,
+      'wisdomRating': (surveyRatings['wisdomRating']! / 5) * 100,
+      'strengthRating': (surveyRatings['strengthRating']! / 5) * 100,
+      'focusRating': (surveyRatings['focusRating']! / 5) * 100,
+      'confidenceRating': (surveyRatings['confidenceRating']! / 5) * 100,
+      'disciplineRating': (surveyRatings['disciplineRating']! / 5) * 100,
+    };
   }
+
+
+
+
+  
+ void nextHabit() {
+  setState(() {
+    if (habitIndex < habits.length - 1) {
+      habitIndex++;
+    } else {
+      Map<String, double> surveyRatings = getSurveyRatings(); // Retrieve survey ratings
+      Map<String, double> ratings = calculateRatings(); // Calculate routine ratings
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ResultScreen(
+            surveyRatings: surveyRatings,
+            routineRatings: ratings,
+          ),
+        ),
+      );
+      return;
+    }
+    updateCurrentHabit();
+  });
+}
+
 
   void previousHabit() {
     setState(() {
@@ -138,11 +169,11 @@ Map<String, double> calculateRatings() {
   }
 
   overallRating /= habits.length;
-  wisdomRating /= 2; // Two habits related to wisdom
-  strengthRating /= 2; // Two habits related to strength
-  focusRating /= 2; // Two habits related to focus
-  disciplineRating /= 2; // Two habits related to discipline
-  confidenceRating /= 2; // Normalized by habit count
+  wisdomRating /= 2; 
+  strengthRating /= 2; 
+  focusRating /= 2; 
+  disciplineRating /= 2; 
+  confidenceRating /= 2;
 
   return {
     'overallRating': overallRating,

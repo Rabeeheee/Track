@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackit/progressprovider.dart';
-import 'package:trackit/screens/Questions/Apreciate.dart';
 import 'package:trackit/screens/Questions/Linear_progress.dart';
 import 'package:trackit/color/colors.dart';
+import 'package:trackit/screens/Questions/apreciate.dart';
 import 'package:trackit/screens/Questions/result_screen.dart';
 import 'package:trackit/screens/Questions/survey_option.dart';
+import 'rating_calculator.dart'; // Import your RatingCalculator class
 
 // Survey Question model
 class SurveyQuestion {
@@ -46,19 +47,25 @@ class _SurveyScreenState extends State<SurveyScreen> {
     Provider.of<ProgressProvider>(context, listen: false).updateIndex(currentQuestionIndex);
 
     if (currentQuestionIndex == questions.length - 1) {
-      // At the end of the survey, calculate ratings
-      Map<String, double> ratings = RatingCalculator.calculateRatings(userResponses);
+  RatingCalculator ratingCalculator = RatingCalculator(userResponses: userResponses);
+  Map<String, double> ratings = ratingCalculator.calculateSurveyRatings();
 
-      // Navigate to the ResultScreen
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ResultScreen(
-            ratings: ratings, // Pass calculated ratings to the result screen
-          ),
-        ),
-      );
-    } else {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => Apreciate(
+        surveyRatings: ratings, 
+        routineRatings: {}, 
+        userResponses: userResponses, 
+        onContinue: () {}, 
+        habitIndex: 0, 
+        habits: [],
+        ratings: {}, 
+      ),
+    ),
+  );
+}
+else {
       currentQuestionIndex++;
     }
   });
@@ -137,45 +144,5 @@ class _SurveyScreenState extends State<SurveyScreen> {
         ),
       ),
     );
-  }
-}
-
-// Rating Calculator class
-// Adjust this method in the RatingCalculator class
-class RatingCalculator {
-  static Map<String, double> calculateRatings(List<int> userResponses) {
-    if (userResponses.isEmpty) {
-      return {
-        'overallRating': 0,
-        'wisdomRating': 0,
-        'strengthRating': 0,
-        'focusRating': 0,
-        'confidenceRating': 0,
-        'disciplineRating': 0,
-      };
-    }
-
-    // Total responses and weights for each question.
-    double totalPoints = userResponses.reduce((a, b) => a + b).toDouble();
-    double maxScore = userResponses.length * 5;
-
-    // Calculate ratings based on specific logic
-    double overallRating = (totalPoints / maxScore) * 100;
-
-    // Distributing ratings based on specific logic
-    double wisdomRating = overallRating * 0.5; // Example weight
-    double strengthRating = overallRating * 0.2; // Example weight
-    double focusRating = overallRating * 0.2; // Example weight
-    double confidenceRating = overallRating * 0.1; // Example weight
-    double disciplineRating = overallRating * 0.1; // Example weight
-
-    return {
-      'overallRating': overallRating,
-      'wisdomRating': wisdomRating,
-      'strengthRating': strengthRating,
-      'focusRating': focusRating,
-      'confidenceRating': confidenceRating,
-      'disciplineRating': disciplineRating,
-    };
   }
 }

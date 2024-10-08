@@ -17,7 +17,7 @@ class TrackIt extends StatelessWidget {
       create: (context) => ProgressProvider(), 
       child: MaterialApp(
         title: 'TrackIt',
-        home: RoutineScreen(habitProgress: {}, userResponses: [0],), 
+        home: SurveyScreen(habitProgress: {}), 
       ),
     );
   }

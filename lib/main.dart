@@ -1,27 +1,29 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit/screens/Questions/result_screen.dart'; 
-import 'package:trackit/screens/Questions/routine.dart';
-import 'package:trackit/screens/Questions/servey.dart';
-import 'package:trackit/progressprovider.dart';
-import 'package:trackit/screens/home/habit_screen.dart'; 
+import 'package:trackit/screens/home/habit_screen.dart';
+import 'theme_provider.dart'; 
 
 void main() {
-  runApp(TrackIt());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: MyApp(),
+    ),
+  );
 }
 
-class TrackIt extends StatelessWidget {
-  const TrackIt({super.key});
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ProgressProvider(), 
-      child: MaterialApp(
-        title: 'TrackIt',
-        home: HabitScreen(), 
-      ),
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    
+    return MaterialApp(
+      title: 'Theme Example',
+      theme: themeProvider.themeData,
+      home: HabitScreen(),
     );
   }
 }
+
 

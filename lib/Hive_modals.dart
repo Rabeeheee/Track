@@ -1,0 +1,17 @@
+import 'package:hive/hive.dart';
+
+
+
+@HiveType(typeId: 0) 
+class UserModel extends HiveObject {
+  @HiveField(0)
+  String username;
+
+  @HiveField(1)
+  String profileImagePath;
+
+  @HiveField(2)
+  bool completed;
+
+  UserModel({required this.username, required this.profileImagePath, required this.completed});
+}

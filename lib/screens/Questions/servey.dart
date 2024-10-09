@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:trackit/progressprovider.dart';
 import 'package:trackit/screens/Questions/Linear_progress.dart';
 import 'package:trackit/color/colors.dart';
-import 'package:trackit/screens/Questions/apreciate.dart';
+import 'package:trackit/auth/apreciate.dart';
 import 'package:trackit/screens/Questions/result_screen.dart';
 import 'package:trackit/screens/Questions/survey_option.dart';
 import 'rating_calculator.dart'; // Import your RatingCalculator class

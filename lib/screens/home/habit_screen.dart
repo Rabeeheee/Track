@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:iconify_flutter/icons/game_icons.dart';
+import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:intl/intl.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:trackit/color/colors.dart';
@@ -8,6 +10,7 @@ import 'package:trackit/hive_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:provider/provider.dart'; // Import Provider
+import 'package:trackit/auth/splash_screen.dart';
 import 'package:trackit/theme_provider.dart';
 
 class HabitScreen extends StatefulWidget {
@@ -27,7 +30,9 @@ class _HabitScreenState extends State<HabitScreen> {
 
   final List<String> _morningTasks = ['Wake up early', 'Read'];
   final List<String> _afternoonTasks = ['Lunch', 'Take a walk'];
-  final List<String> _AboutNotes = ['Welcome to Habit\nTracker, your personal\ncompanion for\nbuilding and\nmaintaining positive\nhabits!'];
+  final List<String> _AboutNotes = [
+    'Welcome to Habit\nTracker, your personal\ncompanion for\nbuilding and\nmaintaining positive\nhabits!'
+  ];
 
   int _selectedIndex = 1;
 
@@ -116,17 +121,15 @@ class _HabitScreenState extends State<HabitScreen> {
           child: Drawer(
             backgroundColor: themeProvider.themeData.scaffoldBackgroundColor,
             child: Padding(
-              padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
-              child: Column(
-                children: [
+                padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
+                child: Column(children: [
                   Text(
                     'Hey $username',
                     style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: themeProvider.themeData.canvasColor,
-                      fontFamily: 'Fonts'
-                    ),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: themeProvider.themeData.canvasColor,
+                        fontFamily: 'Fonts'),
                   ),
                   SizedBox(height: 10),
                   GestureDetector(
@@ -149,11 +152,10 @@ class _HabitScreenState extends State<HabitScreen> {
                       Text(
                         'Theme',
                         style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: themeProvider.themeData.canvasColor,
-                          fontFamily: 'Fonts'
-                        ),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: themeProvider.themeData.canvasColor,
+                            fontFamily: 'Fonts'),
                       ),
                     ],
                   ),
@@ -166,11 +168,10 @@ class _HabitScreenState extends State<HabitScreen> {
                               ? 'Dark Mode'
                               : 'Bright Mode',
                           style: TextStyle(
-                            color: themeProvider.themeData.canvasColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Fonts'
-                          ),
+                              color: themeProvider.themeData.canvasColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Fonts'),
                         ),
                       ],
                     ),
@@ -191,74 +192,115 @@ class _HabitScreenState extends State<HabitScreen> {
                             ? Colors.blueGrey[700]
                             : Colors.blueGrey[300],
                   ),
-                  SizedBox(height: 150,),
-                     Column(
-                       children: [
-                         Row(
-                                             children: [
-                          Icon(
-                            Icons.star_rate_rounded,
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star_rate_rounded,
+                        color: themeProvider.themeData.canvasColor,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        'Notifications',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                             color: themeProvider.themeData.canvasColor,
+                            fontFamily: 'Fonts'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 70,
+                  ),
+                  Column(children: [
+                    Row(children: [
+                      Icon(
+                        Icons.star_rate_rounded,
+                        color: themeProvider.themeData.canvasColor,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        'About TrackIt',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                            color: themeProvider.themeData.canvasColor),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                                _isAboutExpanded
+                                    ? Icons.keyboard_arrow_up
+                                    : Icons.keyboard_arrow_down,
+                                color: themeProvider.themeData.canvasColor),
+                            onPressed: () {
+                              setState(() {
+                                _isAboutExpanded = !_isAboutExpanded;
+                              });
+                            },
                           ),
-                          SizedBox(width: 5),
-                          Text(
-                            'About TrackIt',
+                        ],
+                      ),
+                    ]),
+                    if (_isAboutExpanded) ...[
+                      SizedBox(height: 10),
+                      for (var task in _AboutNotes)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Text(
+                            task,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                                color: themeProvider
-                                    .themeData.canvasColor),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: themeProvider.themeData.canvasColor),
                           ),
-                          Row(
-                            children: [
-                              
-                              IconButton(
-                                icon: Icon(
-                                    _isAboutExpanded
-                                        ? Icons.keyboard_arrow_up
-                                        : Icons.keyboard_arrow_down,
-                                    color: themeProvider
-                                        .themeData.canvasColor),
-                                onPressed: () {
-                                  setState(() {
-                                    _isAboutExpanded =
-                                        !_isAboutExpanded;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                                             ]
-                         ),
-                                    if (_isAboutExpanded) ...[
-                                      SizedBox(height: 10),
-                                      for (var task in _AboutNotes)
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 5),
-                                         
-                                              child: 
-                                              Text(
-                                                task,
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: themeProvider
-                                                        .themeData.canvasColor),
-                                              ),
-                                            
-                                          
-                                        ),
-                                    ],
-                         
-                                             
-                                           
-                       ]
-                     ),
+                        ),
+                    ],
+                  ]),
+                  SizedBox(height: 10,),
+                  GestureDetector(
+                    onTap: (){
+                      showDialog(
+                        context: context,
+                       builder: (BuildContext context){
+                        return AlertDialog(
+                          title: Text('Logout Conformation'),
+                          content: Text('Do you really want to log out?'),
+                          actions: [
+                            TextButton(onPressed: (){
+                              Navigator.of(context).pop();
+                            }, child: Text('Cancel',style: TextStyle(
+                              color: Colors.grey
+                            ),)
+                            ),
+                            TextButton(onPressed: () async {
+                              // var box = Hive.box(userBox);
+                              // await box.clear();
 
+                              HiveService _hiveService = HiveService();
+                              await _hiveService.clearbox();
+
+                              Navigator.pushAndRemoveUntil(
+                                context, MaterialPageRoute(builder: (context)=>SplashScreen()), (Route<dynamic> route)=>false,);
+
+                            }, child: Text('Logout',style: TextStyle(color: Colors.red),))
+                          ],
+                        );
+                       });
+                    },
+                    child: Text('Logout',style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold
+                    ),),
+                  )
                 ]
-              )
-            ),
+                )
+                ),
           ),
         ),
         body: Padding(

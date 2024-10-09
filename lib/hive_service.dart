@@ -5,6 +5,11 @@ class HiveService {
     return await Hive.openBox('userBox');
   }
 
+  Future<void> clearbox() async{
+    var box = Hive.box('userBox');
+    box.clear();
+  }
+
   // Save username
   Future<void> saveUsername(String username) async {
     var box = await openBox();

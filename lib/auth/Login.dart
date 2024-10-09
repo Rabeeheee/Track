@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trackit/color/colors.dart';
-import 'package:trackit/screens/loginpage/getstart.dart';
+import 'package:trackit/auth/getstart.dart';
 
 class LoginScreen extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

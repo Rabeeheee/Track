@@ -34,7 +34,9 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  iconify_flutter: ^0.0.5
   image_picker: ^1.1.2
+  intl: ^0.19.0
   permission_handler: ^11.3.1
   provider: ^6.1.2
 
@@ -60,6 +62,11 @@ flutter:
     - assets\images\arrowdown.png
     - assets\images\arrowup.png
     - assets\images\firstavatar.png
+    - assets\images\shower.webp
+    - assets\images\run.jpeg
+    - assets\images\read.jpeg
+    - assets\images\water.jpeg
+    - assets\images\default.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see

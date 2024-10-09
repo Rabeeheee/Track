@@ -1,47 +1,16 @@
-import 'dart:math'; 
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:trackit/color/colors.dart';
-import 'package:trackit/screens/Questions/potential.dart';
 
-class ResultScreen extends StatelessWidget {
-  final Map<String, double> surveyRatings;
-  final Map<String, double> routineRatings;
+import 'package:trackit/screens/home/habit_screen.dart';
 
-  ResultScreen({required this.surveyRatings, required this.routineRatings});
+class PotentialScreen extends StatelessWidget {
+  final Map<String, double> adjustedRatings;
+
+  PotentialScreen({required this.adjustedRatings});
 
   @override
   Widget build(BuildContext context) {
-    double overallRating = (surveyRatings['overallRating'] ?? 0) +
-        (routineRatings['overallRating'] ?? 0);
-    double wisdomRating = (surveyRatings['wisdomRating'] ?? 0) +
-        (routineRatings['wisdomRating'] ?? 0);
-    double strengthRating = (surveyRatings['strengthRating'] ?? 0) +
-        (routineRatings['strengthRating'] ?? 0);
-    double focusRating = (surveyRatings['focusRating'] ?? 0) +
-        (routineRatings['focusRating'] ?? 0);
-    double confidenceRating = (surveyRatings['confidenceRating'] ?? 0) +
-        (routineRatings['confidenceRating'] ?? 0);
-    double disciplineRating = (surveyRatings['disciplineRating'] ?? 0) +
-        (routineRatings['disciplineRating'] ?? 0);
-
-    double adjustRating(double rating) {
-      if (rating > 50) {
-        int randomAdjustment = Random().nextInt(20);
-        return rating - (rating - 50) - randomAdjustment;
-      }
-      return rating;
-    }
-
-    // Create a map for adjusted ratings
-    Map<String, double> adjustedRatings = {
-      'overallRating': adjustRating(overallRating),
-      'wisdomRating': adjustRating(wisdomRating),
-      'strengthRating': adjustRating(strengthRating),
-      'focusRating': adjustRating(focusRating),
-      'confidenceRating': adjustRating(confidenceRating),
-      'disciplineRating': adjustRating(disciplineRating),
-    };
-
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Padding(
@@ -50,7 +19,7 @@ class ResultScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Your TrackIt Rating',
+              'Your Potential Rating',
               style: TextStyle(
                 fontFamily: 'Fonts',
                 color: AppColors.secondaryColor,
@@ -60,7 +29,7 @@ class ResultScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'Based on your answer, this is your current TrackIt rating, which reflects your lifestyle and habits now.',
+              'Based on your answers, this is your potential TrackIt rating, reflecting your possible lifestyle and habits.',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14,
@@ -85,51 +54,52 @@ class ResultScreen extends StatelessWidget {
                   switch (index) {
                     case 0:
                       title = 'Overall';
-                      rating = overallRating;
+                      rating = adjustedRatings['overallRating'] ?? 0;
                       break;
                     case 1:
                       title = 'Wisdom';
-                      rating = wisdomRating;
+                      rating = adjustedRatings['wisdomRating'] ?? 0;
                       break;
                     case 2:
                       title = 'Strength';
-                      rating = strengthRating;
+                      rating = adjustedRatings['strengthRating'] ?? 0;
                       break;
                     case 3:
                       title = 'Focus';
-                      rating = focusRating;
+                      rating = adjustedRatings['focusRating'] ?? 0;
                       break;
                     case 4:
                       title = 'Confidence';
-                      rating = confidenceRating;
+                      rating = adjustedRatings['confidenceRating'] ?? 0;
                       break;
                     case 5:
                       title = 'Discipline';
-                      rating = disciplineRating;
+                      rating = adjustedRatings['disciplineRating'] ?? 0;
                       break;
                     default:
                       title = '';
                       rating = 0;
                   }
 
-                  // Adjust the rating
-                  rating = adjustRating(rating);
-
+                  // Set colors for the overall rating section
                   Color backgroundColor;
                   Color textColor;
                   Color progressColor;
                   Color progressBack;
+                  Color addColor;
 
-                  if (index == 0) { 
-                    backgroundColor = AppColors.red; 
+                  if (index == 0) {
+                    backgroundColor = Colors.green;
                     textColor = Colors.white;
                     progressColor = Colors.white;
-                    progressBack = const Color.fromARGB(161, 255, 9, 9);
+                    progressBack = const Color.fromARGB(185, 76, 175, 79);
+                    addColor = Colors.yellow;
                   } else {
                     backgroundColor = Colors.white;
                     textColor = Colors.black;
-                    progressColor = AppColors.red;
+                    progressColor = Colors.green;
                     progressBack = const Color.fromARGB(137, 255, 255, 255);
+                    addColor = Colors.green;
                   }
 
                   return Container(
@@ -155,7 +125,7 @@ class ResultScreen extends StatelessWidget {
                                   size: 25,
                                 ),
                               ),
-                              SizedBox(width: 5), 
+                              SizedBox(width: 5),
                               Padding(
                                 padding: EdgeInsets.only(top: 5),
                                 child: Text(
@@ -175,17 +145,23 @@ class ResultScreen extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  '${rating.toStringAsFixed(0)}', 
+                                  '${(rating + 40).toStringAsFixed(0)}', // Use toStringAsFixed(0) to avoid decimal places
                                   style: TextStyle(
-                                    color: textColor, 
+                                    color: textColor,
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
+                              SizedBox(width: 5,),
+                              Text('(+40)',style: TextStyle(
+                                color:addColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              ),)
                             ],
                           ),
-                          SizedBox(height: 10), 
+                          SizedBox(height: 10),
                           Container(
                             width: 350,
                             height: 10,
@@ -196,9 +172,10 @@ class ResultScreen extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: LinearProgressIndicator(
-                                value: rating / 100,
+                                value: (rating+40) / 100,
                                 backgroundColor: progressBack,
-                                valueColor: AlwaysStoppedAnimation<Color>(progressColor),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    progressColor),
                               ),
                             ),
                           ),
@@ -210,7 +187,7 @@ class ResultScreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 30, left: 135),
+              padding: const EdgeInsets.only(top: 30, left: 150),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryColor,
@@ -223,7 +200,8 @@ class ResultScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PotentialScreen(adjustedRatings: adjustedRatings),
+                      builder: (context) =>
+                         HabitScreen(),
                     ),
                   );
                 },
@@ -231,8 +209,11 @@ class ResultScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'See potential rating',
-                      style: TextStyle(color: AppColors.secondaryColor, fontSize: 16, fontWeight: FontWeight.w600),
+                      'View my program',
+                      style: TextStyle(
+                          color: AppColors.secondaryColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
                     ),
                     SizedBox(width: 8),
                     Icon(

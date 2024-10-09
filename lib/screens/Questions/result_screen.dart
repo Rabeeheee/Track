@@ -1,5 +1,5 @@
 import 'dart:ffi';
-
+import 'dart:math'; 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trackit/color/colors.dart';
@@ -24,6 +24,16 @@ class ResultScreen extends StatelessWidget {
         (routineRatings['confidenceRating'] ?? 0);
     double disciplineRating = (surveyRatings['disciplineRating'] ?? 0) +
         (routineRatings['disciplineRating'] ?? 0);
+
+    
+    double adjustRating(double rating) {
+      if (rating > 50) {
+       
+        int randomAdjustment = Random().nextInt(10);
+        return rating - (rating - 50) - randomAdjustment;
+      }
+      return rating;
+    }
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -50,304 +60,178 @@ class ResultScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // First Container
-                Container(
-                  width: 165, // Set a fixed width for the container
-                  height: 130,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7),
-                    color: AppColors.red,
-                  ),
-                  child: Padding(
-                    padding:
-                        EdgeInsets.all(8.0), // Add padding around the content
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment
-                          .start, // Align children to the start (left)
-                      children: [
-                        const Row(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start, // Align to the top
-                          children: [
-                            Icon(
-                              Icons.star_rate_rounded, // Add an icon
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                            SizedBox(width: 5), // Space between icon and text
-                            Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Text(
-                                'Overall', // Display label
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+            SizedBox(
+              height: 400,
+              child: GridView.builder(
+                padding: EdgeInsets.all(8.0),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
+                  childAspectRatio: 165 / 125,
+                ),
+                itemCount: 6,
+                itemBuilder: (context, index) {
+                  String title;
+                  double rating;
+
+                  switch (index) {
+                    case 0:
+                      title = 'Overall';
+                      rating = overallRating;
+                      break;
+                    case 1:
+                      title = 'Wisdom';
+                      rating = wisdomRating;
+                      break;
+                    case 2:
+                      title = 'Strength';
+                      rating = strengthRating;
+                      break;
+                    case 3:
+                      title = 'Focus';
+                      rating = focusRating;
+                      break;
+                    case 4:
+                      title = 'Confidence';
+                      rating = confidenceRating;
+                      break;
+                    case 5:
+                      title = 'Discipline';
+                      rating = disciplineRating;
+                      break;
+                    default:
+                      title = '';
+                      rating = 0;
+                  }
+
+                  
+                  rating = adjustRating(rating);
+
+                  
+                  Color backgroundColor;
+                  Color textColor;
+                  Color progressColor;
+                  Color progressBack;
+
+                  if (index == 0) { 
+                    backgroundColor = AppColors.red; 
+                    textColor = Colors.white;
+                    progressColor = Colors.white;
+                    progressBack = const Color.fromARGB(161, 255, 9, 9);
+                  } else {
+                    backgroundColor = Colors.white;
+                    textColor = Colors.black;
+                    progressColor = AppColors.red;
+                    progressBack = const Color.fromARGB(137, 255, 255, 255);
+                  }
+
+                  return Container(
+                    width: 165,
+                    height: 125,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7),
+                      color: backgroundColor,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Icon(
+                                  Icons.gpp_good_rounded,
+                                  color: textColor,
+                                  size: 25,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15, left: 5),
-                          child: Text(
-                            ' ${overallRating.toStringAsFixed(2)}', // Display rating
-                            style: TextStyle(color: Colors.white, fontSize: 32),
-                          ),
-                        ),
-                        SizedBox(
-                            height:
-                                10), // Space between rating text and progress bar
-                        Container(
-                          width: 350,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            color: AppColors.grey,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinearProgressIndicator(
-                              value: (overallRating) /100,
-                              backgroundColor: const Color.fromARGB(130, 255, 9, 9),
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColors.secondaryColor),
-                                  
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // Second Container
-                 Container(
-                  width: 165, // Set a fixed width for the container
-                  height: 130,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7),
-                    color: Colors.white,
-                  ),
-                  child: Padding(
-                    padding:
-                        EdgeInsets.all(8.0), // Add padding around the content
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment
-                          .start, // Align children to the start (left)
-                      children: [
-                        const Row(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start, // Align to the top
-                          children: [
-                          
-                            Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Icon(
-                                FontAwesomeIcons.brain, // Add an icon
-                                color: Colors.black,
-                                size: 25,
-                              ),
-                            ),
-                            SizedBox(width: 5), // Space between icon and text
-                            Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Text(
-                                'Wisdom', // Display label
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                              SizedBox(width: 5), 
+                              Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Text(
+                                  title,
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(
+                                  '${rating.toStringAsFixed(2)}', 
+                                  style: TextStyle(
+                                    color: textColor, 
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10), 
+                          Container(
+                            width: 350,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              color: AppColors.grey,
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15, left: 5),
-                          child: Text(
-                            ' ${wisdomRating.toStringAsFixed(2)}', // Display rating
-                            style: TextStyle(color: Colors.black, fontSize: 32),
-                          ),
-                        ),
-                        SizedBox(
-                            height:
-                                10), // Space between rating text and progress bar
-                        Container(
-                          width: 350,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            color: AppColors.grey,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinearProgressIndicator(
-                              value: (wisdomRating) /100,
-                              backgroundColor: const Color.fromARGB(137, 255, 255, 255),
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColors.red),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LinearProgressIndicator(
+                                value: rating / 100,
+                                backgroundColor: progressBack,
+                                valueColor: AlwaysStoppedAnimation<Color>(progressColor),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                  );
+                },
+              ),
             ),
-            SizedBox(height: 10,),
-            Row(
-              children: [
-                 Container(
-                  width: 165, // Set a fixed width for the container
-                  height: 130,
-                  decoration: BoxDecoration(
+            Padding(
+              padding: const EdgeInsets.only(top: 30, left: 130),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryColor,
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(7),
-                    color: Colors.white,
                   ),
-                  child: Padding(
-                    padding:
-                        EdgeInsets.all(8.0), // Add padding around the content
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment
-                          .start, // Align children to the start (left)
-                      children: [
-                        const Row(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start, // Align to the top
-                          children: [
-                          
-                            Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Icon(
-                                FontAwesomeIcons.brain, // Add an icon
-                                color: Colors.black,
-                                size: 25,
-                              ),
-                            ),
-                            SizedBox(width: 5), // Space between icon and text
-                            Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Text(
-                                'Wisdom', // Display label
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15, left: 5),
-                          child: Text(
-                            ' ${wisdomRating.toStringAsFixed(2)}', // Display rating
-                            style: TextStyle(color: Colors.black, fontSize: 32),
-                          ),
-                        ),
-                        SizedBox(
-                            height:
-                                10), // Space between rating text and progress bar
-                        Container(
-                          width: 350,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            color: AppColors.grey,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinearProgressIndicator(
-                              value: (wisdomRating) /100,
-                              backgroundColor: const Color.fromARGB(137, 255, 255, 255),
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColors.red),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 ),
-                SizedBox(width: 10,),
-                 Container(
-                  width: 165, // Set a fixed width for the container
-                  height: 130,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7),
-                    color: Colors.white,
-                  ),
-                  child: Padding(
-                    padding:
-                        EdgeInsets.all(8.0), // Add padding around the content
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment
-                          .start, // Align children to the start (left)
-                      children: [
-                        const Row(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start, // Align to the top
-                          children: [
-                          
-                            Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Icon(
-                                FontAwesomeIcons.brain, // Add an icon
-                                color: Colors.black,
-                                size: 25,
-                              ),
-                            ),
-                            SizedBox(width: 5), // Space between icon and text
-                            Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Text(
-                                'Wisdom', // Display label
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15, left: 5),
-                          child: Text(
-                            ' ${wisdomRating.toStringAsFixed(2)}', // Display rating
-                            style: TextStyle(color: Colors.black, fontSize: 32),
-                          ),
-                        ),
-                        SizedBox(
-                            height:
-                                10), // Space between rating text and progress bar
-                        Container(
-                          width: 350,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            color: AppColors.grey,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinearProgressIndicator(
-                              value: (wisdomRating) /100,
-                              backgroundColor: const Color.fromARGB(137, 255, 255, 255),
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColors.red),
-                            ),
-                          ),
-                        ),
-                      ],
+                onPressed: () {
+                 
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'See potential rating',
+                      style: TextStyle(color: AppColors.secondaryColor, fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                  ),
+                    SizedBox(width: 8),
+                    Icon(
+                      Icons.arrow_forward,
+                      color: AppColors.secondaryColor,
+                    ),
+                  ],
                 ),
-              ],
-            )
+              ),
+            ),
           ],
         ),
       ),

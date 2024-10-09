@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:trackit/color/colors.dart';
+import 'package:trackit/utils/colors.dart';
 
-import 'package:trackit/screens/home/habit_screen.dart';
+import 'package:trackit/pages/tabs/habit_screen.dart';
 
 class PotentialScreen extends StatelessWidget {
   final Map<String, double> adjustedRatings;

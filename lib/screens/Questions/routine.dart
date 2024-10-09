@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:trackit/color/colors.dart';
+import 'package:trackit/utils/colors.dart';
 import 'package:trackit/screens/Questions/result_screen.dart';
 
 class RoutineScreen extends StatefulWidget {

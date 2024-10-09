@@ -3,6 +3,8 @@ import 'package:hive/hive.dart';
 class HiveService {
   Future<Box> openBox() async {
     return await Hive.openBox('userBox');
+
+
   }
 
   Future<void> clearbox() async{

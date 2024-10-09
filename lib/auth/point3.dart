@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trackit/color/colors.dart';
+import 'package:trackit/utils/colors.dart';
 
  Widget build3(BuildContext context) {
     return const Scaffold(

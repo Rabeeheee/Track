@@ -5,13 +5,13 @@ import 'package:iconify_flutter/icons/game_icons.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:intl/intl.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:trackit/color/colors.dart';
+import 'package:trackit/utils/colors.dart';
 import 'package:trackit/hive_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:provider/provider.dart'; // Import Provider
 import 'package:trackit/auth/splash_screen.dart';
-import 'package:trackit/theme_provider.dart';
+import 'package:trackit/utils/theme_provider.dart';
 
 class HabitScreen extends StatefulWidget {
   @override

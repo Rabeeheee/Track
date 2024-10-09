@@ -1,6 +1,6 @@
 import 'dart:math'; 
 import 'package:flutter/material.dart';
-import 'package:trackit/color/colors.dart';
+import 'package:trackit/utils/colors.dart';
 import 'package:trackit/screens/Questions/potential.dart';
 
 class ResultScreen extends StatelessWidget {

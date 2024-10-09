@@ -1,6 +1,6 @@
 // theme_provider.dart
 import 'package:flutter/material.dart';
-import 'package:trackit/color/colors.dart';
+import 'package:trackit/utils/colors.dart';
 
 enum AppTheme { light, dark }
 

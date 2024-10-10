@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:trackit/services/models/hive_service.dart';
 import 'package:trackit/utils/colors.dart';
 import 'package:trackit/auth/getstart.dart';
 
 class LoginScreen extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
+  final HiveService _hiveService = HiveService();
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +107,9 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(
                           width: 150,
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                               
+                               await _hiveService.saveUsername(_usernameController.text);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

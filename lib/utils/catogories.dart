@@ -1,4 +1,4 @@
-// Define the category indices
+
 const int WISDOM_INDEX = 0;
 const int STRENGTH_INDEX = 1;
 const int FOCUS_INDEX = 2;

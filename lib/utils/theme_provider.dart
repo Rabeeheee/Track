@@ -24,8 +24,8 @@ class ThemeProvider with ChangeNotifier {
         ),
         cardColor: Colors.white,
         canvasColor: Colors.white,
-        splashColor: Colors.black
-        // Add any additional customization for dark theme
+        splashColor: Colors.black,
+      hoverColor: AppColors.primaryColor,
       );
     } else {
       return ThemeData.light().copyWith(
@@ -37,8 +37,9 @@ class ThemeProvider with ChangeNotifier {
          cardColor: const Color.fromARGB(182, 158, 158, 158),
          canvasColor: Colors.black,
          hintColor: Colors.white,
-         splashColor: Colors.black
-        // Add any additional customization for light theme
+         splashColor: Colors.black,
+         hoverColor: Colors.white,
+       
       );
     }
   }

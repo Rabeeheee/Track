@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackit/services/providers/progressprovider.dart';
-import 'package:trackit/screens/Questions/Linear_progress.dart';
+import 'package:trackit/pages/other/progressprovider.dart';
+import 'package:trackit/utils/Linear_progress.dart';
 import 'package:trackit/utils/colors.dart';
 import 'package:trackit/auth/apreciate.dart';
-import 'package:trackit/screens/Questions/result_screen.dart';
-import 'package:trackit/screens/Questions/survey_option.dart';
-import 'rating_calculator.dart'; // Import your RatingCalculator class
+import 'package:trackit/utils/survey_option.dart';
+import '../../utils/rating_calculator.dart'; 
 
-// Survey Question model
+
 class SurveyQuestion {
   final String questionText;
   final List<String> options;
@@ -27,7 +26,7 @@ List<SurveyQuestion> questions = [
 class SurveyScreen extends StatefulWidget {
   final Map<String, double> habitProgress;
 
-  SurveyScreen({required this.habitProgress});
+  const SurveyScreen({required this.habitProgress});
 
   @override
   _SurveyScreenState createState() => _SurveyScreenState();
@@ -49,6 +48,10 @@ class _SurveyScreenState extends State<SurveyScreen> {
     if (currentQuestionIndex == questions.length - 1) {
   RatingCalculator ratingCalculator = RatingCalculator(userResponses: userResponses);
   Map<String, double> ratings = ratingCalculator.calculateSurveyRatings();
+
+ 
+print('Calculated Ratings: $ratings'); 
+
 
   Navigator.push(
     context,

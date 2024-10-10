@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trackit/utils/colors.dart';
-import 'package:trackit/screens/Questions/routine.dart';
+import 'package:trackit/pages/other/routine.dart';
 
 class Apreciate extends StatelessWidget {
   final VoidCallback onContinue;
@@ -96,7 +96,7 @@ class Apreciate extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => RoutineScreen(
-                            userResponses: userResponses, habitProgress: {}, // Pass the userResponses here
+                            userResponses: userResponses, habitProgress: {},
                           ),
                         ));
                       },

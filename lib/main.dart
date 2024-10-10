@@ -1,22 +1,31 @@
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:trackit/auth/splash_screen.dart';
+import 'package:trackit/pages/other/progressprovider.dart';
 import 'package:trackit/services/models/Hive_modals.dart';
-import 'package:trackit/hive_service.dart';
-import 'package:trackit/pages/tabs/habit_screen.dart';
 import 'utils/theme_provider.dart'; 
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  HiveService _hiveService = HiveService();
-    Hive.registerAdapter(UserModelAdapter());
-  Hive.initFlutter();
-  Hive.openBox('userBox');
+  
+  
+  await Hive.initFlutter();
+  
+
+  Hive.registerAdapter(UserModelAdapter());
+  
+ 
+  await Hive.openBox('userBox');
+  
+
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ProgressProvider()),
+       ChangeNotifierProvider(create: (_)=> ThemeProvider())
+      ],
       child: MyApp(),
     ),
   );
@@ -30,9 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Theme Example',
       theme: themeProvider.themeData,
-      home: HabitScreen(),
+      home: SplashScreen(),
     );
   }
 }
-
-

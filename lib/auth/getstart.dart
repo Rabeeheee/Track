@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trackit/utils/colors.dart';
 
-import 'package:trackit/screens/Questions/servey.dart';
+import 'package:trackit/pages/other/servey.dart';
 
 
 class Getstart extends StatelessWidget {

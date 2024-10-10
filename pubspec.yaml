@@ -79,10 +79,10 @@ flutter:
   fonts:
     - family: Fonts
       fonts:
-        - asset: assets\Poppins-Bold.ttf
-        - asset: assets\Poppins-ExtraBold.ttf
-        - asset: assets\Poppins-Medium.ttf
-        - asset: assets\Poppins-SemiBold.ttf
+        - asset: assets\fonts\Poppins-Bold.ttf
+        - asset: assets\fonts\Poppins-ExtraBold.ttf
+        - asset: assets\fonts\Poppins-Medium.ttf
+        - asset: assets\fonts\Poppins-SemiBold.ttf
     #       style: italic
     # - family: Trajan Pro
     #   fonts:

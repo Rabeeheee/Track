@@ -1,11 +1,14 @@
+
 import 'dart:math'; 
 import 'package:flutter/material.dart';
+import 'package:trackit/services/models/hive_service.dart';
 import 'package:trackit/utils/colors.dart';
-import 'package:trackit/screens/Questions/potential.dart';
+import 'package:trackit/pages/other/potential.dart';
 
 class ResultScreen extends StatelessWidget {
   final Map<String, double> surveyRatings;
   final Map<String, double> routineRatings;
+  final HiveService _hiveService = HiveService();
 
   ResultScreen({required this.surveyRatings, required this.routineRatings});
 
@@ -26,7 +29,7 @@ class ResultScreen extends StatelessWidget {
 
     double adjustRating(double rating) {
       if (rating > 50) {
-        int randomAdjustment = Random().nextInt(20);
+        int randomAdjustment = Random().nextInt(25);
         return rating - (rating - 50) - randomAdjustment;
       }
       return rating;
@@ -41,6 +44,8 @@ class ResultScreen extends StatelessWidget {
       'confidenceRating': adjustRating(confidenceRating),
       'disciplineRating': adjustRating(disciplineRating),
     };
+
+    
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,

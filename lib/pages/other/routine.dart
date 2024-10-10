@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:trackit/auth/splash_screen2.dart';
 import 'package:trackit/utils/colors.dart';
-import 'package:trackit/screens/Questions/result_screen.dart';
 
 class RoutineScreen extends StatefulWidget {
   final List<int> userResponses;
@@ -29,6 +29,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
 
 @override
 void initstate(){
+  
   super.initState();
 
 }
@@ -96,7 +97,7 @@ void initstate(){
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ResultScreen(
+          builder: (context) => SplashScreen2(
             surveyRatings: surveyRatings,
             routineRatings: ratings,
           ),

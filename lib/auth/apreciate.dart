@@ -38,12 +38,13 @@ class Apreciate extends StatelessWidget {
           ),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch, // Ensures the progress bar stretches across the screen
+          // crossAxisAlignment: CrossAxisAlignment.stretch, 
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 25),
+              padding: const EdgeInsets.only(top: 30),
               child: Container(
                 height: 10,
+                width: 327,
                 decoration: BoxDecoration(
                   color: AppColors.grey,
                   borderRadius: BorderRadius.circular(10),

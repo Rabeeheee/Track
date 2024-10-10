@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart'; // Import the image_picker
 import 'package:provider/provider.dart';
 import 'package:trackit/pages/widgets/about_section.dart';
 import 'package:trackit/pages/widgets/logout_dialog.dart';
+import 'package:trackit/services/models/hive_service.dart';
 import 'package:trackit/utils/theme_provider.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -13,10 +14,16 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
   bool _isAboutExpanded = false;
-  String username = "User"; 
+  String? username ;
   String? imagePath;
-
+  final HiveService _hiveService =HiveService();
   final ImagePicker _picker = ImagePicker(); 
+
+  @override
+  void initState(){
+    super.initState();
+    _fetchUsername();
+  }
 
   void _toggleAboutSection() {
     setState(() {
@@ -24,8 +31,14 @@ class _AppDrawerState extends State<AppDrawer> {
     });
   }
 
+  Future<void> _fetchUsername() async {
+    String? storedUsername = await _hiveService.getUsername();
+    setState(() {
+      username = storedUsername!;
+    });
+  }
+
   Future<void> onPickImage() async {
-   
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     
     if (pickedFile != null) {
@@ -44,7 +57,6 @@ class _AppDrawerState extends State<AppDrawer> {
         padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
         child: Column(
           children: [
-           
             Text(
               'Hey $username',
               style: TextStyle(
@@ -61,11 +73,10 @@ class _AppDrawerState extends State<AppDrawer> {
                 radius: 50,
                 backgroundImage: imagePath != null
                     ? FileImage(File(imagePath!))
-                    : AssetImage('assets/images/default.jpg') as ImageProvider, // Cast to ImageProvider
+                    : AssetImage('assets/images/default.jpg') as ImageProvider, 
               ),
             ),
             SizedBox(height: 15),
-            
             
             Row(
               children: [
@@ -151,7 +162,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 showLogoutDialog(context);
               },
               child: Text(
-                'Logout',
+                'Restart',
                 style: TextStyle(
                   color: Colors.red,
                   fontSize: 18,

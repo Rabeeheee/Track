@@ -1,8 +1,8 @@
 // logout_dialog.dart
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:trackit/services/models/hive_service.dart';
 import 'package:trackit/auth/splash_screen.dart';
+import 'package:trackit/utils/login_manager.dart';
 
 
 showLogoutDialog(BuildContext context) {
@@ -26,6 +26,7 @@ showLogoutDialog(BuildContext context) {
               onPressed: () async {
                 HiveService _hiveService = HiveService();
                 await _hiveService.clearbox();
+                await LoginManager.clearLoginStatus();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => SplashScreen()),
@@ -33,7 +34,7 @@ showLogoutDialog(BuildContext context) {
                 );
               },
               child: Text(
-                'Logout',
+                'Restart',
                 style: TextStyle(color: Colors.red),
               ),
             ),

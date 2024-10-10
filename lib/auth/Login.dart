@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trackit/services/models/hive_service.dart';
 import 'package:trackit/utils/colors.dart';
 import 'package:trackit/auth/getstart.dart';
+import 'package:trackit/utils/login_manager.dart';
 
 class LoginScreen extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -110,7 +111,8 @@ class LoginScreen extends StatelessWidget {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                await _hiveService.saveUsername(_usernameController.text);
-                                Navigator.push(
+                               await LoginManager.setLoginStatus(true);
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => Getstart(

@@ -21,10 +21,10 @@ class _RoutineScreenState extends State<RoutineScreen> {
     'confidenceRating': 0.0,
     'disciplineRating': 0.0,
   };
-  int habitIndex = 0; // Current index of habit
-  String currentHabit = "Wake up Early"; // Selected habit
+  int habitIndex = 0;
+  String currentHabit = "Wake up Early"; 
 
-  // List of slider values for each habit
+ 
   List<double> sliderValues = List<double>.filled(8, 1.0);
 
 @override

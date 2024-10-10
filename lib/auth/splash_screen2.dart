@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -31,8 +30,7 @@ class _SplashScreenState extends State<SplashScreen2> {
         if (_progressValue >= 1.0) {
           timer.cancel();
 
-          // Pass the survey and routine ratings to the ResultScreen
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => ResultScreen(
@@ -40,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen2> {
                 routineRatings: widget.routineRatings,
               ),
             ),
+            (route) => false,
           );
         }
       });
@@ -80,7 +79,8 @@ class _SplashScreenState extends State<SplashScreen2> {
                 child: LinearProgressIndicator(
                   value: _progressValue,
                   backgroundColor: Colors.transparent,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.secondaryColor),
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(AppColors.secondaryColor),
                 ),
               ),
             ),

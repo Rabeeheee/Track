@@ -1,4 +1,3 @@
-// theme_provider.dart
 import 'package:flutter/material.dart';
 import 'package:trackit/utils/colors.dart';
 
@@ -7,7 +6,6 @@ enum AppTheme { light, dark }
 class ThemeProvider with ChangeNotifier {
   AppTheme _theme = AppTheme.light;
 
-  // Define your color themes
   final Color lightPrimaryColor = Colors.blue;
   final Color darkPrimaryColor = Colors.deepPurple;
 
@@ -20,12 +18,12 @@ class ThemeProvider with ChangeNotifier {
         scaffoldBackgroundColor: Colors.black,
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.black,
-          
         ),
         cardColor: Colors.white,
         canvasColor: Colors.white,
         splashColor: Colors.black,
-      hoverColor: AppColors.primaryColor,
+        hoverColor: AppColors.primaryColor,
+        focusColor: Colors.black,
       );
     } else {
       return ThemeData.light().copyWith(
@@ -34,18 +32,18 @@ class ThemeProvider with ChangeNotifier {
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
         ),
-         cardColor: const Color.fromARGB(182, 158, 158, 158),
-         canvasColor: Colors.black,
-         hintColor: Colors.white,
-         splashColor: Colors.black,
-         hoverColor: Colors.white,
-       
+        cardColor: Color.fromARGB(255, 235, 235, 235),
+        canvasColor: Colors.black,
+        hintColor: Colors.white,
+        splashColor: Colors.black,
+        hoverColor: Colors.white,
+        focusColor: Colors.white,
       );
     }
   }
 
   void toggleTheme() {
     _theme = (_theme == AppTheme.light) ? AppTheme.dark : AppTheme.light;
-    notifyListeners();
+    notifyListeners(); 
   }
 }

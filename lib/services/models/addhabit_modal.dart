@@ -24,14 +24,23 @@ dynamic frequency;
   @HiveField(5)
 String? partOfDay;
 
+  @HiveField(6)
+  bool isCompleted;  
+
+   @HiveField(7)
+  String? id; 
 
 AddhabitModal({
 this.goalDays,
  this.frequency,
-this.name,
+required this.name,
+required this.isCompleted,
+required this.id,
  this.partOfDay,
  this.quote,
  this.selectedAvatarPath,
+    
+
 });
 
 }

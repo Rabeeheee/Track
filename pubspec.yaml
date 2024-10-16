@@ -60,27 +60,29 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets\images\man after.jpg
-    - assets\images\man before.jpg
-    - assets\images\arrowdown.png
-    - assets\images\arrowup.png
-    - assets\images\firstavatar.png
-    - assets\images\shower.webp
-    - assets\images\run.jpeg
-    - assets\images\read.jpeg
-    - assets\images\water.jpeg
-    - assets\images\default.jpg
-    - assets\images\breakfast.jpeg
-    - assets\images\fruit.jpeg
-    - assets\images\sun.jpeg
-    - assets\images\words.jpg
-    - assets\images\sleep.jpeg
-    - assets\images\meditate.jpeg
-    - assets\avatars\alcohol.png
-    - assets\avatars\cleaning.png
-    - assets\avatars\diary.jpeg
-    - assets\avatars\smoking.png
-    - assets\avatars\workout.png
+    - assets/images/man after.jpg
+    - assets/images/man before.jpg
+    - assets/images/arrowdown.png
+    - assets/images/arrowup.png
+    - assets/images/firstavatar.png
+    - assets/images/shower.webp
+    - assets/images/run.jpeg
+    - assets/images/read.jpeg
+    - assets/images/water.jpeg
+    - assets/images/default.jpg
+    - assets/images/breakfast.jpeg
+    - assets/images/fruit.jpeg
+    - assets/images/sun.jpeg
+    - assets/images/words.jpg
+    - assets/images/sleep.jpeg
+    - assets/images/meditate.jpeg
+    - assets/avatars/alcohol.png
+    - assets/avatars/cleaning.png
+    - assets/avatars/diary.jpeg
+    - assets/avatars/smoking.png
+    - assets/avatars/workout.png
+    - assets/images/Tick.png
+    - assets/avatars/icon.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see
@@ -93,10 +95,10 @@ flutter:
   fonts:
     - family: Schyler
       fonts:
-        - asset: assets\fonts\Poppins-Bold.ttf
-        - asset: assets\fonts\Poppins-ExtraBold.ttf
-        - asset: assets\fonts\Poppins-Medium.ttf
-        - asset: assets\fonts\Poppins-SemiBold.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+        - asset: assets/fonts/Poppins-ExtraBold.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+        - asset: assets/fonts/Poppins-SemiBold.ttf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

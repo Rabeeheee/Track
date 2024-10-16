@@ -52,6 +52,26 @@ class HiveService {
     return box.get('profileImagePath');
   }
 
+
+  // Update a habit's completion status (toggle between true or false)
+ // Update a habit's completion status based on its unique ID
+Future<void> updateHabitCompletion(AddhabitModal habit) async {
+  var box = await openHabitBox();
+  
+  // Find the habit by its unique id in the box
+  final existingHabitKey = box.keys.firstWhere((key) {
+    final storedHabit = box.get(key) as AddhabitModal?;
+    return storedHabit?.id == habit.id;
+  }, orElse: () => null);
+
+  if (existingHabitKey != null) {
+    habit.isCompleted = !habit.isCompleted;  // Toggle the 'isCompleted' value
+    await box.put(existingHabitKey, habit);  // Update the habit in the box
+  }
+}
+
+
+
  Future<dynamic> saveHabit(AddhabitModal habit) async {
   var box = await openHabitBox();
   await box.add(habit);  

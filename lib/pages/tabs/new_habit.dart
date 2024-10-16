@@ -72,7 +72,7 @@ class _NewHabitState extends State<NewHabit> {
   }
 
   Future<void> _loadSelectedAvatar() async {
-    String? savedAvatarPath = await _hiveService.saveHabit(AddhabitModal(selectedAvatarPath: selectedAvatar));
+    String? savedAvatarPath = await _hiveService.saveHabit(AddhabitModal(selectedAvatarPath: selectedAvatar, name: '', isCompleted: true, id: ''));
     if (savedAvatarPath != null) {
       setState(() {
         selectedAvatar = savedAvatarPath; 
@@ -90,7 +90,7 @@ class _NewHabitState extends State<NewHabit> {
       });
 
     
-      await _hiveService.saveHabit(AddhabitModal(selectedAvatarPath: selectedAvatar));
+      await _hiveService.saveHabit(AddhabitModal(selectedAvatarPath: selectedAvatar, name: '', isCompleted: true, id: ''));
     }
   }
 
@@ -141,7 +141,7 @@ class _NewHabitState extends State<NewHabit> {
                         }
                        
                         if (avatar[index] != selectedAvatar) {
-                          _hiveService.saveHabit(AddhabitModal(selectedAvatarPath: selectedAvatar));
+                          _hiveService.saveHabit(AddhabitModal(selectedAvatarPath: selectedAvatar, name: '', isCompleted: true, id: ''));
                         }
                       },
                       child: AnimatedContainer(

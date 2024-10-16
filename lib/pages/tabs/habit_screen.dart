@@ -111,180 +111,80 @@ class HabitScreenState extends State<HabitScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // Date row
                 DateRow(currentDate: _currentDate),
                 SizedBox(height: 20),
                 
-                      Container(
-                      
-                      decoration: BoxDecoration(
-                        color: themeProvider.themeData.cardColor,
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10, top: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Must Do',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  color: themeProvider.themeData.splashColor),
-                            ),
-                            SizedBox(height: 20),
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/images/run.jpeg'),
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  'Run 2km every morning',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: themeProvider
-                                          .themeData.splashColor),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 20),
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/images/water.jpeg'),
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  'Drink 2L water everyday',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: themeProvider
-                                          .themeData.splashColor),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 20),
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/images/shower.webp'),
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  'Take cold shower 2 times in a week',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: themeProvider
-                                          .themeData.splashColor),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 20),
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/images/read.jpeg'),
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  'Read and Meditate everyday',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: themeProvider
-                                          .themeData.splashColor),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 20,)
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
+                // Displaying Morning Habits
+                _buildHabitSection(
+                  title: 'Morning',
+                  habits: _morningHabits,
+                  isExpanded: _isMorningExpanded,
+                  onExpand: () {
+                    setState(() {
+                      _isMorningExpanded = !_isMorningExpanded;
+                    });
+                  },
+                ),
+                SizedBox(height: 10),
 
-                    
-                    SizedBox(height: 10),
-                Column(
-                  children: [
-                    // Morning Section
-                    _buildHabitSection(
-                      title: 'Morning',
-                      habits: _morningHabits,
-                      isExpanded: _isMorningExpanded,
-                      onExpand: () {
-                        setState(() {
-                          _isMorningExpanded = !_isMorningExpanded;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 10),
+                // Displaying Afternoon Habits
+                _buildHabitSection(
+                  title: 'Afternoon',
+                  habits: _afternoonHabits,
+                  isExpanded: _isAfternoonExpanded,
+                  onExpand: () {
+                    setState(() {
+                      _isAfternoonExpanded = !_isAfternoonExpanded;
+                    });
+                  },
+                ),
+                SizedBox(height: 10),
 
-                    // Afternoon Section
-                    _buildHabitSection(
-                      title: 'Afternoon',
-                      habits: _afternoonHabits,
-                      isExpanded: _isAfternoonExpanded,
-                      onExpand: () {
-                        setState(() {
-                          _isAfternoonExpanded = !_isAfternoonExpanded;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 10),
+                // Displaying Night Habits
+                _buildHabitSection(
+                  title: 'Night',
+                  habits: _nightHabits,
+                  isExpanded: _isNightExpanded,
+                  onExpand: () {
+                    setState(() {
+                      _isNightExpanded = !_isNightExpanded;
+                    });
+                  },
+                ),
+                SizedBox(height: 10),
 
-                    // Night Section
-                    _buildHabitSection(
-                      title: 'Night',
-                      habits: _nightHabits,
-                      isExpanded: _isNightExpanded,
-                      onExpand: () {
-                        setState(() {
-                          _isNightExpanded = !_isNightExpanded;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 10),
-
-                    // Other Section
-                    _buildHabitSection(
-                      title: 'Other',
-                      habits: _otherHabits,
-                      isExpanded: _isOtherExpanded,
-                      onExpand: () {
-                        setState(() {
-                          _isOtherExpanded = !_isOtherExpanded;
-                        });
-                      },
-                    ),
-                  ],
+                // Displaying Other Habits
+                _buildHabitSection(
+                  title: 'Other',
+                  habits: _otherHabits,
+                  isExpanded: _isOtherExpanded,
+                  onExpand: () {
+                    setState(() {
+                      _isOtherExpanded = !_isOtherExpanded;
+                    });
+                  },
                 ),
               ],
             ),
           ),
         ),
-
-        // Add a Floating Action Button
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AddDefHabit(),
-              ),
-            );
-          },
-          backgroundColor: AppColors.primaryColor,
-          child: Icon(Icons.add, size: 35, color: Colors.white),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(left: 35),
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddDefHabit(),
+                  ),
+                );
+              },
+              backgroundColor: AppColors.primaryColor,
+              child: Icon(Icons.add, size: 35, color: Colors.white),
+            ),
+          ),
         ),
         bottomNavigationBar: Bottomnav(
           selectedIndex: _selectedIndex,
@@ -294,6 +194,7 @@ class HabitScreenState extends State<HabitScreen> {
     );
   }
 
+  // Build habit section for different parts of the day
   Widget _buildHabitSection({
     required String title,
     required List<AddhabitModal> habits,
@@ -301,6 +202,7 @@ class HabitScreenState extends State<HabitScreen> {
     required VoidCallback onExpand,
   }) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       decoration: BoxDecoration(
         color: themeProvider.themeData.cardColor,
@@ -317,24 +219,24 @@ class HabitScreenState extends State<HabitScreen> {
                 Text(
                   title,
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                      color: themeProvider.themeData.splashColor),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                    color: themeProvider.themeData.splashColor,
+                  ),
                 ),
                 Row(
                   children: [
                     Text(
                       '${habits.length}',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: themeProvider.themeData.splashColor),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: themeProvider.themeData.splashColor,
+                      ),
                     ),
                     IconButton(
                       icon: Icon(
-                        isExpanded
-                            ? Icons.keyboard_arrow_up
-                            : Icons.keyboard_arrow_down,
+                        isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                         color: themeProvider.themeData.splashColor,
                       ),
                       onPressed: onExpand,
@@ -345,42 +247,58 @@ class HabitScreenState extends State<HabitScreen> {
             ),
             if (isExpanded) ...[
               SizedBox(height: 10),
-              for (var habit in habits)
+              for (int index = 0; index < habits.length; index++)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: GestureDetector(
-                    onLongPress: (){},
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundImage: habit.selectedAvatarPath == null
-                              ? AssetImage('assets/images/default.jpg')
-                              : FileImage(File(habit.selectedAvatarPath!)) as ImageProvider,
-                        ),
-                        SizedBox(width: 10),
-                        Column(
+                  child: Row(
+                    children: [
+                      // Avatar Image: Displays tick image if selected
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: habits[index].isCompleted
+                            ? const AssetImage('assets/images/Tick.png')
+                            : (habits[index].selectedAvatarPath != null &&
+                                    habits[index].selectedAvatarPath!.isNotEmpty)
+                                ? FileImage(File(habits[index].selectedAvatarPath!))
+                                    as ImageProvider
+                                : const AssetImage('assets/avatars/icon.png') as ImageProvider,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              habit.name!,
+                              habits[index].name!,
                               style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: themeProvider.themeData.splashColor),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: themeProvider.themeData.splashColor,
+                              ),
                             ),
                             Text(
-                              habit.quote ?? '',
+                              habits[index].quote ?? '',
                               style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: themeProvider.themeData.splashColor),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: themeProvider.themeData.splashColor,
+                              ),
                             ),
                           ],
                         ),
-                        
-                      ],
-                    ),
+                      ),
+                      // Checkbox to mark the habit as completed
+                     Checkbox(
+  value: habits[index].isCompleted,
+  onChanged: (bool? newValue) {
+    setState(() {
+      _hiveService.updateHabitCompletion(habits[index]);  // Pass the habit object
+    });
+  },
+  activeColor: AppColors.primaryColor,
+),
+
+                    ],
                   ),
                 ),
             ],

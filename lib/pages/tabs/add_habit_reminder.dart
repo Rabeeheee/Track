@@ -169,7 +169,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
       selectedAvatarPath: widget.image, 
       goalDays: goalDays,
       frequency: selectedFrequency,
-      partOfDay: selectedPartOfDay,
+      partOfDay: selectedPartOfDay, isCompleted: true, id: '',
     );
 
     await _hiveService.saveHabit(newHabit);

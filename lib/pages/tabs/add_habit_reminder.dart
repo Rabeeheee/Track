@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackitapp/pages/tabs/habit_screen.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/daily_selection.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/date_goal_selection.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/frequency_selection.dart';
@@ -9,11 +10,17 @@ import 'package:trackitapp/pages/widgets/Add_Habit/reminder.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/section_title.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/weekly_selection.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
+import 'package:trackitapp/services/models/addhabit_modal.dart';
+import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/services/models/notification_services.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 
 class AddHabitReminder extends StatefulWidget {
-  const AddHabitReminder({super.key});
+  final String title;
+  final String quote;
+  final String? image;
+
+  const AddHabitReminder({super.key, required this.title, required this.quote, required this.image});
 
   @override
   State<AddHabitReminder> createState() => _AddHabitReminderState();
@@ -30,14 +37,13 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
   List<DateTime> reminderTimes = []; // List to hold selected reminder times
 
   final NotificationServices notificationService = NotificationServices();
+  final HiveService _hiveService = HiveService();
 
   @override
   void initState() {
     super.initState();
     notificationService.initNotification();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +114,10 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                             });
                           },
                         ),
+
+                        
                     ],
-                  ),
+                  )
                 ),
               ),
               const SizedBox(height: 10),
@@ -139,56 +147,80 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
               ),
               const SizedBox(height: 10),
               ReminderWidget(
+                startDate: selectedStartDate,
+
                 onReminderTimesChanged: (times) {
                   setState(() {
                     reminderTimes = times;
                   });
-                },
+                }, title: widget.title, quote: widget.quote,
               ),
               const SizedBox(height: 10),
-              ElevatedButton(
-                child: Text('Save'),
-                onPressed: () {
-                  if (reminderTimes.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please select reminder times!')),
-                    );
-                    return;
-                  }
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  child: Text('Save',style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'Fonts')),
+                  onPressed: () async {
+  if (widget.title.isNotEmpty && widget.quote.isNotEmpty) {
+   print('not empty');
+    AddhabitModal newHabit = AddhabitModal(
+      name: widget.title,
+      quote: widget.quote,
+      selectedAvatarPath: widget.image, 
+      goalDays: goalDays,
+      frequency: selectedFrequency,
+      partOfDay: selectedPartOfDay,
+    );
 
-                  // Loop through each selected reminder time
-                 // Schedule the notification for the selected date and time
-for (DateTime reminderTime in reminderTimes) {
-  DateTime now = DateTime.now();
-  DateTime scheduledDateTime = DateTime(
-    now.year,
-    now.month,
-    now.day,
-    reminderTime.hour,
-    reminderTime.minute,
-  );
+    await _hiveService.saveHabit(newHabit);
 
-  // If the selected time is in the past for today, schedule it for the next day
-  if (scheduledDateTime.isBefore(now)) {
-    scheduledDateTime = scheduledDateTime.add(Duration(days: 1));
-  }
+    for (DateTime reminderTime in reminderTimes) {
+      DateTime now = DateTime.now();
+      DateTime scheduledDateTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        reminderTime.hour,
+        reminderTime.minute,
+      );
 
-  // Calculate the delay in seconds
-  Duration delay = scheduledDateTime.difference(now);
+      if (scheduledDateTime.isBefore(now)) {
+        scheduledDateTime = scheduledDateTime.add(Duration(days: 1));
+      }
 
-  notificationService.scheduleNotification(
-    id: scheduledDateTime.hashCode,  // Use hashCode for unique ID
-    title: 'habit reminder',
-    body: 'Time for your habit!',
-    delay: delay.inSeconds,  // Delay in seconds
-  );
-}
+      Duration delay = scheduledDateTime.difference(now);
+
+      notificationService.scheduleNotification(
+        id: scheduledDateTime.hashCode,
+        title: widget.title,
+        body: widget.quote,
+        delay: delay.inSeconds,
+      );
+    }
+
+   print('snackbar top');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Habit reminder saved!')),
+    );
+
+   
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HabitScreen()),
+      (Route<dynamic> route) => false, 
+    );
+  } 
+},
 
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Habit reminder saved!')),
-                  );
-                },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: ThemeProvider().themeData.primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    ),
+                ),
               ),
             ],
           ),

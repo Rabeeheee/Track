@@ -6,10 +6,8 @@ import 'package:trackitapp/pages/widgets/app_bar.dart';
 import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/pages/widgets/date_row.dart';
 import 'package:trackitapp/pages/widgets/drawer.dart';
-import 'package:trackitapp/pages/widgets/logout_dialog.dart';
-
+import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/utils/colors.dart';
@@ -24,17 +22,18 @@ class HabitScreenState extends State<HabitScreen> {
   DateTime _currentDate = DateTime.now();
   bool _isMorningExpanded = false;
   bool _isAfternoonExpanded = false;
-  bool _isAboutExpanded = false;
+  bool _isNightExpanded = false;
+  bool _isOtherExpanded = false;
 
   final HiveService _hiveService = HiveService();
   String? username;
   File? _imagePath;
 
-  final List<String> _morningTasks = ['Wake up early', 'Read'];
-  final List<String> _afternoonTasks = ['Lunch', 'Take a walk'];
-  final List<String> _AboutNotes = [
-    'Welcome to Habit\nTracker, your personal\ncompanion for\nbuilding and\nmaintaining positive\nhabits!'
-  ];
+  // List to store categorized habits
+  List<AddhabitModal> _morningHabits = [];
+  List<AddhabitModal> _afternoonHabits = [];
+  List<AddhabitModal> _nightHabits = [];
+  List<AddhabitModal> _otherHabits = [];
 
   int _selectedIndex = 1;
 
@@ -43,7 +42,7 @@ class HabitScreenState extends State<HabitScreen> {
     super.initState();
     _updateDate();
     _fetchUsername();
-    
+    _loadHabits();
   }
 
   Future<void> _fetchUsername() async {
@@ -53,15 +52,14 @@ class HabitScreenState extends State<HabitScreen> {
     });
   }
 
-  Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _imagePath = File(pickedFile.path);
-      });
-      await _hiveService.saveProfileImagePath(_imagePath!.path);
-    }
+  Future<void> _loadHabits() async {
+    List<AddhabitModal> allHabits = await _hiveService.getAllHabits();
+    setState(() {
+      _morningHabits = allHabits.where((habit) => habit.partOfDay == 'Morning').toList();
+      _afternoonHabits = allHabits.where((habit) => habit.partOfDay == 'Afternoon').toList();
+      _nightHabits = allHabits.where((habit) => habit.partOfDay == 'Night').toList();
+      _otherHabits = allHabits.where((habit) => habit.partOfDay == 'Other').toList();
+    });
   }
 
   void _updateDate() {
@@ -76,21 +74,6 @@ class HabitScreenState extends State<HabitScreen> {
     });
   }
 
-  void _showLogoutDialog() {
-    return showLogoutDialog(context);
-  }
-
-  
-  void _onFabPressed() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AddDefHabit(),
-        ),
-      );
-   
-  }
-
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -99,27 +82,28 @@ class HabitScreenState extends State<HabitScreen> {
       theme: themeProvider.themeData,
       home: Scaffold(
         backgroundColor: themeProvider.themeData.scaffoldBackgroundColor,
-        appBar: CustomAppBar(title: 'Habit',
-        actions: [
-           IconButton(
-          onPressed: () {},
-          icon: Iconify(
-            GameIcons.progression,
-            color: themeProvider.themeData.canvasColor,
-          ),
-        ),
-        Builder(builder: (context) {
-          return IconButton(
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            icon: Icon(
-              Icons.menu,
-              color: themeProvider.themeData.canvasColor,
+        appBar: CustomAppBar(
+          title: 'Habit',
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Iconify(
+                GameIcons.progression,
+                color: themeProvider.themeData.canvasColor,
+              ),
             ),
-          );
-        }),
-        ],
+            Builder(builder: (context) {
+              return IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: Icon(
+                  Icons.menu,
+                  color: themeProvider.themeData.canvasColor,
+                ),
+              );
+            }),
+          ],
         ),
         drawer: AppDrawer(),
         body: Padding(
@@ -130,9 +114,8 @@ class HabitScreenState extends State<HabitScreen> {
                 // Date row
                 DateRow(currentDate: _currentDate),
                 SizedBox(height: 20),
-                Column(
-                  children: [
-                    Container(
+                
+                      Container(
                       
                       decoration: BoxDecoration(
                         color: themeProvider.themeData.cardColor,
@@ -230,173 +213,58 @@ class HabitScreenState extends State<HabitScreen> {
                     SizedBox(height: 10),
 
                     
-                    Column(
-                      children: [
-                        // Morning Section
-                        Container(
-                          decoration: BoxDecoration(
-                            color: themeProvider.themeData.cardColor,
-                            borderRadius: BorderRadius.circular(7),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Morning',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17,
-                                          color: themeProvider
-                                              .themeData.splashColor),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '${_morningTasks.length}',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: themeProvider
-                                                  .themeData.splashColor),
-                                        ),
-                                        IconButton(
-                                          icon: Icon(
-                                              _isMorningExpanded
-                                                  ? Icons.keyboard_arrow_up
-                                                  : Icons.keyboard_arrow_down,
-                                              color: themeProvider
-                                                  .themeData.splashColor),
-                                          onPressed: () {
-                                            setState(() {
-                                              _isMorningExpanded =
-                                                  !_isMorningExpanded;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                if (_isMorningExpanded) ...[
-                                  SizedBox(height: 10),
-                                  for (var task in _morningTasks)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5),
-                                      child: Row(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 10,
-                                            backgroundColor: Colors.brown,
-                                          ),
-                                          SizedBox(width: 10),
-                                          Text(
-                                            task,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: themeProvider
-                                                    .themeData.splashColor),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                ],
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
+                    SizedBox(height: 10),
+                Column(
+                  children: [
+                    // Morning Section
+                    _buildHabitSection(
+                      title: 'Morning',
+                      habits: _morningHabits,
+                      isExpanded: _isMorningExpanded,
+                      onExpand: () {
+                        setState(() {
+                          _isMorningExpanded = !_isMorningExpanded;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 10),
 
-                        // Afternoon Section
-                        Container(
-                          decoration: BoxDecoration(
-                            color: themeProvider.themeData.cardColor,
-                            borderRadius: BorderRadius.circular(7),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Afternoon',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17,
-                                          color: themeProvider
-                                              .themeData.splashColor),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '${_afternoonTasks.length}',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: themeProvider
-                                                  .themeData.splashColor),
-                                        ),
-                                        IconButton(
-                                          icon: Icon(
-                                              _isAfternoonExpanded
-                                                  ? Icons.keyboard_arrow_up
-                                                  : Icons.keyboard_arrow_down,
-                                              color: themeProvider
-                                                  .themeData.splashColor),
-                                          onPressed: () {
-                                            setState(() {
-                                              _isAfternoonExpanded =
-                                                  !_isAfternoonExpanded;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                if (_isAfternoonExpanded) ...[
-                                  SizedBox(height: 10),
-                                  for (var task in _afternoonTasks)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5),
-                                      child: Row(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 10,
-                                            backgroundColor: Colors.brown,
-                                          ),
-                                          SizedBox(width: 10),
-                                          Text(
-                                            task,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: themeProvider
-                                                    .themeData.splashColor),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                ],
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
+                    // Afternoon Section
+                    _buildHabitSection(
+                      title: 'Afternoon',
+                      habits: _afternoonHabits,
+                      isExpanded: _isAfternoonExpanded,
+                      onExpand: () {
+                        setState(() {
+                          _isAfternoonExpanded = !_isAfternoonExpanded;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 10),
 
-                      ],
+                    // Night Section
+                    _buildHabitSection(
+                      title: 'Night',
+                      habits: _nightHabits,
+                      isExpanded: _isNightExpanded,
+                      onExpand: () {
+                        setState(() {
+                          _isNightExpanded = !_isNightExpanded;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 10),
+
+                    // Other Section
+                    _buildHabitSection(
+                      title: 'Other',
+                      habits: _otherHabits,
+                      isExpanded: _isOtherExpanded,
+                      onExpand: () {
+                        setState(() {
+                          _isOtherExpanded = !_isOtherExpanded;
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -407,13 +275,116 @@ class HabitScreenState extends State<HabitScreen> {
 
         // Add a Floating Action Button
         floatingActionButton: FloatingActionButton(
-          onPressed: _onFabPressed,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddDefHabit(),
+              ),
+            );
+          },
           backgroundColor: AppColors.primaryColor,
-          child: Icon(Icons.add,size: 35,color: Colors.white,),
+          child: Icon(Icons.add, size: 35, color: Colors.white),
         ),
         bottomNavigationBar: Bottomnav(
           selectedIndex: _selectedIndex,
           onItemTapped: _onItemTapped,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHabitSection({
+    required String title,
+    required List<AddhabitModal> habits,
+    required bool isExpanded,
+    required VoidCallback onExpand,
+  }) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: themeProvider.themeData.cardColor,
+        borderRadius: BorderRadius.circular(7),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                      color: themeProvider.themeData.splashColor),
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '${habits.length}',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: themeProvider.themeData.splashColor),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        isExpanded
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down,
+                        color: themeProvider.themeData.splashColor,
+                      ),
+                      onPressed: onExpand,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            if (isExpanded) ...[
+              SizedBox(height: 10),
+              for (var habit in habits)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: GestureDetector(
+                    onLongPress: (){},
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundImage: habit.selectedAvatarPath == null
+                              ? AssetImage('assets/images/default.jpg')
+                              : FileImage(File(habit.selectedAvatarPath!)) as ImageProvider,
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              habit.name!,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: themeProvider.themeData.splashColor),
+                            ),
+                            Text(
+                              habit.quote ?? '',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: themeProvider.themeData.splashColor),
+                            ),
+                          ],
+                        ),
+                        
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ],
         ),
       ),
     );

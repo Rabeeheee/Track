@@ -5,7 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:trackitapp/auth/splash_screen.dart';
 import 'package:trackitapp/pages/other/progressprovider.dart';
 import 'package:trackitapp/pages/tabs/habit_screen.dart';
-import 'package:trackitapp/services/models/Hive_modals.dart';
+import 'package:trackitapp/services/models/addhabit_modal.dart';
+import 'package:trackitapp/services/models/user_modal.dart';
 import 'package:trackitapp/utils/login_manager.dart';
 import 'utils/theme_provider.dart';
 import 'package:timezone/data/latest_all.dart' as tz; 
@@ -16,16 +17,17 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
- 
   tz.initializeTimeZones(); 
-
   await _initializeNotifications(); 
 
 
   await Hive.initFlutter();
   Hive.registerAdapter(UserModelAdapter());
   await Hive.openBox('userBox');
+  Hive.registerAdapter(AddhabitModalAdapter());
+  
+
+  
 
   runApp(
     MultiProvider(

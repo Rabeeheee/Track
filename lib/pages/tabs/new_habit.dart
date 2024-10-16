@@ -4,7 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/tabs/add_habit_reminder.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
+import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
+import 'package:trackitapp/services/models/modals.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 import 'dart:math';
 
@@ -53,7 +55,7 @@ class _NewHabitState extends State<NewHabit> {
     'assets/avatars/workout.png',
   ];
 
-  // The current avatar being used
+  
   String? selectedAvatar;
 
   @override
@@ -70,10 +72,10 @@ class _NewHabitState extends State<NewHabit> {
   }
 
   Future<void> _loadSelectedAvatar() async {
-    String? savedAvatarPath = await _hiveService.getSelectedAvatarPath();
+    String? savedAvatarPath = await _hiveService.saveHabit(AddhabitModal(selectedAvatarPath: selectedAvatar));
     if (savedAvatarPath != null) {
       setState(() {
-        selectedAvatar = savedAvatarPath; // Save the selected avatar for this habit
+        selectedAvatar = savedAvatarPath; 
       });
     }
   }
@@ -83,12 +85,12 @@ class _NewHabitState extends State<NewHabit> {
 
     if (pickedFile != null) {
       setState(() {
-        selectedAvatar = pickedFile.path; // Store the selected avatar
-        avatar[index] = pickedFile.path; // Update the avatar at the index
+        selectedAvatar = pickedFile.path; 
+        avatar[index] = pickedFile.path; 
       });
 
-      // Save the selected avatar path in Hive
-      await _hiveService.saveSelectedAvatarPath(pickedFile.path);
+    
+      await _hiveService.saveHabit(AddhabitModal(selectedAvatarPath: selectedAvatar));
     }
   }
 
@@ -137,9 +139,9 @@ class _NewHabitState extends State<NewHabit> {
                             selectedIndex = index;
                           });
                         }
-                        // Only save the new selected avatar path when changed
+                       
                         if (avatar[index] != selectedAvatar) {
-                          _hiveService.saveSelectedAvatarPath(avatar[index]);
+                          _hiveService.saveHabit(AddhabitModal(selectedAvatarPath: selectedAvatar));
                         }
                       },
                       child: AnimatedContainer(
@@ -188,8 +190,16 @@ class _NewHabitState extends State<NewHabit> {
                 Container(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                     Navigator.push(context, MaterialPageRoute(builder: (context)=>AddHabitReminder()));
+                    onPressed: () async {
+                      if(_titleController.text.isNotEmpty && _quoteController.text.isNotEmpty){
+                      
+                      }
+
+                     Navigator.push(context, MaterialPageRoute(builder: (context)=>AddHabitReminder(
+                      title: _titleController.text,
+                      quote: _quoteController.text,
+                      image: selectedAvatar,
+                     )));
                     },
                     child: Text(
                       'Next',

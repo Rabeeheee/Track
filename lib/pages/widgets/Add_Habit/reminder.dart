@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:trackitapp/services/models/notification_services.dart';
 
 class ReminderWidget extends StatefulWidget {
+    final String title;
+  final String quote;
   final Function(List<DateTime>) onReminderTimesChanged;
+  final DateTime? startDate;
 
-  ReminderWidget({required this.onReminderTimesChanged});
+  ReminderWidget({
+    required this.onReminderTimesChanged,
+    required this.startDate, required this.title, required this.quote, 
+  });
 
   @override
   _ReminderWidgetState createState() => _ReminderWidgetState();
@@ -14,30 +20,17 @@ class _ReminderWidgetState extends State<ReminderWidget> {
   List<DateTime> selectedReminderTimes = [];
   final NotificationServices notificationService = NotificationServices();
 
-  // Function to pick date
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      _selectTime(context, pickedDate);
-    }
-  }
 
-  // Function to pick time and combine with the selected date
-  Future<void> _selectTime(BuildContext context, DateTime selectedDate) async {
+  Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
-    if (pickedTime != null) {
+    if (pickedTime != null && widget.startDate != null) {
       final DateTime finalReminderTime = DateTime(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day,
+        widget.startDate!.year, 
+        widget.startDate!.month,
+        widget.startDate!.day,
         pickedTime.hour,
         pickedTime.minute,
       );
@@ -48,19 +41,19 @@ class _ReminderWidgetState extends State<ReminderWidget> {
 
       widget.onReminderTimesChanged(selectedReminderTimes);
       
-      // Calculate the delay in seconds
+      
       DateTime now = DateTime.now();
       if (finalReminderTime.isBefore(now)) {
         finalReminderTime.add(Duration(days: 1));
       }
       Duration delay = finalReminderTime.difference(now);
 
-      // Schedule the notification for the selected date and time
+   
       notificationService.scheduleNotification(
-        id: finalReminderTime.hashCode,  // Use the final time's hashCode for unique ID
-        title: 'Habit Reminder',
-        body: 'Your scheduled habit reminder!',
-        delay: delay.inSeconds,  // Delay in seconds
+        id: finalReminderTime.hashCode,  
+        title: widget.title,
+        body: widget.quote,
+        delay: delay.inSeconds,  
       );
     }
   }
@@ -87,7 +80,7 @@ class _ReminderWidgetState extends State<ReminderWidget> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.add, color: Colors.blueAccent),
-                  onPressed: () => _selectDate(context),
+                  onPressed: () => _selectTime(context),
                 ),
               ],
             ),

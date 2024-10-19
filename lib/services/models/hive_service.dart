@@ -1,87 +1,109 @@
 import 'package:hive/hive.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
-import 'package:trackitapp/services/models/modals.dart';
-
 
 class HiveService {
   // Open the userBox
-  Future<Box> openuserBox() async {
+  Future<Box> openUserBox() async {
     return await Hive.openBox('userBox');
   }
 
-//to store habits
- Future<Box<AddhabitModal>> openHabitBox() async {
-  return await Hive.openBox<AddhabitModal>('habitBox');
-}
+    Future<Box<AddhabitModal>> openHabitBox() async {
+    return await Hive.openBox('habitBox');
+  }
 
-  
+  // Open the habitBox with AddhabitModal type
+  Future<Box<AddhabitModal>> getHabitsBox() => openHabitBox();
+
 
   // Clear the userBox
-  Future<void> clearuserbox() async {
-    var box = Hive.box('userBox');
+  Future<void> clearUserBox() async {
+    var box = await openUserBox();
     await box.clear();
   }
 
-  // Clear the addhabitbox
-  Future<void> clearhabitbox() async {
-    var box = Hive.box('addhabitbox');
+  // Clear the habitBox
+  Future<void> clearHabitBox() async {
+    var box = await getHabitsBox();
     await box.clear();
   }
 
   // Save username in userBox
   Future<void> saveUsername(String username) async {
-    var box = await openuserBox();
+    var box = await openUserBox();
     await box.put('username', username);
   }
 
   // Retrieve username from userBox
   Future<String?> getUsername() async {
-    var box = await openuserBox();
+    var box = await openUserBox();
     return box.get('username');
   }
 
   // Save profile image path in userBox
   Future<void> saveProfileImagePath(String path) async {
-    var box = await openuserBox();
+    var box = await openUserBox();
     await box.put('profileImagePath', path);
   }
 
   // Retrieve profile image path from userBox
   Future<String?> getProfileImagePath() async {
-    var box = await openuserBox();
+    var box = await openUserBox();
     return box.get('profileImagePath');
   }
 
+ // Save a new habit with a unique ID
+Future<void> saveHabit(AddhabitModal habit) async {
+  var box = await getHabitsBox();
 
-  // Update a habit's completion status (toggle between true or false)
- // Update a habit's completion status based on its unique ID
-Future<void> updateHabitCompletion(AddhabitModal habit) async {
-  var box = await openHabitBox();
-  
-  // Find the habit by its unique id in the box
-  final existingHabitKey = box.keys.firstWhere((key) {
-    final storedHabit = box.get(key) as AddhabitModal?;
-    return storedHabit?.id == habit.id;
-  }, orElse: () => null);
+  // Assign a unique ID if not already set
+  if (habit.id == null) {
+    habit.id = box.isNotEmpty ? box.keys.cast<int>().last + 1 : 1;
+  }
 
-  if (existingHabitKey != null) {
-    habit.isCompleted = !habit.isCompleted;  // Toggle the 'isCompleted' value
-    await box.put(existingHabitKey, habit);  // Update the habit in the box
+  if (habit.name != null && habit.goalDays != null) {
+    await box.put(habit.id, habit);  // Use the unique id to store the habit
+  } else {
+    print(' {{{{{{{{{{{{{not saving}}}}}}}}}}}}}');
   }
 }
 
 
+  // General method to update a habit
+  Future<void> updateHabit(AddhabitModal habit) async {
+    var box = await getHabitsBox();
+    if (habit.id != null) {
+      await box.put(habit.id, habit);
+    } else {
+      print('Habit ID is null, cannot update');
+    }
+  }
 
- Future<dynamic> saveHabit(AddhabitModal habit) async {
-  var box = await openHabitBox();
-  await box.add(habit);  
+  // Update habit completion status (just toggle completed state)
+  Future<void> updateHabitCompletion(int habitId) async {
+    var habit = await getHabitById(habitId);
+    if (habit != null) {
+      habit.isCompleted = !habit.isCompleted;  
+      await updateHabit(habit); 
+    } else {
+      print('Habit not found with the given ID');
+    }
+  }
+
+  // Delete habit by ID
+ Future<void> deleteHabit(int habitId) async {
+  final box = await getHabitsBox();
+  await box.delete(habitId); 
 }
 
+  // Get all habits
   Future<List<AddhabitModal>> getAllHabits() async {
-    var box = await openHabitBox();
-    return box.values.toList();  // Returns a list of all habits
+    var box = await getHabitsBox();
+    return box.values.toList();
   }
 
-
-
+  // Get a specific habit by ID
+  Future<AddhabitModal?> getHabitById(int id) async{
+    var box = await getHabitsBox();
+    return box.get(id);
+  }
 }

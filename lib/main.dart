@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -25,15 +26,15 @@ Future<void> main() async {
   Hive.registerAdapter(UserModelAdapter());
   await Hive.openBox('userBox');
   Hive.registerAdapter(AddhabitModalAdapter());
+  await Hive.openBox<AddhabitModal>('habitBox');
   
-
   
-
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        
       ],
       child: MyApp(),
     ),
@@ -65,7 +66,7 @@ class MyApp extends StatelessWidget {
             future: LoginManager.getLoginStatus(),
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data == true) {
-                return HabitScreen(); 
+                return HabitScreen(name: '', quote: '', selectedAvatarPath: '',); 
               } else {
                 return SplashScreen();
               }

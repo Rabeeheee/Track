@@ -201,7 +201,7 @@ class PotentialScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                           HabitScreen(),
+                           HabitScreen(name: '', quote: '', selectedAvatarPath: '',),
                       ),
                     );
                   },

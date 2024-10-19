@@ -17,36 +17,39 @@ class AddhabitModalAdapter extends TypeAdapter<AddhabitModal> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AddhabitModal(
-      goalDays: fields[3] as dynamic,
-      frequency: fields[4] as dynamic,
+      goalDays: fields[4] as String?,
+      frequency: fields[5] as String?,
       name: fields[0] as String?,
-      isCompleted: fields[6] as bool,
-      id: fields[7] as String?,
-      partOfDay: fields[5] as String?,
+      isCompleted: fields[7] as bool,
+      id: fields[8] as int?,
+      partOfDay: fields[6] as String?,
       quote: fields[1] as String?,
-      selectedAvatarPath: fields[2] as String?,
+      description: fields[2] as String,
+      selectedAvatarPath: fields[3] as String?, 
     );
   }
 
   @override
   void write(BinaryWriter writer, AddhabitModal obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
       ..write(obj.quote)
       ..writeByte(2)
-      ..write(obj.selectedAvatarPath)
+      ..write(obj.description)
       ..writeByte(3)
-      ..write(obj.goalDays)
+      ..write(obj.selectedAvatarPath)
       ..writeByte(4)
-      ..write(obj.frequency)
+      ..write(obj.goalDays)
       ..writeByte(5)
-      ..write(obj.partOfDay)
+      ..write(obj.frequency)
       ..writeByte(6)
-      ..write(obj.isCompleted)
+      ..write(obj.partOfDay)
       ..writeByte(7)
+      ..write(obj.isCompleted)
+      ..writeByte(8)
       ..write(obj.id);
   }
 

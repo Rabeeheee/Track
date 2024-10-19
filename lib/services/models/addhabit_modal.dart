@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 
-
 part 'addhabit_modal.g.dart';
 
 @HiveType(typeId: 1)
@@ -13,36 +12,38 @@ class AddhabitModal extends HiveObject {
   String? quote;
 
   @HiveField(2)
-  String? selectedAvatarPath;
+  String? description;
 
   @HiveField(3)
-  dynamic goalDays;
+  String? selectedAvatarPath;
 
   @HiveField(4)
-dynamic frequency;
+  String? goalDays; 
 
   @HiveField(5)
-String? partOfDay;
+  String? frequency; 
 
   @HiveField(6)
-  bool isCompleted;  
+  String? partOfDay;
 
-   @HiveField(7)
-  String? id; 
+  @HiveField(7)
+  bool isCompleted = false;  
 
-AddhabitModal({
-this.goalDays,
- this.frequency,
-required this.name,
-required this.isCompleted,
-required this.id,
- this.partOfDay,
- this.quote,
- this.selectedAvatarPath,
-    
+  @HiveField(8)
+  int? id;
 
-});
+  AddhabitModal({
+    this.goalDays = 'Forever',
+    this.frequency = 'Daily', 
+    required this.name,
+    this.isCompleted = false,
+    required this.id,
+    this.partOfDay,
+    this.quote,
+    this.selectedAvatarPath, String? image, required String description,
+  });
 
+  void assignId(int id) {
+    this.id = id;
+  }
 }
-
-

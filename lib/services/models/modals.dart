@@ -11,6 +11,7 @@ class Habit {
   late final String title;
   late final String subtitle;
   final String image; 
+  
 
   Habit({required this.title, required this.subtitle, required this.image});
 

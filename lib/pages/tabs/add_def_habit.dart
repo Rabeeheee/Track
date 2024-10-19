@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackitapp/pages/tabs/new_habit.dart';
+import 'package:trackitapp/pages/tabs/add_new_habit.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
 import 'package:trackitapp/pages/widgets/habit_def_card.dart';
 import 'package:trackitapp/services/models/modals.dart';
@@ -72,7 +72,9 @@ class AddDefHabit extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>NewHabit()));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => NewHabit( habitId: 0, title: '', subtitle: '',))
+                    );
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

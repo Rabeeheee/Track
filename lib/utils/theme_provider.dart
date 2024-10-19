@@ -42,6 +42,7 @@ class ThemeProvider with ChangeNotifier {
       );
     }
   }
+   
 
   void toggleTheme() {
     _theme = (_theme == AppTheme.light) ? AppTheme.dark : AppTheme.light;

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/tabs/habit_screen.dart';
@@ -19,8 +20,17 @@ class AddHabitReminder extends StatefulWidget {
   final String title;
   final String quote;
   final String? image;
+  final int habitId;
+  final String description;
 
-  const AddHabitReminder({super.key, required this.title, required this.quote, required this.image});
+  const AddHabitReminder(
+      {super.key,
+      required this.title,
+      required this.quote,
+      required this.image,
+      required this.habitId, 
+      required this.description
+      });
 
   @override
   State<AddHabitReminder> createState() => _AddHabitReminderState();
@@ -34,7 +44,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
   DateTime? selectedStartDate = DateTime.now();
   String goalDays = 'Forever';
   String selectedPartOfDay = 'Morning';
-  List<DateTime> reminderTimes = []; // List to hold selected reminder times
+  List<DateTime> reminderTimes = [];
 
   final NotificationServices notificationService = NotificationServices();
   final HiveService _hiveService = HiveService();
@@ -71,54 +81,51 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                   color: themeProvider.themeData.cardColor,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SectionTitleWidget(
-                          title: 'Frequency',
-                          isSelected: selectedFrequency == 'Frequency'),
-                      const SizedBox(height: 16),
-                      FrequencySelectionWidget(
-                        selectedFrequency: selectedFrequency,
-                        onSelectFrequency: (frequency) {
-                          setState(() {
-                            selectedFrequency = frequency;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 32),
-                      if (selectedFrequency == 'Daily')
-                        DailySelection(
-                          onDaySelected: (updatedDays) {
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SectionTitleWidget(
+                            title: 'Frequency',
+                            isSelected: selectedFrequency == 'Frequency'),
+                        const SizedBox(height: 16),
+                        FrequencySelectionWidget(
+                          selectedFrequency: selectedFrequency,
+                          onSelectFrequency: (frequency) {
                             setState(() {
-                              selectedDays = updatedDays;
+                              selectedFrequency = frequency;
                             });
                           },
                         ),
-                      if (selectedFrequency == 'Weekly')
-                        WeeklySelectionWidget(
-                          selectedWeekdays: selectedWeekdays,
-                          onSelectWeekday: (weekday) {
-                            setState(() {
-                              selectedWeekdays = weekday;
-                            });
-                          },
-                        ),
-                      if (selectedFrequency == 'Interval')
-                        IntervalSelectionWidget(
-                          intervalDays: intervalDays,
-                          onSelectInterval: (days) {
-                            setState(() {
-                              intervalDays = days;
-                            });
-                          },
-                        ),
-
-                        
-                    ],
-                  )
-                ),
+                        const SizedBox(height: 32),
+                        if (selectedFrequency == 'Daily')
+                          DailySelection(
+                            onDaySelected: (updatedDays) {
+                              setState(() {
+                                selectedDays = updatedDays;
+                              });
+                            },
+                          ),
+                        if (selectedFrequency == 'Weekly')
+                          WeeklySelectionWidget(
+                            selectedWeekdays: selectedWeekdays,
+                            onSelectWeekday: (weekday) {
+                              setState(() {
+                                selectedWeekdays = weekday;
+                              });
+                            },
+                          ),
+                        if (selectedFrequency == 'Interval')
+                          IntervalSelectionWidget(
+                            intervalDays: intervalDays,
+                            onSelectInterval: (days) {
+                              setState(() {
+                                intervalDays = days;
+                              });
+                            },
+                          ),
+                      ],
+                    )),
               ),
               const SizedBox(height: 10),
               DateGoalSelection(
@@ -148,78 +155,99 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
               const SizedBox(height: 10),
               ReminderWidget(
                 startDate: selectedStartDate,
-
                 onReminderTimesChanged: (times) {
                   setState(() {
                     reminderTimes = times;
                   });
-                }, title: widget.title, quote: widget.quote,
+                },
+                title: widget.title,
+                quote: widget.quote,
               ),
               const SizedBox(height: 10),
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
-                  child: Text('Save',style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'Fonts')),
+                  child: Text('Save',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: 'Fonts')),
                   onPressed: () async {
-  if (widget.title.isNotEmpty && widget.quote.isNotEmpty) {
-   print('not empty');
-    AddhabitModal newHabit = AddhabitModal(
-      name: widget.title,
-      quote: widget.quote,
-      selectedAvatarPath: widget.image, 
-      goalDays: goalDays,
-      frequency: selectedFrequency,
-      partOfDay: selectedPartOfDay, isCompleted: true, id: '',
-    );
+                    if (widget.title.isNotEmpty && widget.quote.isNotEmpty) {
+                      int habitId = widget.habitId ?? Random().nextInt(1000);
 
-    await _hiveService.saveHabit(newHabit);
+                      print('not empty');
 
-    for (DateTime reminderTime in reminderTimes) {
-      DateTime now = DateTime.now();
-      DateTime scheduledDateTime = DateTime(
-        now.year,
-        now.month,
-        now.day,
-        reminderTime.hour,
-        reminderTime.minute,
-      );
+                      AddhabitModal? existingHabit =
+                          await _hiveService.getHabitById(habitId);
 
-      if (scheduledDateTime.isBefore(now)) {
-        scheduledDateTime = scheduledDateTime.add(Duration(days: 1));
-      }
+                      AddhabitModal habitData = AddhabitModal(
+                        name: widget.title,
+                        quote: widget.quote,
+                        selectedAvatarPath: widget.image,
+                        goalDays: goalDays,
+                        frequency: selectedFrequency ?? 'Daily',
+                        partOfDay: selectedPartOfDay,
+                        isCompleted: existingHabit?.isCompleted ?? false,
+                        id: habitId, 
+                        description: '',
+                      );
 
-      Duration delay = scheduledDateTime.difference(now);
+                      await _hiveService.saveHabit(habitData);
 
-      notificationService.scheduleNotification(
-        id: scheduledDateTime.hashCode,
-        title: widget.title,
-        body: widget.quote,
-        delay: delay.inSeconds,
-      );
-    }
+                      if (existingHabit != null) {}
 
-   print('snackbar top');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Habit reminder saved!')),
-    );
+                      for (DateTime reminderTime in reminderTimes) {
+                        DateTime now = DateTime.now();
+                        DateTime scheduledDateTime = DateTime(
+                          now.year,
+                          now.month,
+                          now.day,
+                          reminderTime.hour,
+                          reminderTime.minute,
+                        );
 
-   
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => HabitScreen()),
-      (Route<dynamic> route) => false, 
-    );
-  } 
-},
+                        if (scheduledDateTime.isBefore(now)) {
+                          scheduledDateTime =
+                              scheduledDateTime.add(Duration(days: 1));
+                        }
 
+                        Duration delay = scheduledDateTime.difference(now);
 
+                        notificationService.scheduleNotification(
+                          id: scheduledDateTime.hashCode,
+                          title: widget.title,
+                          body: widget.quote,
+                          delay: delay.inSeconds,
+                        );
+                      }
+
+                      print(widget.title);
+                      print('snackbar top');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Habit reminder saved!')),
+                      );
+
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HabitScreen(
+                            name: widget.title,
+                            quote: widget.quote,
+                            selectedAvatarPath: widget.image ?? '',
+                          ),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: ThemeProvider().themeData.primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    backgroundColor: themeProvider.themeData.primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(7),
                     ),
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
                 ),
               ),
             ],

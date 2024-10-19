@@ -25,7 +25,7 @@ showLogoutDialog(BuildContext context) {
             TextButton(
               onPressed: () async {
                 HiveService _hiveService = HiveService();
-                await _hiveService.clearuserbox();
+                await _hiveService.clearUserBox();
                 await LoginManager.clearLoginStatus();
                 Navigator.pushAndRemoveUntil(
                   context,

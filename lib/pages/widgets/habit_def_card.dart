@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackitapp/pages/tabs/new_habit.dart';
+import 'package:trackitapp/pages/tabs/add_new_habit.dart';
 import 'package:trackitapp/services/models/modals.dart';
 import 'package:trackitapp/utils/colors.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
@@ -15,7 +15,7 @@ class HabitCard extends StatelessWidget {
       final themeProvider = Provider.of<ThemeProvider>(context);
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>NewHabit(selectedTitle: habit.title,selectedQuote: habit.subtitle,)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>NewHabit( habitId:0, title: '', subtitle: '',)));
       },
       child: Card(
         color: themeProvider.themeData.cardColor,

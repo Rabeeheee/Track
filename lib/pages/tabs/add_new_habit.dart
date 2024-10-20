@@ -11,14 +11,19 @@ import 'package:trackitapp/utils/theme_provider.dart';
 import 'dart:math';
 
 class NewHabit extends StatefulWidget {
-    final int habitId;
-    final String title;
-    final String subtitle;
-  
+  final int habitId;
+  final String title;
+  final String subtitle;
+  final String? selectedAvatarPath;
+  final String? description;
 
   const NewHabit({
-    super.key, required this.habitId, required this.title, required this.subtitle, 
-    
+    super.key,
+    required this.habitId,
+    required this.title,
+    required this.subtitle,
+    this.selectedAvatarPath,
+    this.description,
   });
 
   @override
@@ -31,6 +36,8 @@ class _NewHabitState extends State<NewHabit> {
   final TextEditingController _descriptionController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   final HiveService _hiveService = HiveService();
+
+  bool isEditing = false;
 
   // ignore: non_constant_identifier_names
   final List<String> Quotes = [
@@ -55,36 +62,86 @@ class _NewHabitState extends State<NewHabit> {
   void initState() {
     super.initState();
     _loadSelectedAvatar();
-    loadHabitById(widget.habitId);
+
+    if (widget.habitId != 0) {
+      isEditing = true;
+      loadHabitById(widget.habitId);
+    } else if (widget.title.isNotEmpty && widget.subtitle.isNotEmpty) {
+      _titleController.text = widget.title;
+      _quoteController.text = widget.subtitle;
+      _descriptionController.text = widget.description!;
+      selectedAvatar = widget.selectedAvatarPath;
+    }
   }
 
-  loadHabitById(habitId)async{
-    AddhabitModal? habit = await _hiveService.getHabitById(habitId);
-    setState(() {
-    _titleController.text = habit?.name as String;
-    _quoteController.text = habit?.quote as String;
-    _descriptionController.text = habit?.description as String;
-    habit?.selectedAvatarPath;
-    habit?.partOfDay;
-    });
+  loadHabitById(int habitId) async {
+    if (isEditing) {
+      AddhabitModal? habit = await _hiveService.getHabitById(habitId);
+      setState(() {
+        _titleController.text = habit?.name ?? '';
+        _quoteController.text = habit?.quote ?? '';
+        _descriptionController.text = habit?.description ?? '';
+        selectedAvatar = habit?.selectedAvatarPath;
+      });
+    }
   }
 
-  updateHabit(habitId) async{ 
-    AddhabitModal updatedModal = AddhabitModal(
-      name: _titleController.text, 
-      quote: _quoteController.text,
-      description: _descriptionController.text,
-      id: habitId
+  void _saveHabit() async {
+    int habitId = await _generateUniqueId();
+
+
+    if (widget.habitId == 0) {
+      isEditing = false;
+
+      AddhabitModal newHabit = AddhabitModal(
+        name: _titleController.text,
+        quote: _quoteController.text,
+        description: _descriptionController.text,
+        selectedAvatarPath: selectedAvatar,
+        id: habitId, 
       );
 
-      await _hiveService.updateHabit(updatedModal);
+      await _hiveService.saveHabit(newHabit);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Habit added successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else {
+      AddhabitModal updatedHabit = AddhabitModal(
+        name: _titleController.text,
+        quote: _quoteController.text,
+        description: _descriptionController.text,
+        selectedAvatarPath: selectedAvatar,
+        id: widget.habitId,
+      );
+
+      await _hiveService.updateHabit(updatedHabit);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Habit updated successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
   }
 
+  Future<int> _generateUniqueId() async {
+    List<AddhabitModal> habits = await _hiveService.getAllHabits();
 
+    if (habits.isEmpty) {
+      return 1;
+    }
 
+    int? maxId = habits.map((habit) => habit.id).reduce((a, b) => a! > b! ? a : b);
+    return maxId! + 1;
+  }
   Future<void> _loadSelectedAvatar() async {
-    if (selectedAvatar == null ) {
-      selectedAvatar = 'assets/images/read.jpeg';
+    if (selectedAvatar == null) {
+      selectedAvatar;
     }
   }
 
@@ -107,28 +164,46 @@ class _NewHabitState extends State<NewHabit> {
   }
 
   void _navigateToReminderScreen() async {
-    if (_titleController.text.isNotEmpty && _quoteController.text.isNotEmpty) {
-      await _loadSelectedAvatar();
+    await _loadSelectedAvatar();
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AddHabitReminder(
-            title: _titleController.text,
-            quote: _quoteController.text,
-            image: selectedAvatar,
-            habitId: widget.habitId, 
-            description: _descriptionController.text,
-            
-            
-          ),
-        ),
-      );
-    } else {
+    if (_titleController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Title and Quote cannot be empty")),
+        SnackBar(content: Text("Name cannot be empty")),
       );
+      return;
     }
+    if (_descriptionController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Description cannot be empty')),
+      );
+      return;
+    }
+    if (_quoteController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Quote cannot be empty')),
+      );
+      return;
+    }
+
+    if (selectedAvatar == null || selectedAvatar!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Avatar cannot be empty')),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddHabitReminder(
+          title: _titleController.text,
+          quote: _quoteController.text,
+          image: selectedAvatar,
+          habitId: widget.habitId,
+          description: _descriptionController.text,
+        ),
+      ),
+    );
   }
 
   @override
@@ -157,21 +232,18 @@ class _NewHabitState extends State<NewHabit> {
                   onTap: _pickImage,
                   child: CircleAvatar(
                     radius: 50,
-                   backgroundImage: selectedAvatar != null
-    ? FileImage(File(selectedAvatar!))
-    : AssetImage('assets/images/read.jpeg') as ImageProvider,
-    
-
+                    backgroundImage: selectedAvatar != null
+                        ? FileImage(File(selectedAvatar!))
+                        : null,
                     child: selectedAvatar == null
                         ? Icon(Icons.add_a_photo, size: 50, color: Colors.grey)
                         : null,
                   ),
                 ),
                 SizedBox(height: 40),
-                _buildTextField(
-                    themeProvider, 'Name', _titleController, 'Daily Check-in'),
-                     _buildTextField(
-                    themeProvider, 'Description', _descriptionController, 'Description'),
+                _buildTextField(themeProvider, 'Name', _titleController, 'Daily Check-in'),
+                SizedBox(height: 10),
+                _buildTextField(themeProvider, 'Description', _descriptionController, 'Description'),
                 SizedBox(height: 10),
                 _buildTextField(
                   themeProvider,
@@ -180,8 +252,7 @@ class _NewHabitState extends State<NewHabit> {
                   'Believe in yourself.',
                   iconButton: IconButton(
                     onPressed: _randomizeQuote,
-                    icon: Icon(Icons.replay_outlined,
-                        size: 20, color: Colors.blueAccent),
+                    icon: Icon(Icons.replay_outlined, size: 20, color: Colors.blueAccent),
                   ),
                 ),
               ],
@@ -204,8 +275,7 @@ class _NewHabitState extends State<NewHabit> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(7),
                       ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     ),
                   ),
                 ),
@@ -217,15 +287,16 @@ class _NewHabitState extends State<NewHabit> {
     );
   }
 
-  Widget _buildTextField(ThemeProvider themeProvider, String label,
-      TextEditingController controller, String hintText,
+  Widget _buildTextField(
+      ThemeProvider themeProvider, String label, TextEditingController controller, String hintText,
       {Widget? iconButton}) {
     return Container(
       height: 135,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: themeProvider.themeData.cardColor,
-          borderRadius: BorderRadius.circular(8)),
+        color: themeProvider.themeData.cardColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -248,21 +319,16 @@ class _NewHabitState extends State<NewHabit> {
             TextField(
               controller: controller,
               decoration: InputDecoration(
-                  hintText: hintText,
-                  hintStyle: TextStyle(color: Colors.grey),
-                  filled: true,
-                  fillColor: const Color.fromARGB(255, 202, 201, 201),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.transparent)),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  )),
+                hintText: hintText,
+                hintStyle: TextStyle(color: Colors.grey),
+                filled: true,
+                fillColor: const Color.fromARGB(255, 202, 201, 201),
+                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
           ],
         ),

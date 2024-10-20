@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
             future: LoginManager.getLoginStatus(),
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data == true) {
-                return HabitScreen(name: '', quote: '', selectedAvatarPath: '',); 
+                return HabitScreen(name: '', quote: '', selectedAvatarPath: '', isEditing: false, description: '', habitId: 0,); 
               } else {
                 return SplashScreen();
               }

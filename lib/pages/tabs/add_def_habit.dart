@@ -8,6 +8,25 @@ import 'package:trackitapp/utils/colors.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 
 class AddDefHabit extends StatelessWidget {
+
+ final int habitId;
+    final String title;
+    final String subtitle;
+    final String? selectedAvatarPath;
+    final String? description;
+  
+
+  AddDefHabit({
+    super.key, 
+    required this.habitId, 
+    required this.title, 
+    required this.subtitle, 
+    this.selectedAvatarPath,
+    this.description,
+    
+  });
+
+
  final List<Habit> suggestedHabits = [
   Habit(title: "Drink water", subtitle: "Stay moisturized", image: 'assets/images/water.jpeg'),
   Habit(title: "Eat breakfast", subtitle: "Life begins after breakfast", image: 'assets/images/breakfast.jpeg'),
@@ -73,7 +92,10 @@ class AddDefHabit extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => NewHabit( habitId: 0, title: '', subtitle: '',))
+                      MaterialPageRoute(builder: (context) => NewHabit(
+                         habitId: 0, 
+                         title: '',
+                        subtitle: '',))
                     );
                   },
                   child: Column(

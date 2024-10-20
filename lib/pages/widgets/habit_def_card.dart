@@ -15,7 +15,12 @@ class HabitCard extends StatelessWidget {
       final themeProvider = Provider.of<ThemeProvider>(context);
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>NewHabit( habitId:0, title: '', subtitle: '',)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>NewHabit( 
+          habitId:0, 
+          title: habit.title, 
+          subtitle: habit.subtitle,
+          description: '',
+          )));
       },
       child: Card(
         color: themeProvider.themeData.cardColor,

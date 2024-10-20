@@ -40,7 +40,9 @@ class AddhabitModal extends HiveObject {
     required this.id,
     this.partOfDay,
     this.quote,
-    this.selectedAvatarPath, String? image, required String description,
+    this.selectedAvatarPath, 
+    String? image, 
+    this.description,
   });
 
   void assignId(int id) {

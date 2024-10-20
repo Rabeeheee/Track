@@ -24,7 +24,7 @@ class AddhabitModalAdapter extends TypeAdapter<AddhabitModal> {
       id: fields[8] as int?,
       partOfDay: fields[6] as String?,
       quote: fields[1] as String?,
-      description: fields[2] as String,
+      description: fields[2] as String?,
       selectedAvatarPath: fields[3] as String?, 
     );
   }

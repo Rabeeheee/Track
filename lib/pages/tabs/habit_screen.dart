@@ -4,6 +4,7 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/game_icons.dart';
 import 'package:trackitapp/pages/tabs/add_def_habit.dart';
 import 'package:trackitapp/pages/tabs/add_new_habit.dart';
+import 'package:trackitapp/pages/tabs/habit_detail.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
 import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/pages/widgets/date_row.dart';
@@ -19,12 +20,19 @@ class HabitScreen extends StatefulWidget {
   final String name;
   final String quote;
   final String? selectedAvatarPath;
+  final bool isEditing;
+  final String description;
+  final int habitId;
+  
 
   HabitScreen({
     super.key,
     required this.name,
     required this.quote,
     required this.selectedAvatarPath,
+    required this.isEditing, 
+    required this.habitId,
+    required this.description, 
   });
 
   @override
@@ -60,15 +68,7 @@ class HabitScreenState extends State<HabitScreen> {
       selectedNightIndex.isNotEmpty ||
       selectedOtherIndex.isNotEmpty;
 
-  List<AddhabitModal> get selectedHabits {
-    List<AddhabitModal> habits = [
-      ...selectedMorningIndex.map((index) => _morningHabits[index]),
-      ...selectedAfternoonIndex.map((index) => _afternoonHabits[index]),
-      ...selectedNightIndex.map((index) => _nightHabits[index]),
-      ...selectedOtherIndex.map((index) => _otherHabits[index]),
-    ];
-    return habits;
-  }
+ 
 
   @override
   void initState() {
@@ -78,68 +78,9 @@ class HabitScreenState extends State<HabitScreen> {
     _loadHabits();
   }
 
-  void updateHabitSection(AddhabitModal habit, String newSection) async {
-    setState(() {
-      if (habit.partOfDay == 'Morning') {
-        _morningHabits.remove(habit);
-      } else if (habit.partOfDay == 'Afternoon') {
-        _afternoonHabits.remove(habit);
-      } else if (habit.partOfDay == 'Night') {
-        _nightHabits.remove(habit);
-      } else if (habit.partOfDay == 'Other') {
-        _otherHabits.remove(habit);
-      }
+ 
 
-      habit.partOfDay = newSection;
-
-      if (newSection == 'Morning') {
-        _morningHabits.add(habit);
-      } else if (newSection == 'Afternoon') {
-        _afternoonHabits.add(habit);
-      } else if (newSection == 'Night') {
-        _nightHabits.add(habit);
-      } else if (newSection == 'Other') {
-        _otherHabits.add(habit);
-      }
-
-      _hiveService.saveHabit(habit);
-    });
-  }
-
- Future<void> _deleteSelectedHabits() async {
-  // Collect habits to delete based on selected indices
-  List<AddhabitModal> habitsToDelete = [
-    ...selectedMorningIndex.map((index) => _morningHabits[index]),
-    ...selectedAfternoonIndex.map((index) => _afternoonHabits[index]),
-    ...selectedNightIndex.map((index) => _nightHabits[index]),
-    ...selectedOtherIndex.map((index) => _otherHabits[index]),
-  ];
-
-  // Delete habits from Hive (persistent storage)
-  for (var habit in habitsToDelete) {
-    await _hiveService.deleteHabit(habit.id!);
-  }
-
-  // Update the UI
-  setState(() {
-    // Remove habits from the local lists after deleting them from Hive
-    _morningHabits.removeWhere((habit) =>
-        selectedMorningIndex.contains(_morningHabits.indexOf(habit)));
-    _afternoonHabits.removeWhere((habit) =>
-        selectedAfternoonIndex.contains(_afternoonHabits.indexOf(habit)));
-    _nightHabits.removeWhere(
-        (habit) => selectedNightIndex.contains(_nightHabits.indexOf(habit)));
-    _otherHabits.removeWhere(
-        (habit) => selectedOtherIndex.contains(_otherHabits.indexOf(habit)));
-
-    // Clear the selected indices
-    selectedMorningIndex.clear();
-    selectedAfternoonIndex.clear();
-    selectedNightIndex.clear();
-    selectedOtherIndex.clear();
-  });
-}
-
+ 
 
 
   Future<void> _fetchUsername() async {
@@ -200,60 +141,8 @@ class HabitScreenState extends State<HabitScreen> {
     return Scaffold(
       backgroundColor: themeProvider.themeData.scaffoldBackgroundColor,
       appBar: CustomAppBar(
-        title: isAnyHabitSelected ? '' : 'Habit',
-        actions: isAnyHabitSelected
-            ? [
-                IconButton(
-                  onPressed: _deleteSelectedHabits,
-                  icon: const Icon(Icons.delete),
-                  color: themeProvider.themeData.canvasColor,
-                ),
-                IconButton(
-                  onPressed: () async {
-                    if (selectedHabits.isNotEmpty) {
-                      final editedHabit = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewHabit(
-                            habitId: selectedHabits.first.id!, title: '', subtitle: '',
-                          ),
-                        ),
-                      );
-
-                      if (editedHabit != null) {
-                        setState(() {
-                          final index = _morningHabits.indexWhere(
-                              (habit) => habit.id == editedHabit.id);
-                          if (index != -1) {
-                            _morningHabits[index] = editedHabit;
-                          }
-
-                          final indexAfternoon = _afternoonHabits.indexWhere(
-                              (habit) => habit.id == editedHabit.id);
-                          if (indexAfternoon != -1) {
-                            _afternoonHabits[indexAfternoon] = editedHabit;
-                          }
-
-                          final indexNight = _nightHabits.indexWhere(
-                              (habit) => habit.id == editedHabit.id);
-                          if (indexNight != -1) {
-                            _nightHabits[indexNight] = editedHabit;
-                          }
-
-                          final indexOther = _otherHabits.indexWhere(
-                              (habit) => habit.id == editedHabit.id);
-                          if (indexOther != -1) {
-                            _otherHabits[indexOther] = editedHabit;
-                          }
-                        });
-                      }
-                    }
-                  },
-                  icon: Icon(Icons.edit,
-                      color: themeProvider.themeData.canvasColor),
-                ),
-              ]
-            : [
+        title: 'Habit',
+        actions:  [
                 IconButton(
                   onPressed: () {},
                   icon: Iconify(
@@ -273,83 +162,84 @@ class HabitScreenState extends State<HabitScreen> {
                   );
                 }),
               ],
-        leading: isAnyHabitSelected
-            ? IconButton(
-                onPressed: _clearSelectedHabits,
-                icon: const Icon(Icons.arrow_back),
-              )
-            : null,
+        
+          
       ),
       drawer: AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              DateRow(currentDate: _currentDate),
-              const SizedBox(height: 20),
-              _buildMustDoSection(themeProvider),
-              const SizedBox(height: 10),
-
-              // Displaying Morning Habits
-              _buildHabitSection(
-                title: 'Morning',
-                habits: _morningHabits,
-                selectedIndex: selectedMorningIndex,
-                isExpanded: _isMorningExpanded,
-                onExpand: () {
-                  setState(() {
-                    _isMorningExpanded = !_isMorningExpanded;
-                  });
-                },
-                selectedHabits: [],
-              ),
-              const SizedBox(height: 10),
-
-              // Displaying Afternoon Habits
-              _buildHabitSection(
-                title: 'Afternoon',
-                habits: _afternoonHabits,
-                selectedIndex: selectedAfternoonIndex,
-                isExpanded: _isAfternoonExpanded,
-                onExpand: () {
-                  setState(() {
-                    _isAfternoonExpanded = !_isAfternoonExpanded;
-                  });
-                },
-                selectedHabits: [],
-              ),
-              const SizedBox(height: 10),
-
-              // Displaying Night Habits
-              _buildHabitSection(
-                title: 'Night',
-                habits: _nightHabits,
-                selectedIndex: selectedNightIndex,
-                isExpanded: _isNightExpanded,
-                onExpand: () {
-                  setState(() {
-                    _isNightExpanded = !_isNightExpanded;
-                  });
-                },
-                selectedHabits: [],
-              ),
-              const SizedBox(height: 10),
-
-              // Displaying Other Habits
-              _buildHabitSection(
-                title: 'Other',
-                habits: _otherHabits,
-                selectedIndex: selectedOtherIndex,
-                isExpanded: _isOtherExpanded,
-                onExpand: () {
-                  setState(() {
-                    _isOtherExpanded = !_isOtherExpanded;
-                  });
-                },
-                selectedHabits: [],
-              ),
-            ],
+        child: RefreshIndicator(
+          onRefresh: () async {
+            _loadHabits();
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                DateRow(currentDate: _currentDate),
+                const SizedBox(height: 20),
+                _buildMustDoSection(themeProvider),
+                const SizedBox(height: 10),
+          
+                // Displaying Morning Habits
+                _buildHabitSection(
+                  title: 'Morning',
+                  habits: _morningHabits,
+                  selectedIndex: selectedMorningIndex,
+                  isExpanded: _isMorningExpanded,
+                  onExpand: () {
+                    setState(() {
+                      _isMorningExpanded = !_isMorningExpanded;
+                    });
+                  },
+                  selectedHabits: [],
+                ),
+                const SizedBox(height: 10),
+          
+                // Displaying Afternoon Habits
+                _buildHabitSection(
+                  title: 'Afternoon',
+                  habits: _afternoonHabits,
+                  selectedIndex: selectedAfternoonIndex,
+                  isExpanded: _isAfternoonExpanded,
+                  onExpand: () {
+                    setState(() {
+                      _isAfternoonExpanded = !_isAfternoonExpanded;
+                    });
+                  },
+                  selectedHabits: [],
+                ),
+                const SizedBox(height: 10),
+          
+                // Displaying Night Habits
+                _buildHabitSection(
+                  title: 'Night',
+                  habits: _nightHabits,
+                  selectedIndex: selectedNightIndex,
+                  isExpanded: _isNightExpanded,
+                  onExpand: () {
+                    setState(() {
+                      _isNightExpanded = !_isNightExpanded;
+                    });
+                  },
+                  selectedHabits: [],
+                ),
+                const SizedBox(height: 10),
+          
+                // Displaying Other Habits
+                _buildHabitSection(
+                  title: 'Other',
+                  habits: _otherHabits,
+                  selectedIndex: selectedOtherIndex,
+                  isExpanded: _isOtherExpanded,
+                  onExpand: () {
+                    setState(() {
+                      _isOtherExpanded = !_isOtherExpanded;
+                    });
+                  },
+                  selectedHabits: [],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -357,18 +247,26 @@ class HabitScreenState extends State<HabitScreen> {
         padding: const EdgeInsets.only(left: 35),
         child: Align(
           alignment: Alignment.bottomLeft,
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddDefHabit(),
-                ),
-              );
-            },
-            backgroundColor: AppColors.primaryColor,
-            child: const Icon(Icons.add, size: 35, color: Colors.white),
-          ),
+          child:FloatingActionButton(
+            
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddDefHabit(
+          habitId: 0,  
+          title: '',
+          subtitle: '',
+          selectedAvatarPath: null,
+          description: '',
+        ),
+      ),
+    );
+  },
+  backgroundColor: themeProvider.darkPrimaryColor,
+  child: Icon(Icons.add,size: 35,color: Colors.white,),
+),
+
         ),
       ),
       bottomNavigationBar: Bottomnav(
@@ -495,20 +393,19 @@ class HabitScreenState extends State<HabitScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: GestureDetector(
-                    onLongPress: () {
-                      setState(() {
-                        if (!selectedIndex.contains(index)) {
-                          selectedIndex.add(index);
-                        }
-                      });
-                    },
-                    onTap: () {
-                      setState(() {
-                        if (selectedIndex.contains(index)) {
-                          selectedIndex.remove(index);
-                        } else {}
-                      });
-                    },
+                   onTap: () {
+                     Navigator.push(context, MaterialPageRoute(
+                      builder: (context)=>HabitDetail(
+                        title: habits[index].name as String, 
+                        subtitle: habits[index].quote as String,
+                        description: habits[index].description as String,
+                                                
+                        selectedAvatarPath: habits[index].selectedAvatarPath, 
+                       habitId: habits[index].id,
+                        )
+                        )
+                        );
+                   },
                     child: Container(
                       decoration: BoxDecoration(
                         color: selectedIndex.contains(index)
@@ -524,12 +421,9 @@ class HabitScreenState extends State<HabitScreen> {
                               radius: 20,
                               backgroundImage: habits[index].isCompleted
                                   ? const AssetImage('assets/images/Tick.png')
-                                  : (habits[index].selectedAvatarPath != null)
-                                      ? FileImage(File(
+                                  : FileImage(File(
                                           habits[index].selectedAvatarPath!))
-                                      : const AssetImage(
-                                              'assets/images/read.jpeg')
-                                          as ImageProvider,
+                                     
                             ),
                             const SizedBox(width: 10),
                             Expanded(

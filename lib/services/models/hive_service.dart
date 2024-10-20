@@ -56,12 +56,12 @@ Future<void> saveHabit(AddhabitModal habit) async {
   var box = await getHabitsBox();
 
   // Assign a unique ID if not already set
-  if (habit.id == null) {
+  if (habit.id == null || habit.id == 0) {
     habit.id = box.isNotEmpty ? box.keys.cast<int>().last + 1 : 1;
   }
 
   if (habit.name != null && habit.goalDays != null) {
-    await box.put(habit.id, habit);  // Use the unique id to store the habit
+    await box.put(habit.id, habit); 
   } else {
     print(' {{{{{{{{{{{{{not saving}}}}}}}}}}}}}');
   }
@@ -93,6 +93,7 @@ Future<void> saveHabit(AddhabitModal habit) async {
  Future<void> deleteHabit(int habitId) async {
   final box = await getHabitsBox();
   await box.delete(habitId); 
+  
 }
 
   // Get all habits

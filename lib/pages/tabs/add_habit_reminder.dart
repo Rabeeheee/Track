@@ -22,6 +22,7 @@ class AddHabitReminder extends StatefulWidget {
   final String? image;
   final int habitId;
   final String description;
+  
 
   const AddHabitReminder(
       {super.key,
@@ -54,6 +55,9 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
     super.initState();
     notificationService.initNotification();
   }
+
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +194,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                         partOfDay: selectedPartOfDay,
                         isCompleted: existingHabit?.isCompleted ?? false,
                         id: habitId, 
-                        description: '',
+                        description: widget.description,
                       );
 
                       await _hiveService.saveHabit(habitData);
@@ -234,7 +238,9 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                           builder: (context) => HabitScreen(
                             name: widget.title,
                             quote: widget.quote,
-                            selectedAvatarPath: widget.image ?? '',
+                            selectedAvatarPath: widget.image ?? '', 
+                            isEditing: false, 
+                            description: widget.description, habitId: habitId,
                           ),
                         ),
                         (Route<dynamic> route) => false,

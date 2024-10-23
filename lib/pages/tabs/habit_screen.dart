@@ -153,7 +153,7 @@ class HabitScreenState extends State<HabitScreen> {
                   onPressed: () {
                     Navigator.push(
                       context, 
-                      MaterialPageRoute(builder: (context)=> ProgressScreen(totalPoints: 0, totalPossiblePoints: 0,)));
+                      MaterialPageRoute(builder: (context)=> ProgressScreen(overallprogress: 0,)));
                   },
                   icon: Iconify(
                     GameIcons.progression,

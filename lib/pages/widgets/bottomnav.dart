@@ -4,19 +4,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trackitapp/utils/colors.dart';
 
 class Bottomnav extends StatelessWidget {
-  final int selectedIndex;
+  final int selectedIndex=0;
   final Function(int) onItemTapped;
 
   const Bottomnav({
     Key? key,
-    required this.selectedIndex,
-    required this.onItemTapped,
+    // required this.selectedIndex,
+    required this.onItemTapped, required int selectedIndex,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: AppColors.primaryColor, // Change to your desired color
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(FontAwesomeIcons.feather),
@@ -35,13 +35,13 @@ class Bottomnav extends StatelessWidget {
           label: 'Focus',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.more_horiz_outlined,size: 40,),
+          icon: Icon(Icons.more_horiz_outlined, size: 40),
           label: 'More',
         ),
       ],
       currentIndex: selectedIndex,
-      selectedItemColor: AppColors.primaryColor,
-      unselectedItemColor: Colors.grey,
+      selectedItemColor: Colors.white, // Color for selected item
+      unselectedItemColor: Colors.grey, // Color for unselected items
       iconSize: 30,
       onTap: onItemTapped,
     );

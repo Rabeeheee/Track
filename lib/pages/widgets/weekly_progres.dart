@@ -7,6 +7,7 @@ import 'package:trackitapp/utils/theme_provider.dart';
 class WeeklyProgressGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return FutureBuilder(
@@ -19,6 +20,8 @@ class WeeklyProgressGraph extends StatelessWidget {
             ),
           );
         }
+
+        
 
         var weeklyPoints = snapshot.data!;
         List<BarChartGroupData> barGroups = [];

@@ -24,6 +24,7 @@ class ThemeProvider with ChangeNotifier {
         splashColor: Colors.black,
         hoverColor: AppColors.primaryColor,
         focusColor: Colors.black,
+        shadowColor: Color(0xFF3c3c3c)
         
       );
     } else {

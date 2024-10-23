@@ -1,8 +1,11 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/progress_modal.dart';
+
+ValueNotifier<List<WeeklyProgress>> progressListNotifier = ValueNotifier([]);
 
 class HiveService {
   // Open the userBox
@@ -139,9 +142,11 @@ Future<Map<String, int>> calculateWeeklyPoints() async {
  // Save the weekly progress data
   List<WeeklyProgress> weeklyProgressList = weeklyPoints.entries.map((entry) {
   return WeeklyProgress(
-    entry.value,       
-    day: entry.key,    
-    points: entry.value 
+
+    entry.value,
+    day: entry.key,
+    points: entry.value,
+    
   );
 }).toList();
 
@@ -156,6 +161,7 @@ Future<Map<String, int>> calculateWeeklyPoints() async {
   // await saveWeeklyProgress(testList);
 
 await saveWeeklyProgress(weeklyProgressList);
+getWeeklyProgress();
 
 return weeklyPoints;
 }
@@ -230,6 +236,8 @@ Future<void> saveWeeklyProgress(List<WeeklyProgress> weeklyProgressList) async {
   for (var progress in weeklyProgressList) {
     await box.put(progress.day, progress);
   }
+//   await saveWeeklyProgress(weeklyProgressList);
+// await getWeeklyProgress(); 
   
   // print("Saved Weekly Progress: ${box.values.toList()}");
 }
@@ -238,6 +246,10 @@ Future<void> saveWeeklyProgress(List<WeeklyProgress> weeklyProgressList) async {
 Future<List<WeeklyProgress>> getWeeklyProgress() async {
   var box = await openWeeklyProgressBox();
   var progressList = box.values.toList();
+
+  progressListNotifier.value =List.from(progressList);
+
+  progressListNotifier.notifyListeners();
   
   if (progressList.isEmpty) {
     // print("No progress data available");

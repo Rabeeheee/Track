@@ -13,5 +13,7 @@ class WeeklyProgress {
   @HiveField(2)
   final int weeklyPoints;
 
+  
+
   WeeklyProgress(this.weeklyPoints, {required this.day, required this.points, });
 }

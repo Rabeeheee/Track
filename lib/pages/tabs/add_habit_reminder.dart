@@ -5,7 +5,6 @@ import 'package:trackitapp/pages/tabs/habit_screen.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/daily_selection.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/date_goal_selection.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/frequency_selection.dart';
-import 'package:trackitapp/pages/widgets/Add_Habit/interval_selection.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/part_of_day_selection.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/reminder.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/section_title.dart';
@@ -119,15 +118,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                               });
                             },
                           ),
-                        if (selectedFrequency == 'Interval')
-                          IntervalSelectionWidget(
-                            intervalDays: intervalDays,
-                            onSelectInterval: (days) {
-                              setState(() {
-                                intervalDays = days;
-                              });
-                            },
-                          ),
+                       
                       ],
                     )),
               ),
@@ -219,7 +210,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                         Duration delay = scheduledDateTime.difference(now);
 
                         notificationService.scheduleNotification(
-                          id: scheduledDateTime.hashCode,
+                          id: habitId,
                           title: widget.title,
                           body: widget.quote,
                           delay: delay.inSeconds,

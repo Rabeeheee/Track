@@ -24,15 +24,17 @@ class AddhabitModalAdapter extends TypeAdapter<AddhabitModal> {
       id: fields[8] as int?,
       partOfDay: fields[6] as String?,
       quote: fields[1] as String?,
+      selectedAvatarPath: fields[3] as String?,
       description: fields[2] as String?,
-      selectedAvatarPath: fields[3] as String?, 
+      notificationId: fields[9] as int?,
+      completedDate: fields[10] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, AddhabitModal obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -50,7 +52,11 @@ class AddhabitModalAdapter extends TypeAdapter<AddhabitModal> {
       ..writeByte(7)
       ..write(obj.isCompleted)
       ..writeByte(8)
-      ..write(obj.id);
+      ..write(obj.id)
+      ..writeByte(9)
+      ..write(obj.notificationId)
+      ..writeByte(10)
+      ..write(obj.completedDate);
   }
 
   @override

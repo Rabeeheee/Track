@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:trackitapp/services/models/notification_services.dart';
+import 'package:trackitapp/utils/theme_provider.dart';
 
 class ReminderWidget extends StatefulWidget {
     final String title;
@@ -22,6 +25,7 @@ class _ReminderWidgetState extends State<ReminderWidget> {
 
 
   Future<void> _selectTime(BuildContext context) async {
+    
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -60,6 +64,8 @@ class _ReminderWidgetState extends State<ReminderWidget> {
 
   @override
   Widget build(BuildContext context) {
+        final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -76,6 +82,7 @@ class _ReminderWidgetState extends State<ReminderWidget> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: themeProvider.themeData.splashColor
                   ),
                 ),
                 IconButton(
@@ -95,10 +102,11 @@ class _ReminderWidgetState extends State<ReminderWidget> {
                           const Icon(Icons.access_time, color: Colors.blueAccent),
                           const SizedBox(width: 8),
                           Text(
-                            '${reminderTime.toLocal()}',
+                            DateFormat('hh:mm a').format(reminderTime),
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              color: Colors.black
                             ),
                           ),
                         ],

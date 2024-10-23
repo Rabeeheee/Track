@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trackitapp/utils/theme_provider.dart';
 
 class DailySelection extends StatefulWidget {
   final Function(List<String>) onDaySelected;
@@ -35,12 +37,14 @@ class _DailySelectionState extends State<DailySelection> {
 
   @override
   Widget build(BuildContext context) {
+        final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Select Days:',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: themeProvider.themeData.splashColor),
         ),
         SizedBox(height: 8),
         Wrap(

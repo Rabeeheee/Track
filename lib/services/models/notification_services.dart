@@ -13,7 +13,7 @@ class NotificationServices {
     tz.initializeTimeZones();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher'); // App icon
+        AndroidInitializationSettings('@mipmap/icon'); // App icon
 
     const InitializationSettings initializationSettings =
         InitializationSettings(
@@ -31,6 +31,11 @@ class NotificationServices {
           .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
           ?.requestNotificationsPermission();
     }
+  }
+
+  Future<void> cancelNotification(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
+    print('notification with ID $id has beeen deleted');
   }
 
   // Notification select handler (used when a notification is tapped)
@@ -72,5 +77,8 @@ class NotificationServices {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
+    Future<void> cancelNotification(int habitId) async {
+      await flutterLocalNotificationsPlugin.cancel(habitId);
+    }
   }
 }

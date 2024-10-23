@@ -7,6 +7,7 @@ import 'package:trackitapp/auth/splash_screen.dart';
 import 'package:trackitapp/pages/other/progressprovider.dart';
 import 'package:trackitapp/pages/tabs/habit_screen.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
+import 'package:trackitapp/services/models/progress_modal.dart';
 import 'package:trackitapp/services/models/user_modal.dart';
 import 'package:trackitapp/utils/login_manager.dart';
 import 'utils/theme_provider.dart';
@@ -17,6 +18,7 @@ import 'package:timezone/timezone.dart' as tz;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones(); 
   await _initializeNotifications(); 
@@ -27,6 +29,8 @@ Future<void> main() async {
   await Hive.openBox('userBox');
   Hive.registerAdapter(AddhabitModalAdapter());
   await Hive.openBox<AddhabitModal>('habitBox');
+  Hive.registerAdapter(WeeklyProgressAdapter());
+  await Hive.openBox<WeeklyProgress>('weeklyProgressBox');
   
   
   runApp(
@@ -39,6 +43,9 @@ Future<void> main() async {
       child: MyApp(),
     ),
   );
+}
+void initializeTimeZones(){
+  tz.initializeTimeZones();
 }
 
 Future<void> _initializeNotifications() async {
@@ -66,7 +73,12 @@ class MyApp extends StatelessWidget {
             future: LoginManager.getLoginStatus(),
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data == true) {
-                return HabitScreen(name: '', quote: '', selectedAvatarPath: '', isEditing: false, description: '', habitId: 0,); 
+                return HabitScreen(name: '',
+                 quote: '', 
+                 selectedAvatarPath: '', 
+                 isEditing: false, 
+                 description: '', 
+                 habitId: 0,); 
               } else {
                 return SplashScreen();
               }

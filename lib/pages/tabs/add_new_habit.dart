@@ -6,7 +6,6 @@ import 'package:trackitapp/pages/tabs/add_habit_reminder.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
-import 'package:trackitapp/services/models/modals.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 import 'dart:math';
 
@@ -115,7 +114,7 @@ class _NewHabitState extends State<NewHabit> {
         quote: _quoteController.text,
         description: _descriptionController.text,
         selectedAvatarPath: selectedAvatar,
-        id: widget.habitId,
+        id: widget.habitId, 
       );
 
       await _hiveService.updateHabit(updatedHabit);

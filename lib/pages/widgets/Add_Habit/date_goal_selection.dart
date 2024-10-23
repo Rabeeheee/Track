@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/goal_days_popup.dart';
 import 'package:trackitapp/utils/date.dart' as customDate;
+import 'package:trackitapp/utils/theme_provider.dart';
 
 class DateGoalSelection extends StatelessWidget {
   final DateTime? selectedStartDate;
@@ -31,6 +33,8 @@ class DateGoalSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -44,28 +48,28 @@ class DateGoalSelection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Start Date', style: TextStyle(fontSize: 16)),
+                Text('Start Date', style: TextStyle(fontSize: 16,color: themeProvider.themeData.splashColor,fontWeight: FontWeight.bold)),
                 Row(
                   children: [
                     Text(
                       customDate.DateUtils.formatDate(
                         selectedStartDate ?? DateTime.now(),
                       ),
-                      style: const TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.bold),
                     ),
                     IconButton(
                       onPressed: () async {
                         DateTime? pickedDate = await showDatePicker(
                           context: context,
                           initialDate: selectedStartDate ?? DateTime.now(),
-                          firstDate: DateTime(2020),
+                          firstDate: DateTime.now(),
                           lastDate: DateTime(2101),
                         );
                         if (pickedDate != null) {
                           onDateChanged(pickedDate);
                         }
                       },
-                      icon: const Icon(Icons.calendar_today, size: 15),
+                      icon: const Icon(Icons.calendar_today, size: 15,color: Colors.black,),
                     ),
                   ],
                 ),
@@ -75,13 +79,13 @@ class DateGoalSelection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Goal Days', style: TextStyle(fontSize: 16)),
+                Text('Goal Days', style: TextStyle(fontSize: 16,color: themeProvider.themeData.splashColor,fontWeight: FontWeight.bold)),
                 Row(
                   children: [
-                    Text(goalDays, style: const TextStyle(fontSize: 12)),
+                    Text(goalDays, style: const TextStyle(fontSize: 12,color: Colors.black,fontWeight: FontWeight.bold)),
                     IconButton(
                       onPressed: () => _showGoalDaysPopup(context),
-                      icon: const Icon(Icons.arrow_forward_ios, size: 15),
+                      icon: const Icon(Icons.arrow_forward_ios, size: 15,color: Colors.black,),
                     ),
                   ],
                 ),

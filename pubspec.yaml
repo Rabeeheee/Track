@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cupertino_icons: ^1.0.8
+  fl_chart: ^0.69.0
   flutter:
     sdk: flutter
   flutter_local_notifications: ^17.2.3
@@ -41,6 +42,7 @@ dependencies:
   permission_handler: ^11.3.1
   provider: ^6.1.2
   shared_preferences: ^2.3.2
+  syncfusion_flutter_gauges: ^27.1.55
   timezone: ^0.9.4
 
 dev_dependencies:
@@ -81,7 +83,7 @@ flutter:
     - assets/avatars/smoking.png
     - assets/avatars/workout.png
     - assets/images/Tick.png
-    - assets/avatars/icon.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see
@@ -92,7 +94,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Schyler
+    - family: Fonts
       fonts:
         - asset: assets/fonts/Poppins-Bold.ttf
         - asset: assets/fonts/Poppins-ExtraBold.ttf

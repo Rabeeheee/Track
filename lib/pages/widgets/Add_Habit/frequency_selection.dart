@@ -1,4 +1,3 @@
-// lib/widgets/frequency_selection_widget.dart
 import 'package:flutter/material.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/selectable_text.dart';
 
@@ -33,13 +32,7 @@ class FrequencySelectionWidget extends StatelessWidget {
           },
         ),
         SizedBox(width: 16),
-        SelectableTextWidget(
-          text: 'Interval',
-          isSelected: selectedFrequency == 'Interval',
-          onTap: () {
-            onSelectFrequency('Interval');
-          },
-        ),
+        
       ],
     );
   }

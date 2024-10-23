@@ -5,6 +5,7 @@ import 'package:iconify_flutter/icons/game_icons.dart';
 import 'package:trackitapp/pages/tabs/add_def_habit.dart';
 import 'package:trackitapp/pages/tabs/add_new_habit.dart';
 import 'package:trackitapp/pages/tabs/habit_detail.dart';
+import 'package:trackitapp/pages/tabs/progress.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
 import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/pages/widgets/date_row.dart';
@@ -132,6 +133,11 @@ class HabitScreenState extends State<HabitScreen> {
     });
   }
 
+  void onCheckboxTapped(int habitId) async {
+  await HiveService().updateHabitCompletion(habitId);
+ _loadHabits();
+}
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -144,7 +150,11 @@ class HabitScreenState extends State<HabitScreen> {
         title: 'Habit',
         actions:  [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context)=> ProgressScreen(totalPoints: 0, totalPossiblePoints: 0,)));
+                  },
                   icon: Iconify(
                     GameIcons.progression,
                     color: themeProvider.themeData.canvasColor,
@@ -169,6 +179,10 @@ class HabitScreenState extends State<HabitScreen> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: RefreshIndicator(
+           backgroundColor: Colors.blue,    
+        color: Colors.white,              
+        strokeWidth: 3.0,                
+        displacement: 100,   
           onRefresh: () async {
             _loadHabits();
           },
@@ -263,7 +277,7 @@ class HabitScreenState extends State<HabitScreen> {
       ),
     );
   },
-  backgroundColor: themeProvider.darkPrimaryColor,
+  backgroundColor: themeProvider.themeData.primaryColor,
   child: Icon(Icons.add,size: 35,color: Colors.white,),
 ),
 
@@ -452,9 +466,11 @@ class HabitScreenState extends State<HabitScreen> {
                             Checkbox(
                               value: habits[index].isCompleted,
                               onChanged: (bool? value) {
+                                onCheckboxTapped(habits[index].id!);
                                 setState(() {
                                   habits[index].isCompleted = value ?? false;
                                   habits[index].save();
+                                  HiveService().updateHabitCompletion(habits[index].id!);
                                 });
                               },
                             ),

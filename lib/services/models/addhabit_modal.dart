@@ -32,6 +32,12 @@ class AddhabitModal extends HiveObject {
   @HiveField(8)
   int? id;
 
+  @HiveField(9)
+  int? notificationId;
+
+  @HiveField(10)
+  DateTime? completedDate;
+
   AddhabitModal({
     this.goalDays = 'Forever',
     this.frequency = 'Daily', 
@@ -43,6 +49,9 @@ class AddhabitModal extends HiveObject {
     this.selectedAvatarPath, 
     String? image, 
     this.description,
+    this.notificationId,
+    this.completedDate,
+    
   });
 
   void assignId(int id) {

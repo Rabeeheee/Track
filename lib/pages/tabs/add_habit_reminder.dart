@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/tabs/habit_screen.dart';
@@ -169,7 +168,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                           fontFamily: 'Fonts')),
                   onPressed: () async {
                     if (widget.title.isNotEmpty && widget.quote.isNotEmpty) {
-                      int habitId = widget.habitId ?? Random().nextInt(1000);
+                      int habitId = widget.habitId;
 
                       print('not empty');
 

@@ -1,13 +1,11 @@
 import 'dart:math'; 
 import 'package:flutter/material.dart';
-import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/utils/colors.dart';
 import 'package:trackitapp/pages/other/potential.dart';
 
 class ResultScreen extends StatelessWidget {
   final Map<String, double> surveyRatings;
   final Map<String, double> routineRatings;
-  final HiveService _hiveService = HiveService();
 
   ResultScreen({required this.surveyRatings, required this.routineRatings});
 

@@ -3,7 +3,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/game_icons.dart';
 import 'package:trackitapp/pages/tabs/add_def_habit.dart';
-import 'package:trackitapp/pages/tabs/add_new_habit.dart';
 import 'package:trackitapp/pages/tabs/habit_detail.dart';
 import 'package:trackitapp/pages/tabs/progress.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
@@ -14,7 +13,6 @@ import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
-import 'package:trackitapp/utils/colors.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 
 class HabitScreen extends StatefulWidget {

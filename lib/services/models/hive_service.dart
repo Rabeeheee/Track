@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -196,7 +195,7 @@ Future<int> getTotalHabitsForDay(DateTime day) async {
 Future<void> updateDailyPoints() async {
     DateTime today = DateTime.now();
     int totalPointsToday = await calculatePointsForDay(today);
-    // print("Total Points for Today: $totalPointsToday out of 100");
+    print("Total Points for Today: $totalPointsToday out of 100");
 }
 
   // Delete habit by ID
@@ -249,7 +248,7 @@ Future<List<WeeklyProgress>> getWeeklyProgress() async {
 
   progressListNotifier.value =List.from(progressList);
 
-  progressListNotifier.notifyListeners();
+  // progressListNotifier.notifyListeners();
   
   if (progressList.isEmpty) {
     // print("No progress data available");

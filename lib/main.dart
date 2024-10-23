@@ -12,7 +12,6 @@ import 'package:trackitapp/services/models/user_modal.dart';
 import 'package:trackitapp/utils/login_manager.dart';
 import 'utils/theme_provider.dart';
 import 'package:timezone/data/latest_all.dart' as tz; 
-import 'package:timezone/timezone.dart' as tz; 
 
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();

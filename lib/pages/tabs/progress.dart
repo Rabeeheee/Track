@@ -39,7 +39,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await Future.delayed(Duration(milliseconds: 1000));
+          await Future.delayed(Duration(milliseconds: 100));
           setState(() {
             _overallprogress.calculateOverallProgress();
           });

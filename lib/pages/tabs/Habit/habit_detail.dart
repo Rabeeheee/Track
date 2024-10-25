@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackitapp/pages/tabs/add_new_habit.dart';
+import 'package:trackitapp/pages/tabs/Habit/add_new_habit.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/utils/theme_provider.dart';

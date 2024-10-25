@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:trackitapp/utils/colors.dart';
 
-import 'package:trackitapp/pages/tabs/habit_screen.dart';
+import 'package:trackitapp/pages/tabs/Habit/habit_screen.dart';
 
 class PotentialScreen extends StatelessWidget {
   final Map<String, double> adjustedRatings;

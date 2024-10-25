@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackitapp/pages/tabs/add_new_habit.dart';
+import 'package:trackitapp/pages/tabs/Habit/add_new_habit.dart';
 import 'package:trackitapp/services/models/modals.dart';
 import 'package:trackitapp/utils/colors.dart';
 import 'package:trackitapp/utils/theme_provider.dart';

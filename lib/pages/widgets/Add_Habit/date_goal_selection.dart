@@ -58,7 +58,7 @@ class DateGoalSelection extends StatelessWidget {
                     Text(
                       DateFormat('MMM dd, yyyy').format(
                         selectedStartDate ??
-                            DateTime.now(), // Fallback to current date if null
+                            DateTime.now(), 
                       ),
                       style: const TextStyle(
                         fontSize: 12,

@@ -5,8 +5,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/auth/splash_screen.dart';
 import 'package:trackitapp/pages/other/progressprovider.dart';
-import 'package:trackitapp/pages/tabs/habit_screen.dart';
+import 'package:trackitapp/pages/tabs/Habit/habit_screen.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
+import 'package:trackitapp/services/models/calender_modal.dart';
 import 'package:trackitapp/services/models/progress_modal.dart';
 import 'package:trackitapp/services/models/user_modal.dart';
 import 'package:trackitapp/utils/login_manager.dart';
@@ -30,6 +31,8 @@ Future<void> main() async {
   await Hive.openBox<AddhabitModal>('habitBox');
   Hive.registerAdapter(WeeklyProgressAdapter());
   await Hive.openBox<WeeklyProgress>('weeklyProgressBox');
+  await Hive.openBox('taskBox');
+  Hive.registerAdapter(TaskAdapter()); 
   
   
   runApp(

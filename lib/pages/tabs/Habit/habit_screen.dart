@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/game_icons.dart';
-import 'package:trackitapp/pages/tabs/add_def_habit.dart';
-import 'package:trackitapp/pages/tabs/habit_detail.dart';
-import 'package:trackitapp/pages/tabs/progress.dart';
+import 'package:trackitapp/pages/tabs/Habit/add_def_habit.dart';
+import 'package:trackitapp/pages/tabs/Habit/habit_detail.dart';
+import 'package:trackitapp/pages/tabs/Habit/progress.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
 import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/pages/widgets/date_row.dart';
@@ -282,8 +282,7 @@ class HabitScreenState extends State<HabitScreen> {
         ),
       ),
       bottomNavigationBar: Bottomnav(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
+       
       ),
     );
   }

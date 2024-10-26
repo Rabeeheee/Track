@@ -8,7 +8,7 @@ class PriorityScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      bottomNavigationBar: Bottomnav(),
+      bottomNavigationBar: BottomNav(),
     );
   }
 }

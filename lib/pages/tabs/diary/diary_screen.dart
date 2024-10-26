@@ -10,7 +10,7 @@ class DiaryScreen extends StatelessWidget {
     return Scaffold(
 appBar: CustomAppBar(title: 'Diary'),
 
-      bottomNavigationBar: Bottomnav(),
+      bottomNavigationBar: BottomNav(),
     );
   }
 }

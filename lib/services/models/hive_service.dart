@@ -214,15 +214,22 @@ class HiveService {
     return progressList;
   }
 
-  // Open the task box
+   // Open the task box
   Future<Box<Task>> openTaskBox() async {
     return await Hive.openBox<Task>('taskBox');
   }
 
+   // Clear the habitBox
+  Future<void> clearTaskBox() async {
+  var box = await openTaskBox();
+  await box.clear(); 
+}
+
+
   // Save a new task
   Future<void> saveTask(Task task) async {
     var box = await openTaskBox();
-    await box.add(task);
+    await box.put(task.id, task); 
   }
 
   // Get all tasks
@@ -232,20 +239,34 @@ class HiveService {
   }
 
   // Get a specific task by index
-  Future<Task?> getTaskByIndex(int index) async {
+  Future<Task?> getTaskById(String id) async {
     var box = await openTaskBox();
-    return box.getAt(index);
+    return box.get(id);
   }
 
   // Update a task
-  Future<void> updateTask(int index, Task task) async {
+  Future<void> updateTask(String id, Task task) async {
     var box = await openTaskBox();
-    await box.putAt(index, task); 
+    await box.put(id, task); // Update using the unique ID
   }
 
-  // Delete a task by index
-  Future<void> deleteTask(int index) async {
+  // Delete a task by ID
+  Future<void> deleteTask(String id) async {
     var box = await openTaskBox();
-    await box.deleteAt(index); 
+    await box.delete(id);
+  }
+
+  // Update task completion status
+Future<void> updateTaskCompletion(String id) async {
+  var box = await openTaskBox();
+  Task? task = box.get(id);
+
+  if (task != null) {
+    task.isCompleted = !task.isCompleted; 
+    await box.put(id, task); 
   }
 }
+
+}
+
+ 

@@ -11,12 +11,12 @@ import 'package:trackitapp/pages/tabs/priority/priority_screen.dart';
 import 'package:trackitapp/utils/colors.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 
-class Bottomnav extends StatefulWidget {
+class BottomNav extends StatefulWidget {
   @override
   _BottomnavState createState() => _BottomnavState();
 }
 
-class _BottomnavState extends State<Bottomnav> {
+class _BottomnavState extends State<BottomNav> {
   int selectedIndex = 0;
   bool isExpanded = false;
 
@@ -25,10 +25,11 @@ class _BottomnavState extends State<Bottomnav> {
     CelanderScreen(),
     PriorityScreen(),
     FocusScreen(),
-    InboxScreen(),
-    MemoryScreen(),
-    DiaryScreen(),
+    // InboxScreen(),
+    // MemoryScreen(),
+    // DiaryScreen(),
   ];
+  
 
   void onItemTapped(int index) {
     if (index == 4) {

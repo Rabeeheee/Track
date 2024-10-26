@@ -28,6 +28,7 @@ showLogoutDialog(BuildContext context) {
                 await _hiveService.clearUserBox();
                 await _hiveService.clearHabitBox();
                 await LoginManager.clearLoginStatus();
+                 await _hiveService.clearTaskBox(); 
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => SplashScreen()),

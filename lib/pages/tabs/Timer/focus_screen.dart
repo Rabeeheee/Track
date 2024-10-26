@@ -9,7 +9,7 @@ class FocusScreen extends StatelessWidget {
     return Scaffold(
 
 
-      bottomNavigationBar: Bottomnav(),
+      bottomNavigationBar: BottomNav(),
     );
   }
 }

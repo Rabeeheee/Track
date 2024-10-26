@@ -31,7 +31,7 @@ Future<void> main() async {
   await Hive.openBox<AddhabitModal>('habitBox');
   Hive.registerAdapter(WeeklyProgressAdapter());
   await Hive.openBox<WeeklyProgress>('weeklyProgressBox');
-  await Hive.openBox('taskBox');
+  // await Hive.openBox('taskBox');
   Hive.registerAdapter(TaskAdapter()); 
   
   

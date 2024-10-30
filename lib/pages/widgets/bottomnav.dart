@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/tabs/Habit/habit_screen.dart';
 import 'package:trackitapp/pages/tabs/Inbox/inbox_screen.dart';
 import 'package:trackitapp/pages/tabs/Timer/focus_screen.dart';
@@ -7,6 +8,7 @@ import 'package:trackitapp/pages/tabs/celander/celander_screen.dart';
 import 'package:trackitapp/pages/tabs/diary/diary_screen.dart';
 import 'package:trackitapp/pages/tabs/memory/memory_screen.dart';
 import 'package:trackitapp/pages/tabs/priority/priority_screen.dart';
+import 'package:trackitapp/utils/theme_provider.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -17,7 +19,6 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   int _selectedIndex = 0;
-  bool _isMoreSelected = false; // New variable to track "More" selection
 
   final List<Widget> _screens = [
     HabitScreen(
@@ -54,7 +55,6 @@ class _BottomNavState extends State<BottomNav> {
                     Navigator.pop(context);
                     setState(() {
                       _selectedIndex = 4;
-                      _isMoreSelected = true; 
                     });
                   },
                 ),
@@ -65,7 +65,6 @@ class _BottomNavState extends State<BottomNav> {
                     Navigator.pop(context);
                     setState(() {
                       _selectedIndex = 5;
-                      _isMoreSelected = true;
                     });
                   },
                 ),
@@ -76,7 +75,6 @@ class _BottomNavState extends State<BottomNav> {
                     Navigator.pop(context);
                     setState(() {
                       _selectedIndex = 6;
-                      _isMoreSelected = true;
                     });
                   },
                 ),
@@ -88,44 +86,91 @@ class _BottomNavState extends State<BottomNav> {
     } else {
       setState(() {
         _selectedIndex = index;
-        _isMoreSelected = false; 
       });
     }
   }
 
+  Color _getIconColor(int index) {
+    return _selectedIndex == index
+        ? Provider.of<ThemeProvider>(context).themeData.brightness == Brightness.dark
+            ? Colors.white
+            : Colors.black
+        : Colors.grey; 
+  }
+
+  double _getIconSize(int index) {
+    return _selectedIndex == index ? 30.0 : 24.0; 
+  }
+
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
-      backgroundColor: Colors.amberAccent,
       body: _screens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _isMoreSelected ? 4 : _selectedIndex, 
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.feather),
-            label: 'Habit',
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+        child: BottomAppBar(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              GestureDetector(
+                onTap: () => _onItemTapped(0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(FontAwesomeIcons.feather, color: _getIconColor(0), size: _getIconSize(0)),
+                    Text('Habit'),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () => _onItemTapped(1),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(FontAwesomeIcons.calendarWeek, color: _getIconColor(1), size: _getIconSize(1)),
+                    Text('Calendar'),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () => _onItemTapped(2),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.grid_view_rounded, color: _getIconColor(2), size: _getIconSize(2)),
+                    Text('Priority'),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () => _onItemTapped(3),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(FontAwesomeIcons.clock, color: _getIconColor(3), size: _getIconSize(3)),
+                    Text('Focus'),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () => _onItemTapped(4),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.more_horiz_outlined, size: _getIconSize(4), color: _getIconColor(4)),
+                    Text('More'),
+                  ],
+                ),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.calendarWeek),
-            label: 'Calendar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.grid_view_rounded),
-            label: 'Priority',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.clock),
-            label: 'Focus',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.more_horiz_outlined, size: 40),
-            label: 'More',
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -8,7 +8,8 @@ import 'package:intl/intl.dart';
 class PriorityScreen extends StatelessWidget {
   const PriorityScreen({super.key});
 
-  Future<List<Task>> _fetchTasksByPriority(HiveService hiveService, String priority) async {
+  Future<List<Task>> _fetchTasksByPriority(
+      HiveService hiveService, String priority) async {
     List<Task> allTasks = await hiveService.getAllTasks();
     return allTasks.where((task) => task.priority == priority).toList();
   }
@@ -18,7 +19,11 @@ class PriorityScreen extends StatelessWidget {
     final HiveService hiveService = Provider.of<HiveService>(context);
 
     final List<Map<String, dynamic>> priorityItems = [
-      {"title": "Top Priority", "color": 0xFFB3E5FC, "priority": 'Top Priority'},
+      {
+        "title": "Top Priority",
+        "color": 0xFFB3E5FC,
+        "priority": 'Top Priority'
+      },
       {"title": "Necessary", "color": 0xFFFFF59D, "priority": 'Necessary'},
       {"title": "Regular", "color": 0xFFB0BEC5, "priority": 'Regular'},
       {"title": "Delete", "color": 0xFFFF8A80, "priority": 'Delete'},
@@ -29,26 +34,37 @@ class PriorityScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder(
-          future: Future.wait(priorityItems.map((item) => _fetchTasksByPriority(hiveService, item['priority'])).toList()),
+          future: Future.wait(priorityItems
+              .map((item) =>
+                  _fetchTasksByPriority(hiveService, item['priority']))
+              .toList()),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
-            final List<List<Task>> tasksByPriority = snapshot.data as List<List<Task>>;
-            
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 0.6,
-              ),
-              itemCount: priorityItems.length,
-              itemBuilder: (BuildContext context, int index) {
-                return PriorityContainer(
-                  title: priorityItems[index]["title"],
-                  color: Color(priorityItems[index]["color"]),
-                  tasks: tasksByPriority[index],
+            final List<List<Task>> tasksByPriority =
+                snapshot.data as List<List<Task>>;
+
+            return LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                int crossAxisCount =
+                    (constraints.maxWidth ~/ 200).toInt().clamp(2, 4);
+
+                return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 0.6,
+                  ),
+                  itemCount: priorityItems.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return PriorityContainer(
+                      title: priorityItems[index]["title"],
+                      color: Color(priorityItems[index]["color"]),
+                      tasks: tasksByPriority[index],
+                    );
+                  },
                 );
               },
             );
@@ -95,7 +111,7 @@ class PriorityContainer extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 63, 63, 63), 
+                color: Color.fromARGB(255, 63, 63, 63),
               ),
             ),
           ),
@@ -104,17 +120,20 @@ class PriorityContainer extends StatelessWidget {
                 ? const Center(
                     child: Text(
                       'No tasks',
-                      style: TextStyle(color: Colors.white70, fontStyle: FontStyle.italic),
+                      style: TextStyle(
+                          color: Colors.white70, fontStyle: FontStyle.italic),
                     ),
                   )
                 : ListView.builder(
                     itemCount: tasks.length,
                     itemBuilder: (context, index) {
                       final task = tasks[index];
-                      final formattedDate = DateFormat('dd MMM yyyy').format(task.date);
+                      final formattedDate =
+                          DateFormat('dd MMM yyyy').format(task.date);
 
                       return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 4.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -122,16 +141,15 @@ class PriorityContainer extends StatelessWidget {
                               child: Text(
                                 task.likeToDo,
                                 style: const TextStyle(
-                                  color: Colors.black, 
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16
-                                ),
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16),
                               ),
                             ),
                             Text(
                               formattedDate,
                               style: const TextStyle(
-                                color: Colors.black, 
+                                color: Colors.black,
                                 fontSize: 12,
                               ),
                             ),

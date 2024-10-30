@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -15,17 +14,14 @@ import 'package:trackitapp/services/models/progress_modal.dart';
 import 'package:trackitapp/services/models/user_modal.dart';
 import 'package:trackitapp/utils/login_manager.dart';
 import 'utils/theme_provider.dart';
-import 'package:timezone/data/latest_all.dart' as tz; 
-
+import 'package:timezone/data/latest_all.dart' as tz;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-  tz.initializeTimeZones(); 
-  await _initializeNotifications(); 
-
+  tz.initializeTimeZones();
+  await _initializeNotifications();
 
   await Hive.initFlutter();
   Hive.registerAdapter(UserModelAdapter());
@@ -34,37 +30,37 @@ Future<void> main() async {
   await Hive.openBox<AddhabitModal>('habitBox');
   Hive.registerAdapter(WeeklyProgressAdapter());
   await Hive.openBox<WeeklyProgress>('weeklyProgressBox');
-  // await Hive.openBox('taskBox');
-  Hive.registerAdapter(TaskAdapter()); 
+  Hive.registerAdapter(TaskAdapter());
   Hive.registerAdapter(DiaryAdapter());
   Hive.registerAdapter(FolderAdapter());
-  
-  
+
+  // Load theme preference and initialize ThemeProvider with it
+  final themeProvider = await ThemeProvider.loadTheme();
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-         Provider<HiveService>(create: (_) => HiveService()),
+        ChangeNotifierProvider(create: (_) => themeProvider),  // Updated to use `themeProvider` with loaded theme
+        Provider<HiveService>(create: (_) => HiveService()),
       ],
       child: MyApp(),
     ),
   );
 }
-void initializeTimeZones(){
-  tz.initializeTimeZones();
-}
 
 Future<void> _initializeNotifications() async {
- 
   const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
   final InitializationSettings initializationSettings = InitializationSettings(
     android: androidInitializationSettings,
   );
-  
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
   );
+}
+
+void initializeTimeZones() {
+  tz.initializeTimeZones();
 }
 
 class MyApp extends StatelessWidget {

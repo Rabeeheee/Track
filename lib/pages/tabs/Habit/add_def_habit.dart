@@ -111,7 +111,7 @@ class AddDefHabit extends StatelessWidget {
                     ],
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: ThemeProvider().themeData.primaryColor,
+                    backgroundColor: themeProvider.themeData.primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(7),
                     ),

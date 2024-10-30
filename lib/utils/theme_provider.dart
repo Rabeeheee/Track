@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackitapp/utils/colors.dart';
 
 enum AppTheme { light, dark }
 
 class ThemeProvider with ChangeNotifier {
-  AppTheme _theme = AppTheme.light;
+  AppTheme _theme;
 
-  final Color lightPrimaryColor = Colors.blue;
-  final Color darkPrimaryColor = Colors.deepPurple;
+  ThemeProvider(this._theme);
+
+  AppTheme get theme => _theme;
 
   ThemeData get themeData => _getThemeData();
 
@@ -16,7 +18,7 @@ class ThemeProvider with ChangeNotifier {
       return ThemeData.dark().copyWith(
         primaryColor: AppColors.primaryColor,
         scaffoldBackgroundColor: Colors.black,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           backgroundColor: Colors.black,
         ),
         cardColor: Colors.white,
@@ -24,29 +26,35 @@ class ThemeProvider with ChangeNotifier {
         splashColor: Colors.black,
         hoverColor: AppColors.primaryColor,
         focusColor: Colors.black,
-        shadowColor: Color(0xFF3c3c3c)
-        
+        shadowColor: const Color(0xFF3c3c3c),
       );
     } else {
       return ThemeData.light().copyWith(
         primaryColor: AppColors.primaryColor,
         scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
         ),
         cardColor: Colors.blueGrey[100],
         canvasColor: Colors.black,
-       
         splashColor: Colors.black,
         hoverColor: Colors.white,
         focusColor: Colors.white,
       );
     }
   }
-   
 
-  void toggleTheme() {
+  void toggleTheme() async {
     _theme = (_theme == AppTheme.light) ? AppTheme.dark : AppTheme.light;
-    notifyListeners(); 
+    notifyListeners();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkTheme', _theme == AppTheme.dark);
+  }
+
+  static Future<ThemeProvider> loadTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isDarkTheme = prefs.getBool('isDarkTheme') ?? false;
+    return ThemeProvider(isDarkTheme ? AppTheme.dark : AppTheme.light);
   }
 }

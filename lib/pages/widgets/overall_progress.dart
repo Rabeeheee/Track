@@ -94,6 +94,7 @@ class OverallProgressState extends State<OverallProgress> {
                           fontSize: 20,
                           fontFamily: 'Fonts',
                           fontWeight: FontWeight.bold,
+                          color: themeProvider.themeData.splashColor
                         ),
                       ),
                       SizedBox(height: 20),

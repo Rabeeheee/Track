@@ -33,7 +33,7 @@ class HabitCard extends StatelessWidget {
           title: Text(
             habit.title,
             style: TextStyle(
-              color: ThemeProvider().themeData.splashColor,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),

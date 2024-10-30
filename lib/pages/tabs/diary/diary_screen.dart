@@ -51,22 +51,53 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   ),
                   elevation: 5,
                   margin: EdgeInsets.all(10),
-                  child: TableCalendar(
-                    focusedDay: _selectedDate,
-                    firstDay: DateTime.utc(2000, 1, 1),
-                    lastDay: DateTime.utc(2100, 12, 31),
-                    calendarFormat: CalendarFormat.month,
-                    availableCalendarFormats: const {
-                      CalendarFormat.month: 'Month'
-                    },
-                    selectedDayPredicate: (day) =>
-                        isSameDay(_selectedDate, day),
-                    onDaySelected: (selectedDay, focusedDay) {
-                      setState(() {
-                        _selectedDate = selectedDay;
-                        _loadDiaryEntries();
-                      });
-                    },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: TableCalendar(
+                      calendarStyle: CalendarStyle(
+                        outsideTextStyle: TextStyle(color: Colors.grey),
+                        defaultTextStyle: TextStyle(color: Colors.black),
+                        todayTextStyle: TextStyle(color: Colors.black),
+                        selectedTextStyle: TextStyle(color: Colors.white),
+                        selectedDecoration: BoxDecoration(
+                          color: themeProvider.themeData.primaryColor,
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      headerStyle: HeaderStyle(
+                        titleTextStyle: TextStyle(color: Colors.black),
+                        formatButtonVisible: false,
+                        leftChevronIcon:
+                            Icon(Icons.chevron_left, color: Colors.black),
+                        rightChevronIcon:
+                            Icon(Icons.chevron_right, color: Colors.black),
+                      ),
+                      focusedDay: _selectedDate,
+                      firstDay: DateTime.utc(2000, 1, 1),
+                      lastDay: DateTime.utc(2100, 12, 31),
+                      calendarFormat: CalendarFormat.month,
+                      availableCalendarFormats: const {
+                        CalendarFormat.month: 'Month'
+                      },
+                      selectedDayPredicate: (day) =>
+                          isSameDay(_selectedDate, day),
+                      onDaySelected: (selectedDay, focusedDay) {
+                        setState(() {
+                          _selectedDate = selectedDay;
+                          _loadDiaryEntries();
+                        });
+                      },
+                    ),
                   ),
                 ),
                 Padding(
@@ -91,8 +122,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                   color: themeProvider.themeData.cardColor,
                                   margin: EdgeInsets.symmetric(vertical: 5),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10), 
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   elevation: 4,
                                   child: ListTile(
@@ -100,8 +130,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                       entry.title,
                                       style: TextStyle(
                                         fontSize: 18,
-                                        fontWeight:
-                                            FontWeight.bold, // Bold title
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     subtitle: Text(
@@ -115,8 +144,8 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                         color: themeProvider
                                             .themeData.primaryColor),
                                     trailing: Icon(Icons.arrow_forward,
-                                        color: themeProvider.themeData
-                                            .primaryColor),
+                                        color: themeProvider
+                                            .themeData.primaryColor),
                                   ),
                                 ),
                               ))

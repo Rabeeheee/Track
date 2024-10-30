@@ -55,7 +55,6 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     OverallProgress(),
                     SizedBox(height: 13),
                     WeeklyProgressGraph(),
-                  //   Container(height: 800,color: Colors.blueGrey,)
                   ],
                 ),
               ),

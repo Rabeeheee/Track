@@ -356,6 +356,7 @@ Future<void> deleteFolder(String folderName) async {
   // Retrieve the folder to delete its images
   Folder? folder = box.get(folderName);
   if (folder != null) {
+    // ignore: unused_local_variable
     for (var imagePath in folder.imagePaths) {
       // Your image deletion logic here
       // If you want to delete images from the device, you can use File(imagePath).delete();

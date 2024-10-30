@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/widgets/Add_task/show_dialoge.dart';
-import 'package:trackitapp/pages/widgets/bottomnav.dart';
-import 'package:trackitapp/pages/widgets/date_pickercelender.dart';
+
 import 'package:trackitapp/services/models/calender_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
@@ -112,7 +111,7 @@ class _InboxScreenState extends State<InboxScreen> {
               likeToDo: titleController.text,
               Descrition: descriptionController.text,
               date: selectedDate,
-              priority: selectedPriority,  // Save priority
+              priority: selectedPriority, 
             );
             await _hiveService.saveTask(newTask);
           } else {
@@ -121,14 +120,12 @@ class _InboxScreenState extends State<InboxScreen> {
               likeToDo: titleController.text,
               Descrition: descriptionController.text,
               date: selectedDate,
-              priority: selectedPriority,  // Update priority
+              priority: selectedPriority, 
             );
             await _hiveService.updateTask(taskToEdit.id!, updatedTask);
           }
 
-          // Refresh tasks to reflect updated priority
           await _fetchTasksForDate(_selectedDate);
-          // Navigator.pop(context);
         },
       );
     },

@@ -6,7 +6,6 @@ import 'package:trackitapp/pages/tabs/Habit/add_def_habit.dart';
 import 'package:trackitapp/pages/tabs/Habit/habit_detail.dart';
 import 'package:trackitapp/pages/tabs/Habit/progress.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
-import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/pages/widgets/date_row.dart';
 import 'package:trackitapp/pages/widgets/drawer.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
@@ -60,6 +59,7 @@ class HabitScreenState extends State<HabitScreen> {
   Set<int> selectedOtherIndex = {};
 
   int _selectedIndex = 1;
+  
 
   bool get isAnyHabitSelected =>
       selectedMorningIndex.isNotEmpty ||
@@ -139,7 +139,7 @@ class HabitScreenState extends State<HabitScreen> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-
+print('$_selectedIndex');
 
     print('$isAnyHabitSelected');
     return Scaffold(

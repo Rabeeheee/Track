@@ -4,7 +4,6 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:trackitapp/pages/tabs/diary/Diary_detail_screen.dart';
 import 'package:trackitapp/pages/tabs/diary/add_diary_screen.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
-import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/services/models/diary_model.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/utils/theme_provider.dart';

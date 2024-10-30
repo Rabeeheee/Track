@@ -6,7 +6,6 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
-import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 
 class FocusScreen extends StatefulWidget {

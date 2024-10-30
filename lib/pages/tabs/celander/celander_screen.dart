@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/widgets/Add_task/show_dialoge.dart';
-import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/pages/widgets/date_pickercelender.dart';
 import 'package:trackitapp/services/models/calender_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';

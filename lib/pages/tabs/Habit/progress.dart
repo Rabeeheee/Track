@@ -45,6 +45,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
           });
         },
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
               Padding(
@@ -54,7 +55,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     OverallProgress(),
                     SizedBox(height: 13),
                     WeeklyProgressGraph(),
-                    Container(height: 800,color: Colors.blueGrey,)
+                  //   Container(height: 800,color: Colors.blueGrey,)
                   ],
                 ),
               ),

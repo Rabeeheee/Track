@@ -7,6 +7,6 @@ class ProgressProvider with ChangeNotifier {
 
   void updateIndex(int index) {
     _currentIndex = index;
-    notifyListeners(); // Notify listeners to rebuild
+    notifyListeners(); 
   }
 }

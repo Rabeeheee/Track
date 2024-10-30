@@ -58,12 +58,10 @@ class OverallProgressState extends State<OverallProgress> {
       future: calculateOverallProgress(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          // While the data is loading
-          return CircularProgressIndicator(); // Show a loader
+          return CircularProgressIndicator(); 
         } else if (snapshot.hasError) {
-          return Text("Error calculating progress"); // Handle error
+          return Text("Error calculating progress"); 
         } else {
-          // Data is available
           double overallProgress = snapshot.data ?? 0.0;
 
           return Column(

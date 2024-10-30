@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
+import 'package:trackitapp/services/models/diary_model.dart';
+import 'package:trackitapp/services/models/memory_model.dart';
 import 'package:trackitapp/services/models/progress_modal.dart';
 import 'package:trackitapp/services/models/calender_modal.dart'; // Import the Task model
 
@@ -196,6 +198,18 @@ class HiveService {
     }
   }
 
+  //clear weeklyprogressbox
+Future<void> clearWeeklyProgressBox() async {
+  var box = await openWeeklyProgressBox();
+  await box.clear();
+}
+    
+//   Future<void> clearWeekl() async {
+//   var box = await openTaskBox();
+//   await box.clear(); 
+// }
+
+
   // Save weekly progress
   Future<void> saveWeeklyProgress(List<WeeklyProgress> weeklyProgressList) async {
     var box = await openWeeklyProgressBox();
@@ -203,6 +217,8 @@ class HiveService {
 
     for (var progress in weeklyProgressList) {
       await box.put(progress.day, progress);
+await getWeeklyProgress();
+      
     }
   }
 
@@ -264,6 +280,88 @@ Future<void> updateTaskCompletion(String id) async {
   if (task != null) {
     task.isCompleted = !task.isCompleted; 
     await box.put(id, task); 
+  }
+}
+
+
+ // Open the diary box
+Future<Box<Diary>> openDiaryBox() async {
+  return await Hive.openBox<Diary>('diarybox');
+}
+
+  //clear Diarybox
+Future<void> clearDiaryBox() async {
+  var box = await openDiaryBox();
+  await box.clear();
+}
+
+// Save a new diary entry
+Future<void> saveDiary(Diary diary) async {
+  var box = await openDiaryBox();
+  await box.put(diary.id, diary); 
+}
+
+// Get all diary entries
+Future<List<Diary>> getAllDiaryEntries() async {
+  var box = await openDiaryBox();
+  return box.values.toList();
+}
+
+// Get a specific diary entry by ID
+Future<Diary?> getDiaryById(String id) async {
+  var box = await openDiaryBox();
+  return box.get(id);
+}
+
+// Update a diary entry
+Future<void> updateDiary(String id, Diary diary) async {
+  var box = await openDiaryBox();
+  await box.put(id, diary); 
+}
+
+// Delete a diary entry by ID
+Future<void> deleteDiary(String id) async {
+  var box = await openDiaryBox();
+  await box.delete(id);
+}
+
+
+  // Open the folderBox
+Future<Box<Folder>> openFolderBox() async {
+  return await Hive.openBox<Folder>('folderBox');
+}
+
+  //clear folderbox
+Future<void> clearFolderBox() async {
+  var box = await openFolderBox();
+  await box.clear();
+}
+
+// Save a new folder with image paths
+Future<void> saveFolder(Folder folder) async {
+  var box = await openFolderBox();
+  await box.put(folder.name, folder);
+}
+
+// Get all folders
+Future<List<Folder>> getAllFolders() async {
+  var box = await openFolderBox();
+  return box.values.toList();
+}
+
+// Delete a folder by name and remove its images
+Future<void> deleteFolder(String folderName) async {
+  var box = await openFolderBox();
+  
+  // Retrieve the folder to delete its images
+  Folder? folder = box.get(folderName);
+  if (folder != null) {
+    for (var imagePath in folder.imagePaths) {
+      // Your image deletion logic here
+      // If you want to delete images from the device, you can use File(imagePath).delete();
+    }
+    
+    await box.delete(folderName); 
   }
 }
 

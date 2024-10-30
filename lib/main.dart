@@ -5,9 +5,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/auth/splash_screen.dart';
 import 'package:trackitapp/pages/other/progressprovider.dart';
-import 'package:trackitapp/pages/tabs/Habit/habit_screen.dart';
+import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/calender_modal.dart';
+import 'package:trackitapp/services/models/diary_model.dart';
+import 'package:trackitapp/services/models/hive_service.dart';
+import 'package:trackitapp/services/models/memory_model.dart';
 import 'package:trackitapp/services/models/progress_modal.dart';
 import 'package:trackitapp/services/models/user_modal.dart';
 import 'package:trackitapp/utils/login_manager.dart';
@@ -33,6 +36,8 @@ Future<void> main() async {
   await Hive.openBox<WeeklyProgress>('weeklyProgressBox');
   // await Hive.openBox('taskBox');
   Hive.registerAdapter(TaskAdapter()); 
+  Hive.registerAdapter(DiaryAdapter());
+  Hive.registerAdapter(FolderAdapter());
   
   
   runApp(
@@ -40,7 +45,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        
+         Provider<HiveService>(create: (_) => HiveService()),
       ],
       child: MyApp(),
     ),
@@ -71,16 +76,12 @@ class MyApp extends StatelessWidget {
       animation: themeProvider,
       builder: (context, _) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           home: FutureBuilder(
             future: LoginManager.getLoginStatus(),
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data == true) {
-                return HabitScreen(name: '',
-                 quote: '', 
-                 selectedAvatarPath: '', 
-                 isEditing: false, 
-                 description: '', 
-                 habitId: 0,); 
+                return BottomNav();
               } else {
                 return SplashScreen();
               }

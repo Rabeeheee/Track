@@ -39,10 +39,12 @@ dependencies:
   image_picker: ^1.1.2
   intl: ^0.19.0
   path_provider: ^2.1.4
+  percent_indicator: ^4.2.3
   permission_handler: ^11.3.1
   provider: ^6.1.2
   shared_preferences: ^2.3.2
   syncfusion_flutter_gauges: ^27.1.55
+  table_calendar: ^3.1.2
   timezone: ^0.9.4
   uuid: ^4.5.1
 

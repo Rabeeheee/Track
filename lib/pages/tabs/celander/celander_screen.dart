@@ -43,9 +43,9 @@ class _CelanderScreenState extends State<CelanderScreen> {
     setState(() {
       isAnyTaskSelected = true;
       for (var task in tasksForSelectedDate) {
-        task.isSelected = false; // Deselect all tasks
+        task.isSelected = false;
       }
-      task.isSelected = true; // Select only the long-pressed task
+      task.isSelected = true;
     });
   }
 
@@ -72,67 +72,69 @@ class _CelanderScreenState extends State<CelanderScreen> {
   }
 
   void _showTaskDialog(BuildContext context, {Task? taskToEdit}) {
-    TextEditingController titleController = TextEditingController(
-      text: taskToEdit?.likeToDo ?? '',
-    );
-    TextEditingController descriptionController = TextEditingController(
-      text: taskToEdit?.Descrition ?? '',
-    );
-    String selectedPriority = taskToEdit?.priority ?? 'Top Priority';
-    DateTime selectedDate = taskToEdit?.date ?? DateTime.now();
+  TextEditingController titleController = TextEditingController(
+    text: taskToEdit?.likeToDo ?? '',
+  );
+  TextEditingController descriptionController = TextEditingController(
+    text: taskToEdit?.Descrition ?? '',
+  );
+  String selectedPriority = taskToEdit?.priority ?? 'Top Priority';
+  DateTime selectedDate = taskToEdit?.date ?? DateTime.now();
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return TaskDialog(
-          titleController: titleController,
-          descriptionController: descriptionController,
-          selectedPriority: selectedPriority,
-          selectedDate: selectedDate,
-          onPriorityChanged: (String newPriority) {
-            selectedPriority = newPriority;
-          },
-          onDateChanged: (DateTime? date) {
-            if (date != null) {
-              selectedDate = date;
-            }
-          },
-          onSave: () async {
-            if (titleController.text.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Title cannot be empty!')),
-              );
-              return;
-            }
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return TaskDialog(
+        titleController: titleController,
+        descriptionController: descriptionController,
+        selectedPriority: selectedPriority,
+        selectedDate: selectedDate,
+        onPriorityChanged: (String newPriority) {
+          selectedPriority = newPriority;  
+        },
+        onDateChanged: (DateTime? date) {
+          if (date != null) {
+            selectedDate = date;
+          }
+        },
+        onSave: () async {
+          if (titleController.text.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Title cannot be empty!')),
+            );
+            return;
+          }
 
-            if (taskToEdit == null) {
-              String uniqueId = Uuid().v4();
-              Task newTask = Task(
-                id: uniqueId,
-                likeToDo: titleController.text,
-                Descrition: descriptionController.text,
-                date: selectedDate,
-                priority: selectedPriority,
-              );
-              await _hiveService.saveTask(newTask);
-            } else {
-              Task updatedTask = Task(
-                id: taskToEdit.id,
-                likeToDo: titleController.text,
-                Descrition: descriptionController.text,
-                date: selectedDate,
-                priority: selectedPriority,
-              );
-              await _hiveService.updateTask(taskToEdit.id!, updatedTask);
-            }
+          if (taskToEdit == null) {
+            String uniqueId = Uuid().v4();
+            Task newTask = Task(
+              id: uniqueId,
+              likeToDo: titleController.text,
+              Descrition: descriptionController.text,
+              date: selectedDate,
+              priority: selectedPriority,  // Save priority
+            );
+            await _hiveService.saveTask(newTask);
+          } else {
+            Task updatedTask = Task(
+              id: taskToEdit.id,
+              likeToDo: titleController.text,
+              Descrition: descriptionController.text,
+              date: selectedDate,
+              priority: selectedPriority,  // Update priority
+            );
+            await _hiveService.updateTask(taskToEdit.id!, updatedTask);
+          }
 
-            _fetchTasksForDate(_selectedDate);
-            // Navigator.pop(context);
-          },
-        );
-      },
-    );
-  }
+          // Refresh tasks to reflect updated priority
+          await _fetchTasksForDate(_selectedDate);
+          // Navigator.pop(context);
+        },
+      );
+    },
+  );
+}
+
 
   void _toggleTaskCompletion(Task task) async {
     await _hiveService.updateTaskCompletion(task.id!);
@@ -330,7 +332,7 @@ class _CelanderScreenState extends State<CelanderScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNav(),
+      // bottomNavigationBar: BottomNav(),
     );
   }
 }

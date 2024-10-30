@@ -98,10 +98,10 @@ final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
         decoration: InputDecoration(
           labelText: 'Enter new username',
           labelStyle: TextStyle(
-            color: theme.hoverColor, // Change label color
+            color: theme.hoverColor, 
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0), // Rounded input field
+            borderRadius: BorderRadius.circular(12.0),
             borderSide: BorderSide(color: theme.primaryColor),
           ),
         ),
@@ -237,27 +237,9 @@ final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
                   ? Colors.blueGrey[700]
                   : Colors.blueGrey[300],
             ),
-            SizedBox(height: 15),
+            
 
-            // Notifications section
-            Row(
-              children: [
-                Icon(
-                  Icons.star_rate_rounded,
-                  color: themeProvider.themeData.canvasColor,
-                ),
-                SizedBox(width: 5),
-                Text(
-                  'Notifications',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: themeProvider.themeData.canvasColor,
-                    fontFamily: 'Fonts',
-                  ),
-                ),
-              ],
-            ),
+           
             SizedBox(height: 70),
 
             // About section

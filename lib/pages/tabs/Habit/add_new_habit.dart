@@ -222,65 +222,67 @@ class _NewHabitState extends State<NewHabit> {
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                GestureDetector(
-                  onTap: _pickImage,
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: selectedAvatar != null
-                        ? FileImage(File(selectedAvatar!))
-                        : null,
-                    child: selectedAvatar == null
-                        ? Icon(Icons.add_a_photo, size: 50, color: Colors.grey)
-                        : null,
-                  ),
-                ),
-                SizedBox(height: 40),
-                _buildTextField(themeProvider, 'Name', _titleController, 'Daily Check-in'),
-                SizedBox(height: 10),
-                _buildTextField(themeProvider, 'Description', _descriptionController, 'Description'),
-                SizedBox(height: 10),
-                _buildTextField(
-                  themeProvider,
-                  'Quote',
-                  _quoteController,
-                  'Believe in yourself.',
-                  iconButton: IconButton(
-                    onPressed: _randomizeQuote,
-                    icon: Icon(Icons.replay_outlined, size: 20, color: Colors.blueAccent),
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _navigateToReminderScreen,
-                    child: Text(
-                      'Next',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontFamily: 'Fonts'),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: selectedAvatar != null
+                          ? FileImage(File(selectedAvatar!))
+                          : null,
+                      child: selectedAvatar == null
+                          ? Icon(Icons.add_a_photo, size: 50, color: Colors.grey)
+                          : null,
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ThemeProvider().themeData.primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7),
+                  ),
+                  SizedBox(height: 40),
+                  _buildTextField(themeProvider, 'Name', _titleController, 'Daily Check-in'),
+                  SizedBox(height: 10),
+                  _buildTextField(themeProvider, 'Description', _descriptionController, 'Description'),
+                  SizedBox(height: 10),
+                  _buildTextField(
+                    themeProvider,
+                    'Quote',
+                    _quoteController,
+                    'Believe in yourself.',
+                    iconButton: IconButton(
+                      onPressed: _randomizeQuote,
+                      icon: Icon(Icons.replay_outlined, size: 20, color: Colors.blueAccent),
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _navigateToReminderScreen,
+                      child: Text(
+                        'Next',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontFamily: 'Fonts'),
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ThemeProvider().themeData.primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

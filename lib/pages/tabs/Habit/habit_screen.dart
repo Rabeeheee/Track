@@ -281,9 +281,9 @@ class HabitScreenState extends State<HabitScreen> {
 
         ),
       ),
-      bottomNavigationBar: BottomNav(
+      // bottomNavigationBar: BottomNav(
        
-      ),
+      // ),
     );
   }
 

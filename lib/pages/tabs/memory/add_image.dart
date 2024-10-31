@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:trackitapp/pages/tabs/memory/image_view.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/services/models/memory_model.dart';
@@ -30,6 +31,8 @@ class _AddImageState extends State<AddImage> {
     super.initState();
     selectedImages = List.generate(widget.folder.imagePaths.length, (_) => false);
   }
+
+ 
 
   void addImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -85,6 +88,33 @@ class _AddImageState extends State<AddImage> {
     }
   }
 
+ void viewImageFullScreen(String imagePath) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ImageFullScreen(
+        imagePath: imagePath,
+        onDelete: (String path) async {
+          try {
+            await File(path).delete();
+            setState(() {
+              int index = widget.folder.imagePaths.indexOf(path);
+              if (index != -1) {
+                widget.folder.imagePaths.removeAt(index);
+                selectedImages.removeAt(index); 
+              }
+            });
+            await _hiveService.saveFolder(widget.folder); 
+          } catch (e) {
+            print("Error deleting image file: $e");
+          }
+        },
+      ),
+    ),
+  );
+}
+
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -92,21 +122,22 @@ class _AddImageState extends State<AddImage> {
 
     return Scaffold(
       appBar: CustomAppBar(
-  leading: IconButton(
-    icon: Icon(Icons.arrow_back),
-    onPressed: () {
-      Navigator.of(context).pop(); 
-    },
-  ),
-  title: selectedCount > 0 ? '$selectedCount selected' : widget.folder.name,
-  actions: [
-    if (selectedCount > 0)
-      IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: deleteSelectedImage,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop(); 
+           
+          },
+        ),
+        title: selectedCount > 0 ? '$selectedCount selected' : widget.folder.name,
+        actions: [
+          if (selectedCount > 0)
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: deleteSelectedImage,
+            ),
+        ],
       ),
-  ],
-),
 
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -118,35 +149,30 @@ class _AddImageState extends State<AddImage> {
             mainAxisSpacing: 10,
           ),
           itemCount: widget.folder.imagePaths.length,
-         itemBuilder: (context, index) {
-  return GestureDetector(
-    onLongPress: () {
-      setState(() {
-        selectedImages[index] = true; 
-      });
-    },
-    onTap: () {
-      setState(() {
-        if (selectedImages[index]) {
-          selectedImages[index] = false; 
-        }
-      });
-    },
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        image: DecorationImage(
-          image: FileImage(File(widget.folder.imagePaths[index])),
-          fit: BoxFit.cover,
-        ),
-        border: selectedImages[index]
-            ? Border.all(color: Colors.blue, width: 3)
-            : null,
-      ),
-    ),
-  );
-},
-
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onLongPress: () {
+                setState(() {
+                  selectedImages[index] = true; 
+                });
+              },
+              onTap: () {
+                viewImageFullScreen(widget.folder.imagePaths[index]);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: FileImage(File(widget.folder.imagePaths[index])),
+                    fit: BoxFit.cover,
+                  ),
+                  border: selectedImages[index]
+                      ? Border.all(color: Colors.blue, width: 3)
+                      : null,
+                ),
+              ),
+            );
+          },
         ),
       ),
       floatingActionButton: Padding(
@@ -163,3 +189,5 @@ class _AddImageState extends State<AddImage> {
     );
   }
 }
+
+

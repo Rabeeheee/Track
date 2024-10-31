@@ -70,7 +70,7 @@ class _CelanderScreenState extends State<CelanderScreen> {
         : date.day.toString();
   }
 
-  void _showTaskDialog(BuildContext context, {Task? taskToEdit}) {
+ void _showTaskDialog(BuildContext context, {Task? taskToEdit}) {
   TextEditingController titleController = TextEditingController(
     text: taskToEdit?.likeToDo ?? '',
   );
@@ -104,6 +104,13 @@ class _CelanderScreenState extends State<CelanderScreen> {
             return;
           }
 
+          if (descriptionController.text.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Description cannot be empty!')),
+            );
+            return;
+          }
+
           if (taskToEdit == null) {
             String uniqueId = Uuid().v4();
             Task newTask = Task(
@@ -111,7 +118,7 @@ class _CelanderScreenState extends State<CelanderScreen> {
               likeToDo: titleController.text,
               Descrition: descriptionController.text,
               date: selectedDate,
-              priority: selectedPriority,  // Save priority
+              priority: selectedPriority,
             );
             await _hiveService.saveTask(newTask);
           } else {
@@ -120,19 +127,19 @@ class _CelanderScreenState extends State<CelanderScreen> {
               likeToDo: titleController.text,
               Descrition: descriptionController.text,
               date: selectedDate,
-              priority: selectedPriority,  // Update priority
+              priority: selectedPriority,
             );
             await _hiveService.updateTask(taskToEdit.id!, updatedTask);
           }
 
-          // Refresh tasks to reflect updated priority
           await _fetchTasksForDate(_selectedDate);
-          // Navigator.pop(context);
+          Navigator.pop(context);
         },
       );
     },
   );
 }
+
 
 
   void _toggleTaskCompletion(Task task) async {

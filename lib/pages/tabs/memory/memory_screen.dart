@@ -21,8 +21,11 @@ class _MemoryScreenState extends State<MemoryScreen> {
   @override
   void initState() {
     super.initState();
-    loadFolders();
+    setState(() {
+      loadFolders();
+    });
   }
+  
 
   Future<void> loadFolders() async {
     folders = await _hiveService.getAllFolders();
@@ -143,75 +146,78 @@ class _MemoryScreenState extends State<MemoryScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            childAspectRatio: 2 / 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemCount: folders.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onLongPress: () {
-                toggleSelection(folders[index]);
-              },
-              onTap: () {
-                if (isSelectionMode) {
-                  toggleSelection(folders[index]); 
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => AddImage(
-                        folder: folders[index],
-                        onNewImage: (image) async {
-                          setState(() {
-                            folders[index].imagePaths.add(image.path);
-                          });
-                          await _hiveService.saveFolder(folders[index]);
-                        },
-                      ),
-                    ),
-                  );
-                }
-              },
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: selectedFolders.contains(folders[index]) 
-                            ? Colors.red 
-                            : Colors.blueAccent,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: selectedFolders.contains(folders[index])
-                              ? Colors.black 
-                              : Colors.transparent, 
-                          width: 2, 
+        child: RefreshIndicator(
+          onRefresh: loadFolders,
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 2 / 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: folders.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onLongPress: () {
+                  toggleSelection(folders[index]);
+                },
+                onTap: () {
+                  if (isSelectionMode) {
+                    toggleSelection(folders[index]); 
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => AddImage(
+                          folder: folders[index],
+                          onNewImage: (image) async {
+                            setState(() {
+                              folders[index].imagePaths.add(image.path);
+                            });
+                            await _hiveService.saveFolder(folders[index]);
+                          },
                         ),
-                        image: folders[index].imagePaths.isNotEmpty
-                            ? DecorationImage(
-                                image: FileImage(File(folders[index].imagePaths.last)),
-                                fit: BoxFit.cover,
-                              )
+                      ),
+                    );
+                  }
+                },
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: selectedFolders.contains(folders[index]) 
+                              ? Colors.red 
+                              : Colors.blueAccent,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: selectedFolders.contains(folders[index])
+                                ? Colors.black 
+                                : Colors.transparent, 
+                            width: 2, 
+                          ),
+                          image: folders[index].imagePaths.isNotEmpty
+                              ? DecorationImage(
+                                  image: FileImage(File(folders[index].imagePaths.last)),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                        ),
+                        child: folders[index].imagePaths.isEmpty
+                            ? Center(child: Icon(Icons.folder, color: Colors.white, size: 50))
                             : null,
                       ),
-                      child: folders[index].imagePaths.isEmpty
-                          ? Center(child: Icon(Icons.folder, color: Colors.white, size: 50))
-                          : null,
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    folders[index].name,
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            );
-          },
+                    SizedBox(height: 8),
+                    Text(
+                      folders[index].name,
+                      style: TextStyle(color: themeProvider.themeData.dividerColor),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
       floatingActionButton: Padding(
@@ -225,7 +231,6 @@ class _MemoryScreenState extends State<MemoryScreen> {
           ),
         ),
       ),
-      // bottomNavigationBar: BottomNav(),
     );
   }
 }

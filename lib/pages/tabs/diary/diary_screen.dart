@@ -65,13 +65,12 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     ),
                     child: TableCalendar(
                       calendarStyle: CalendarStyle(
-                        outsideTextStyle: TextStyle(color: Colors.grey),
                         defaultTextStyle: TextStyle(color: Colors.black),
                         todayTextStyle: TextStyle(color: Colors.black),
                         selectedTextStyle: TextStyle(color: Colors.white),
                         selectedDecoration: BoxDecoration(
                           color: themeProvider.themeData.primaryColor,
-                          borderRadius: BorderRadius.circular(5.0),
+                          shape: BoxShape.circle, // Change shape to circle
                         ),
                       ),
                       headerStyle: HeaderStyle(

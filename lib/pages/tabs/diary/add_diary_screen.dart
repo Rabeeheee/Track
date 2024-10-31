@@ -64,28 +64,28 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
       Navigator.popUntil(context, (route) => route.isFirst);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please fill in the title and diary entry")),
+        SnackBar(content: Text("Please fill in the title and diary ")),
       );
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+ @override
+Widget build(BuildContext context) {
+  final themeProvider = Provider.of<ThemeProvider>(context);
 
-    return Scaffold(
-      appBar: CustomAppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back, color: const Color.fromARGB(255, 0, 0, 0)),
-        ),
-        title: (widget.diary == null ? "Write your Day" : "Edit Diary Entry"),
-       
+  return Scaffold(
+    resizeToAvoidBottomInset: true,
+    appBar: CustomAppBar(
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: Icon(Icons.arrow_back, color: const Color.fromARGB(255, 0, 0, 0)),
       ),
-      body: Container(
-        color: themeProvider.themeData.scaffoldBackgroundColor,
+      title: (widget.diary == null ? "Write your Day" : "Edit Diary Entry"),
+    ),
+    body: SingleChildScrollView( // Added SingleChildScrollView
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,13 +98,13 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
 
             TextField(
               controller: _titleController,
-              style: TextStyle(color:themeProvider.themeData.splashColor),
+              style: TextStyle(color: themeProvider.themeData.splashColor),
               decoration: InputDecoration(
                 labelText: "Diary Title",
                 labelStyle: TextStyle(color: Colors.grey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color:themeProvider.themeData.splashColor),
+                  borderSide: BorderSide(color: themeProvider.themeData.splashColor),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -149,22 +149,20 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
             
             SizedBox(height: 16),
 
-            Expanded(
-              child: TextField(
-                controller: _diaryController,
-                style: TextStyle(color:themeProvider.themeData.splashColor),
-                maxLines: null,
-                decoration: InputDecoration(
-                  labelText: "Write your diary here",
-                  labelStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(9),
-                    borderSide: BorderSide(color: themeProvider.themeData.splashColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(9),
-                    borderSide: BorderSide(color:themeProvider.themeData.splashColor, width: 1),
-                  ),
+            TextField(
+              controller: _diaryController,
+              style: TextStyle(color: themeProvider.themeData.splashColor),
+              maxLines: null,
+              decoration: InputDecoration(
+                labelText: "Write your diary here",
+                labelStyle: TextStyle(color: Colors.grey),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(9),
+                  borderSide: BorderSide(color: themeProvider.themeData.splashColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(9),
+                  borderSide: BorderSide(color: themeProvider.themeData.splashColor, width: 1),
                 ),
               ),
             ),
@@ -194,6 +192,8 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

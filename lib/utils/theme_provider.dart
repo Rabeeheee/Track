@@ -27,6 +27,7 @@ class ThemeProvider with ChangeNotifier {
         hoverColor: AppColors.primaryColor,
         focusColor: Colors.black,
         shadowColor: const Color(0xFF3c3c3c),
+        dividerColor: Colors.white,
       );
     } else {
       return ThemeData.light().copyWith(
@@ -34,12 +35,14 @@ class ThemeProvider with ChangeNotifier {
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
+          
         ),
         cardColor: Colors.blueGrey[100],
         canvasColor: Colors.black,
         splashColor: Colors.black,
         hoverColor: Colors.white,
         focusColor: Colors.white,
+        dividerColor: Colors.black,
       );
     }
   }

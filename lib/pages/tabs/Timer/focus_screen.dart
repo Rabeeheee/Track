@@ -33,12 +33,10 @@ class _FocusScreenState extends State<FocusScreen> {
 
     await _notificationsPlugin.initialize(settings);
 
-    // Request notification permission
     if (Platform.isAndroid && await Permission.notification.isDenied) {
       await Permission.notification.request();
     }
 
-    // Set up the notification channel for Android
     if (Platform.isAndroid) {
       const androidChannel = AndroidNotificationChannel(
         'timer_alarm', 
@@ -85,46 +83,59 @@ class _FocusScreenState extends State<FocusScreen> {
     await _notificationsPlugin.show(0, 'Time’s up!', 'Your timer has ended.', notificationDetails);
   }
 
-  void _openTimeDialog() {
-    TextEditingController customTimeController = TextEditingController();
+ void _openTimeDialog() {
+  TextEditingController customTimeController = TextEditingController();
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Select Time Limit'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextButton(onPressed: () => _setTimeLimit(10), child: Text('10 minutes')),
-              TextButton(onPressed: () => _setTimeLimit(30), child: Text('30 minutes')),
-              TextButton(onPressed: () => _setTimeLimit(60), child: Text('1 hour')),
-              TextField(
-                controller: customTimeController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(hintText: 'Custom time in minutes (max 180)'),
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Select Time Limit'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextButton(onPressed: () => _setTimeLimit(10), child: Text('10 minutes')),
+            TextButton(onPressed: () => _setTimeLimit(30), child: Text('30 minutes')),
+            TextButton(onPressed: () => _setTimeLimit(60), child: Text('1 hour')),
+            TextField(
+              controller: customTimeController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: 'Custom time in minutes (max 180)',
+                errorText: _isInputInvalid(customTimeController.text) ? 'Invalid input! Must be 1-180 minutes.' : null,
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                int? minutes = int.tryParse(customTimeController.text);
-                if (minutes != null && minutes > 0 && minutes <= 180) {
-                  _setTimeLimit(minutes);
-                }
-              },
-              child: Text('Set'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Close', style: TextStyle(color: Colors.red)),
             ),
           ],
-        );
-      },
-    );
-  }
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              int? minutes = int.tryParse(customTimeController.text);
+              if (minutes != null && minutes > 0 && minutes <= 180) {
+                _setTimeLimit(minutes);
+                Navigator.pop(context);
+              } else {
+                setState(() {});
+              }
+            },
+            child: Text('Set'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Close', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+bool _isInputInvalid(String input) {
+  if (input.isEmpty) return true;
+  int? minutes = int.tryParse(input);
+  return minutes == null || minutes < 1 || minutes > 180;
+}
+
 
   void _setTimeLimit(int minutes) {
     setState(() {
@@ -209,7 +220,6 @@ class _FocusScreenState extends State<FocusScreen> {
           ),
         ),
       ),
-      // bottomNavigationBar: BottomNav(),
     );
   }
 }

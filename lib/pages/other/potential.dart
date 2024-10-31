@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/utils/colors.dart';
 
 import 'package:trackitapp/pages/tabs/Habit/habit_screen.dart';
@@ -80,7 +81,6 @@ class PotentialScreen extends StatelessWidget {
                       rating = 0;
                   }
               
-                  // Set colors for the overall rating section
                   Color backgroundColor;
                   Color textColor;
                   Color progressColor;
@@ -201,7 +201,7 @@ class PotentialScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                           HabitScreen(name: '', quote: '', selectedAvatarPath: '', isEditing: false, description: '', habitId: 0,),
+                           BottomNav(),
                       ),
                     );
                   },

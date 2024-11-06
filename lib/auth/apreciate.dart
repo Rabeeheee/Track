@@ -27,8 +27,8 @@ class Apreciate extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => RoutineScreen(
           userResponses: userResponses,
-          habitProgress: {}, 
-          surveyRatings: surveyRatings, // Passing the correct surveyRatings
+          habitProgress: const {}, 
+          surveyRatings: surveyRatings,
         ),
       ),
     );
@@ -36,99 +36,111 @@ class Apreciate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(15, 255, 255, 255),
-              Color.fromARGB(39, 0, 0, 0),
-              Color.fromARGB(14, 255, 255, 255),
-              Color.fromARGB(39, 0, 0, 0),
-              Color.fromARGB(14, 255, 255, 255),
-            ],
+   
+
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(15, 255, 255, 255),
+                Color.fromARGB(39, 0, 0, 0),
+                Color.fromARGB(14, 255, 255, 255),
+                Color.fromARGB(39, 0, 0, 0),
+                Color.fromARGB(14, 255, 255, 255),
+              ],
+            ),
           ),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: Container(
-                height: 10,
-                width: 327,
-                decoration: BoxDecoration(
-                  color: AppColors.grey,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: LinearProgressIndicator(
-                    value: 0.4,
-                    backgroundColor: Colors.transparent,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      AppColors.secondaryColor,
+          child: Center(
+            child: Container(
+               constraints: BoxConstraints(maxWidth: 600),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Container(
+                      height: 10,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.grey,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: const LinearProgressIndicator(
+                          value: 0.4,
+                          backgroundColor: Colors.transparent,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.secondaryColor,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "I'm proud of you for wanting\n to make changes",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Fonts',
+                              color: AppColors.secondaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            '🔥',
+                            style: TextStyle(fontSize: 60),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            'Answer all questions honestly.',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Fonts',
+                              color: AppColors.secondaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () => navigateToNextScreen(context),
+                            child: const Text(
+                              'Got it',
+                              style: TextStyle(
+                                fontFamily: 'Fonts',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.secondaryColor,
+                              foregroundColor: AppColors.backgroundColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "I'm proud of you for wanting\n to make changes",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Fonts',
-                        color: AppColors.secondaryColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      '🔥',
-                      style: TextStyle(fontSize: 60),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Answer all questions honestly.',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Fonts',
-                        color: AppColors.secondaryColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: () => navigateToNextScreen(context),
-                      child: const Text(
-                        'Got it',
-                        style: TextStyle(
-                          fontFamily: 'Fonts',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.secondaryColor,
-                        foregroundColor: AppColors.backgroundColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

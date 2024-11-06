@@ -12,7 +12,7 @@ class CommonProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 350,
+      width: double.infinity,
       height: 10,
       decoration: BoxDecoration(
         color: AppColors.grey,

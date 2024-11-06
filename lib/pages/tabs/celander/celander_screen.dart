@@ -133,7 +133,7 @@ class _CelanderScreenState extends State<CelanderScreen> {
           }
 
           await _fetchTasksForDate(_selectedDate);
-          Navigator.pop(context);
+          // Navigator.pop(context);
         },
       );
     },
@@ -240,6 +240,7 @@ class _CelanderScreenState extends State<CelanderScreen> {
           children: [
             DatePickercelender(
               currentDate: _selectedDate,
+               
               onDateSelected: (DateTime date) {
                 setState(() {
                   _selectedDate = date;
@@ -248,7 +249,24 @@ class _CelanderScreenState extends State<CelanderScreen> {
               },
             ),
             Expanded(
-              child: ListView.builder(
+              child: tasksForSelectedDate.isEmpty
+      ?  Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/not_found.webp',
+                height: 150,
+                width: 150,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(height: 20),
+             
+            ],
+          ),
+        )
+              
+              : ListView.builder(
                 itemCount: tasksForSelectedDate.length,
                 itemBuilder: (context, index) {
                   final task = tasksForSelectedDate[index];
@@ -321,24 +339,17 @@ class _CelanderScreenState extends State<CelanderScreen> {
           ],
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(left: 35),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: FloatingActionButton(
-            onPressed: () {
-              _showTaskDialog(context);
-            },
-            backgroundColor: themeProvider.themeData.primaryColor,
-            child: Icon(
-              Icons.add,
-              size: 35,
-              color: Colors.white,
-            ),
-          ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showTaskDialog(context);
+        },
+        backgroundColor: themeProvider.themeData.primaryColor,
+        child: Icon(
+          Icons.add,
+          size: 35,
+          color: Colors.white,
         ),
       ),
-      // bottomNavigationBar: BottomNav(),
     );
   }
 }

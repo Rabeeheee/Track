@@ -1,4 +1,6 @@
 
+import 'package:flutter/src/widgets/icon_data.dart';
+
 class SurveyQuestion {
   String questionText;
   List<String> options;
@@ -12,7 +14,7 @@ class Habit {
   final String image; 
   
 
-  Habit({required this.title, required this.subtitle, required this.image});
+  Habit({required this.title, required this.subtitle, required this.image,});
 
   get avatar => null;
 }

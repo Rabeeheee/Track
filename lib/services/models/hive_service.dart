@@ -61,6 +61,7 @@ class HiveService {
   // Save a new habit with a unique ID
   Future<void> saveHabit(AddhabitModal habit) async {
     var box = await getHabitsBox();
+    
     if (habit.id == null || habit.id == 0) {
       habit.id = box.isNotEmpty ? box.keys.cast<int>().last + 1 : 1;
     }

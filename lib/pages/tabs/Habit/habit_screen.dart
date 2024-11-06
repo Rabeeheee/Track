@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
@@ -6,12 +10,10 @@ import 'package:trackitapp/pages/tabs/Habit/add_def_habit.dart';
 import 'package:trackitapp/pages/tabs/Habit/habit_detail.dart';
 import 'package:trackitapp/pages/tabs/Habit/progress.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
-import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/pages/widgets/date_row.dart';
 import 'package:trackitapp/pages/widgets/drawer.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
-import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 
@@ -22,16 +24,15 @@ class HabitScreen extends StatefulWidget {
   final bool isEditing;
   final String description;
   final int habitId;
-  
 
-  HabitScreen({
+  const HabitScreen({
     super.key,
     required this.name,
     required this.quote,
     required this.selectedAvatarPath,
-    required this.isEditing, 
+    required this.isEditing,
     required this.habitId,
-    required this.description, 
+    required this.description,
   });
 
   @override
@@ -59,16 +60,14 @@ class HabitScreenState extends State<HabitScreen> {
   Set<int> selectedNightIndex = {};
   Set<int> selectedOtherIndex = {};
 
+  // ignore: unused_field
   int _selectedIndex = 1;
-  
 
   bool get isAnyHabitSelected =>
       selectedMorningIndex.isNotEmpty ||
       selectedAfternoonIndex.isNotEmpty ||
       selectedNightIndex.isNotEmpty ||
       selectedOtherIndex.isNotEmpty;
-
- 
 
   @override
   void initState() {
@@ -77,11 +76,6 @@ class HabitScreenState extends State<HabitScreen> {
     _fetchUsername();
     _loadHabits();
   }
-
- 
-
- 
-
 
   Future<void> _fetchUsername() async {
     String? storedUsername = await _hiveService.getUsername();
@@ -117,12 +111,14 @@ class HabitScreenState extends State<HabitScreen> {
     });
   }
 
+  // ignore: unused_element
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  // ignore: unused_element
   void _clearSelectedHabits() {
     setState(() {
       selectedMorningIndex.clear();
@@ -133,55 +129,56 @@ class HabitScreenState extends State<HabitScreen> {
   }
 
   void onCheckboxTapped(int habitId) async {
-  await HiveService().updateHabitCompletion(habitId);
- _loadHabits();
-}
+    await HiveService().updateHabitCompletion(habitId);
+    _loadHabits();
+  }
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-print('$_selectedIndex');
 
+    // ignore: avoid_print
     print('$isAnyHabitSelected');
     return Scaffold(
       backgroundColor: themeProvider.themeData.scaffoldBackgroundColor,
       appBar: CustomAppBar(
         title: 'Habit',
-        actions:  [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context)=> ProgressScreen(overallprogress: 0,)));
-                  },
-                  icon: Iconify(
-                    GameIcons.progression,
-                    color: themeProvider.themeData.canvasColor,
-                  ),
-                ),
-                Builder(builder: (context) {
-                  return IconButton(
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                    icon: Icon(
-                      Icons.menu,
-                      color: themeProvider.themeData.canvasColor,
-                    ),
-                  );
-                }),
-              ],
-        
-          
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProgressScreen(
+                            overallprogress: 0,
+                          )));
+            },
+            icon: Iconify(
+              GameIcons.progression,
+              color: themeProvider.themeData.canvasColor,
+            ),
+          ),
+          Builder(builder: (context) {
+            return IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: Icon(
+                Icons.menu,
+                color: themeProvider.themeData.canvasColor,
+              ),
+            );
+          }),
+        ],
       ),
       drawer: AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: RefreshIndicator(
-           backgroundColor: Colors.blue,    
-        color: Colors.white,              
-        strokeWidth: 3.0,                
-        displacement: 100,   
+          backgroundColor: Colors.blue,
+          color: Colors.white,
+          strokeWidth: 3.0,
+          displacement: 100,
           onRefresh: () async {
             _loadHabits();
           },
@@ -192,7 +189,7 @@ print('$_selectedIndex');
                 const SizedBox(height: 20),
                 _buildMustDoSection(themeProvider),
                 const SizedBox(height: 10),
-          
+
                 // Displaying Morning Habits
                 _buildHabitSection(
                   title: 'Morning',
@@ -207,7 +204,7 @@ print('$_selectedIndex');
                   selectedHabits: [],
                 ),
                 const SizedBox(height: 10),
-          
+
                 // Displaying Afternoon Habits
                 _buildHabitSection(
                   title: 'Afternoon',
@@ -222,7 +219,7 @@ print('$_selectedIndex');
                   selectedHabits: [],
                 ),
                 const SizedBox(height: 10),
-          
+
                 // Displaying Night Habits
                 _buildHabitSection(
                   title: 'Night',
@@ -237,7 +234,7 @@ print('$_selectedIndex');
                   selectedHabits: [],
                 ),
                 const SizedBox(height: 10),
-          
+
                 // Displaying Other Habits
                 _buildHabitSection(
                   title: 'Other',
@@ -251,40 +248,36 @@ print('$_selectedIndex');
                   },
                   selectedHabits: [],
                 ),
+                SizedBox(
+                  height: 75,
+                )
               ],
             ),
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(left: 35),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child:FloatingActionButton(
-            
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AddDefHabit(
-          habitId: 0,  
-          title: '',
-          subtitle: '',
-          selectedAvatarPath: null,
-          description: '',
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddDefHabit(
+                habitId: 0,
+                title: '',
+                subtitle: '',
+                selectedAvatarPath: null,
+                description: '',
+              ),
+            ),
+          );
+        },
+        backgroundColor: themeProvider.themeData.primaryColor,
+        child: const Icon(
+          Icons.add,
+          size: 35,
+          color: Colors.white,
         ),
       ),
-    );
-  },
-  backgroundColor: themeProvider.themeData.primaryColor,
-  child: Icon(Icons.add,size: 35,color: Colors.white,),
-),
-
-        ),
-      ),
-      // bottomNavigationBar: BottomNav(
-       
-      // ),
     );
   }
 
@@ -353,7 +346,6 @@ print('$_selectedIndex');
     required List<AddhabitModal> selectedHabits,
   }) {
     final themeProvider = Provider.of<ThemeProvider>(context);
- 
 
     return Container(
       decoration: BoxDecoration(
@@ -405,19 +397,20 @@ print('$_selectedIndex');
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: GestureDetector(
-                   onTap: () {
-                     Navigator.push(context, MaterialPageRoute(
-                      builder: (context)=>HabitDetail(
-                        title: habits[index].name as String, 
-                        subtitle: habits[index].quote as String,
-                        description: habits[index].description as String,
-                                                
-                        selectedAvatarPath: habits[index].selectedAvatarPath, 
-                       habitId: habits[index].id,
-                        )
-                        )
-                        );
-                   },
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HabitDetail(
+                                    title: habits[index].name as String,
+                                    subtitle: habits[index].quote as String,
+                                    description:
+                                        habits[index].description as String,
+                                    selectedAvatarPath:
+                                        habits[index].selectedAvatarPath,
+                                    habitId: habits[index].id,
+                                  )));
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         color: selectedIndex.contains(index)
@@ -433,9 +426,9 @@ print('$_selectedIndex');
                               radius: 20,
                               backgroundImage: habits[index].isCompleted
                                   ? const AssetImage('assets/images/Tick.png')
-                                  : FileImage(File(
-                                          habits[index].selectedAvatarPath!))
-                                     
+                                  : habits[index].selectedAvatarPath != null
+                                      ? MemoryImage(base64Decode(habits[index].selectedAvatarPath!))
+                                      : null,
                             ),
                             const SizedBox(width: 10),
                             Expanded(
@@ -468,7 +461,8 @@ print('$_selectedIndex');
                                 setState(() {
                                   habits[index].isCompleted = value ?? false;
                                   habits[index].save();
-                                  HiveService().updateHabitCompletion(habits[index].id!);
+                                  HiveService()
+                                      .updateHabitCompletion(habits[index].id!);
                                 });
                               },
                             ),

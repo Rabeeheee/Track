@@ -1,13 +1,18 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackitapp/pages/tabs/Habit/add_habit_reminder.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 
 class NewHabit extends StatefulWidget {
   final int habitId;
@@ -88,7 +93,6 @@ class _NewHabitState extends State<NewHabit> {
   void _saveHabit() async {
     int habitId = await _generateUniqueId();
 
-
     if (widget.habitId == 0) {
       isEditing = false;
 
@@ -97,7 +101,7 @@ class _NewHabitState extends State<NewHabit> {
         quote: _quoteController.text,
         description: _descriptionController.text,
         selectedAvatarPath: selectedAvatar,
-        id: habitId, 
+        id: habitId,
       );
 
       await _hiveService.saveHabit(newHabit);
@@ -114,7 +118,7 @@ class _NewHabitState extends State<NewHabit> {
         quote: _quoteController.text,
         description: _descriptionController.text,
         selectedAvatarPath: selectedAvatar,
-        id: widget.habitId, 
+        id: widget.habitId,
       );
 
       await _hiveService.updateHabit(updatedHabit);
@@ -135,26 +139,69 @@ class _NewHabitState extends State<NewHabit> {
       return 1;
     }
 
-    int? maxId = habits.map((habit) => habit.id).reduce((a, b) => a! > b! ? a : b);
+    int? maxId =
+        habits.map((habit) => habit.id).reduce((a, b) => a! > b! ? a : b);
     return maxId! + 1;
   }
+
   Future<void> _loadSelectedAvatar() async {
-    if (selectedAvatar == null) {
-      selectedAvatar;
-    }
-  }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? loadedAvatarBase64 = prefs.getString('selectedAvatar');
+    print("Loaded avatar base64 from SharedPreferences: $loadedAvatarBase64");
 
-  Future<void> _pickImage() async {
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
+    if (loadedAvatarBase64 != null) {
       setState(() {
-        selectedAvatar = pickedFile.path;
+        selectedAvatar = loadedAvatarBase64;
       });
     }
   }
 
+ Future<void> _pickImage() async {
+  String? base64Image;
+  Uint8List? imageBytes;
+
+  if (kIsWeb) {
+    // For web, handle the image differently since File API is not available
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
+      base64Image = base64Encode(bytes);
+      imageBytes = bytes;
+      print("Picked image for web as base64: $base64Image");
+      await _storeImageLocally(base64Image);
+    }
+  } else {
+    // For mobile platforms (iOS/Android)
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final bytes = await File(pickedFile.path).readAsBytes();
+      base64Image = base64Encode(bytes);
+      imageBytes = bytes;
+      await _storeImageLocally(base64Image);
+    }
+  }
+
+  if (imageBytes != null) {
+    setState(() {
+      selectedAvatar = base64Image; // Store base64 string
+    });
+  }
+}
+
+  Future<String> _convertImageToBase64(String imagePath) async {
+    final imageBytes = await File(imagePath).readAsBytes();
+    return base64Encode(imageBytes); // Convert the image bytes to base64
+  }
+
+ Future<void> _storeImageLocally(String base64Image) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('selectedAvatar', base64Image); // Save as base64
+
+  print("Stored avatar as base64 in SharedPreferences");
+  setState(() {
+    selectedAvatar = base64Image; // Update avatar as base64
+  });
+}
   void _randomizeQuote() {
     final randomIndex = Random().nextInt(Quotes.length);
     setState(() {
@@ -231,19 +278,21 @@ class _NewHabitState extends State<NewHabit> {
                   GestureDetector(
                     onTap: _pickImage,
                     child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: selectedAvatar != null
-                          ? FileImage(File(selectedAvatar!))
-                          : null,
-                      child: selectedAvatar == null
-                          ? Icon(Icons.add_a_photo, size: 50, color: Colors.grey)
-                          : null,
-                    ),
+                    radius: 50,
+                    backgroundImage: selectedAvatar != null
+                        ? MemoryImage(base64Decode(selectedAvatar!))
+                        : null,
+                    child: selectedAvatar == null
+                        ? Icon(Icons.add_a_photo, size: 50, color: Colors.grey)
+                        : null,
+                  ),
                   ),
                   SizedBox(height: 40),
-                  _buildTextField(themeProvider, 'Name', _titleController, 'Daily Check-in'),
+                  _buildTextField(themeProvider, 'Name', _titleController,
+                      'Daily Check-in'),
                   SizedBox(height: 10),
-                  _buildTextField(themeProvider, 'Description', _descriptionController, 'Description'),
+                  _buildTextField(themeProvider, 'Description',
+                      _descriptionController, 'Description'),
                   SizedBox(height: 10),
                   _buildTextField(
                     themeProvider,
@@ -252,10 +301,14 @@ class _NewHabitState extends State<NewHabit> {
                     'Believe in yourself.',
                     iconButton: IconButton(
                       onPressed: _randomizeQuote,
-                      icon: Icon(Icons.replay_outlined, size: 20, color: Colors.blueAccent),
+                      icon: Icon(Icons.replay_outlined,
+                          size: 20, color: Colors.blueAccent),
                     ),
                   ),
                 ],
+              ),
+              SizedBox(
+                height: 10,
               ),
               Column(
                 children: [
@@ -275,7 +328,8 @@ class _NewHabitState extends State<NewHabit> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(7),
                         ),
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       ),
                     ),
                   ),
@@ -288,8 +342,8 @@ class _NewHabitState extends State<NewHabit> {
     );
   }
 
-  Widget _buildTextField(
-      ThemeProvider themeProvider, String label, TextEditingController controller, String hintText,
+  Widget _buildTextField(ThemeProvider themeProvider, String label,
+      TextEditingController controller, String hintText,
       {Widget? iconButton}) {
     return Container(
       height: 135,
@@ -324,7 +378,8 @@ class _NewHabitState extends State<NewHabit> {
                 hintStyle: TextStyle(color: Colors.grey),
                 filled: true,
                 fillColor: const Color.fromARGB(255, 202, 201, 201),
-                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,

@@ -220,16 +220,10 @@ class _MemoryScreenState extends State<MemoryScreen> {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(left: 35),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: FloatingActionButton(
-            onPressed: createFolder,
-            backgroundColor: themeProvider.themeData.primaryColor,
-            child: Icon(Icons.create_new_folder, color: Colors.white),
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: createFolder,
+        backgroundColor: themeProvider.themeData.primaryColor,
+        child: Icon(Icons.create_new_folder, color: Colors.white),
       ),
     );
   }

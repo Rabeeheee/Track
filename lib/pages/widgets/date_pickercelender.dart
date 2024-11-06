@@ -7,7 +7,11 @@ class DatePickercelender extends StatefulWidget {
   final DateTime currentDate;
   final Function(DateTime) onDateSelected;
 
-  const DatePickercelender({Key? key, required this.currentDate, required this.onDateSelected}) : super(key: key);
+  const DatePickercelender({
+    Key? key, 
+    required this.currentDate,
+    required this.onDateSelected, 
+    }) : super(key: key);
 
   @override
   _DateRowState createState() => _DateRowState();
@@ -68,7 +72,7 @@ class _DateRowState extends State<DatePickercelender> {
                 child: Text(
                   date.day.toString(),
                   style: TextStyle(
-                    color: themeProvider.themeData.canvasColor,
+                    color: isSelected ? Colors.white : themeProvider.themeData.canvasColor,
                   ),
                 ),
               ),

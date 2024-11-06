@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_const
+
 import 'package:flutter/material.dart';
 import 'package:trackitapp/utils/colors.dart';
 
@@ -25,7 +27,7 @@ import 'package:trackitapp/utils/colors.dart';
                 Text.rich(
                   TextSpan(children: [
                     TextSpan(
-                      text: 'At some stage, most people will experience',
+                      text: 'At some stage, most people will experience\n\n',
                       style: TextStyle(
                         color: Color.fromARGB(231, 255, 255, 255),
                         fontSize: 19,
@@ -33,8 +35,9 @@ import 'package:trackitapp/utils/colors.dart';
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    
                     TextSpan(
-                      text: ' a lack of discipline, low energy, and a loss of direction and motivation ',
+                      text: ' a lack of discipline, low energy, and a loss of\n\ndirection and motivation ',
                       style: TextStyle(
                         color: AppColors.primaryColor,
                         fontSize: 19,

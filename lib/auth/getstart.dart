@@ -87,9 +87,10 @@ class Getstart extends StatelessWidget {
                               onPressed: () {
                                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SurveyScreen(habitProgress: {},)));
+                    MaterialPageRoute(builder: (context) => const SurveyScreen(habitProgress: {},)));
                               },
-                              child: Text(
+                              // ignore: sort_child_properties_last
+                              child: const Text(
                                 'Get Started',
                                 style: TextStyle(
                                   fontFamily: 'Fonts',

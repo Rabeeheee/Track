@@ -6,6 +6,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
+import 'package:trackitapp/services/providers/time_service.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 
 class FocusScreen extends StatefulWidget {
@@ -16,9 +17,6 @@ class FocusScreen extends StatefulWidget {
 }
 
 class _FocusScreenState extends State<FocusScreen> {
-  int _timeLimit = 5; 
-  int _remainingTime = 5 * 60; 
-  Timer? _timer;
   FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   @override
@@ -30,7 +28,6 @@ class _FocusScreenState extends State<FocusScreen> {
   Future<void> _initializeNotifications() async {
     const androidSettings = AndroidInitializationSettings('@mipmap/app_icon');
     final settings = InitializationSettings(android: androidSettings);
-
     await _notificationsPlugin.initialize(settings);
 
     if (Platform.isAndroid && await Permission.notification.isDenied) {
@@ -49,29 +46,6 @@ class _FocusScreenState extends State<FocusScreen> {
     }
   }
 
-  void _startTimer() {
-    if (_timer != null) _timer!.cancel();
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_remainingTime > 0) {
-          _remainingTime--;
-        } else {
-          _timer!.cancel();
-          _showAlarm();
-        }
-      });
-    });
-  }
-
-  void _stopTimer() {
-    if (_timer != null) {
-      _timer!.cancel();
-      setState(() {
-        _remainingTime = _timeLimit * 60;
-      });
-    }
-  }
-
   void _showAlarm() async {
     const androidDetails = AndroidNotificationDetails(
       'timer_alarm', 
@@ -83,88 +57,81 @@ class _FocusScreenState extends State<FocusScreen> {
     await _notificationsPlugin.show(0, 'Time’s up!', 'Your timer has ended.', notificationDetails);
   }
 
- void _openTimeDialog() {
-  TextEditingController customTimeController = TextEditingController();
+  void _openTimeDialog() {
+    TextEditingController customTimeController = TextEditingController();
+    bool _isInvalidInput = false;
 
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text('Select Time Limit'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextButton(onPressed: () => _setTimeLimit(10), child: Text('10 minutes')),
-            TextButton(onPressed: () => _setTimeLimit(30), child: Text('30 minutes')),
-            TextButton(onPressed: () => _setTimeLimit(60), child: Text('1 hour')),
-            TextField(
-              controller: customTimeController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: 'Custom time in minutes (max 180)',
-                errorText: _isInputInvalid(customTimeController.text) ? 'Invalid input! Must be 1-180 minutes.' : null,
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text('Select Time Limit'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextButton(onPressed: () => _setTimeLimit(10), child: Text('10 minutes')),
+                  TextButton(onPressed: () => _setTimeLimit(30), child: Text('30 minutes')),
+                  TextButton(onPressed: () => _setTimeLimit(60), child: Text('1 hour')),
+                  TextField(
+                    controller: customTimeController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      hintText: 'Custom time in minutes (max 180)',
+                      errorText: _isInvalidInput ? 'Invalid input! Must be 1-180 minutes.' : null,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              int? minutes = int.tryParse(customTimeController.text);
-              if (minutes != null && minutes > 0 && minutes <= 180) {
-                _setTimeLimit(minutes);
-                Navigator.pop(context);
-              } else {
-                setState(() {});
-              }
-            },
-            child: Text('Set'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Close', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      );
-    },
-  );
-}
-
-bool _isInputInvalid(String input) {
-  if (input.isEmpty) return true;
-  int? minutes = int.tryParse(input);
-  return minutes == null || minutes < 1 || minutes > 180;
-}
-
-
-  void _setTimeLimit(int minutes) {
-    setState(() {
-      _timeLimit = minutes;
-      _remainingTime = _timeLimit * 60;
-    });
-    Navigator.pop(context);
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    int? minutes = int.tryParse(customTimeController.text);
+                    if (minutes != null && minutes > 0 && minutes <= 180) {
+                      _setTimeLimit(minutes);
+                      Navigator.pop(context);
+                    } else {
+                      setDialogState(() {
+                        _isInvalidInput = true;
+                      });
+                    }
+                  },
+                  child: Text('Set'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('Close', style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
+  void _setTimeLimit(int minutes) {
+    Provider.of<TimerService>(context, listen: false).setTimeLimit(minutes);
+  }
+
+  void _restartTimer() {
+    final timerService = Provider.of<TimerService>(context, listen: false);
+    timerService.stopTimer(); 
+    timerService.resetTimer(); 
   }
 
   @override
   Widget build(BuildContext context) {
-        final themeProvider = Provider.of<ThemeProvider>(context);
-
-    double progress = _remainingTime / (_timeLimit * 60);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final timerService = Provider.of<TimerService>(context);
+    double progress = timerService.remainingTime / (timerService.timeLimit * 60);
 
     return Scaffold(
       appBar: CustomAppBar(title: 'Focus Period'),
       body: Container(
         decoration: BoxDecoration(
-          
-            color: themeProvider.themeData.scaffoldBackgroundColor,
-            
-          
+          color: themeProvider.themeData.scaffoldBackgroundColor,
         ),
         child: Center(
           child: Column(
@@ -177,7 +144,7 @@ bool _isInputInvalid(String input) {
                   lineWidth: 12.0,
                   percent: progress,
                   center: Text(
-                    '${(_remainingTime / 60).floor().toString().padLeft(2, '0')}:${(_remainingTime % 60).toString().padLeft(2, '0')}',
+                    '${(timerService.remainingTime / 60).floor().toString().padLeft(2, '0')}:${(timerService.remainingTime % 60).toString().padLeft(2, '0')}',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: themeProvider.themeData.canvasColor),
                   ),
                   progressColor: const Color.fromARGB(255, 69, 69, 69),
@@ -189,7 +156,10 @@ bool _isInputInvalid(String input) {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton.icon(
-                  onPressed: _startTimer,
+                  onPressed: () {
+                    timerService.startTimer();
+                    // Optional: Start timer notification
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                     shape: RoundedRectangleBorder(
@@ -204,7 +174,9 @@ bool _isInputInvalid(String input) {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton.icon(
-                  onPressed: _stopTimer,
+                  onPressed: () {
+                    timerService.stopTimer();
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
@@ -216,6 +188,21 @@ bool _isInputInvalid(String input) {
                 ),
               ),
               SizedBox(height: 10),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton.icon(
+                  onPressed: _restartTimer,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  icon: const Icon(Icons.refresh, color: Colors.white),
+                  label: const Text('Restart Timer', style: TextStyle(color: Colors.white)),
+                ),
+              ),
+              const SizedBox(height: 10),
             ],
           ),
         ),

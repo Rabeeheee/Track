@@ -33,7 +33,7 @@ class DateRow extends StatelessWidget {
               child: Text(
                 date.day.toString(),
                 style: TextStyle(
-                  color: themeProvider.themeData.canvasColor,
+                  color: isSelected ? Colors.white : themeProvider.themeData.canvasColor,
                 ),
               ),
             ),

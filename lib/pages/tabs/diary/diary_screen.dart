@@ -45,7 +45,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
             child: Column(
               children: [
                 Card(
-                  color: themeProvider.themeData.cardColor,
+                  color: themeProvider.themeData.scaffoldBackgroundColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -65,16 +65,16 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     ),
                     child: TableCalendar(
                       calendarStyle: CalendarStyle(
-                        defaultTextStyle: TextStyle(color: Colors.black),
-                        todayTextStyle: TextStyle(color: Colors.black),
-                        selectedTextStyle: TextStyle(color: Colors.white),
+                        // defaultTextStyle: TextStyle(color: Colors.black),
+                        // todayTextStyle: TextStyle(color: Colors.black),
+                        // selectedTextStyle: TextStyle(color: Colors.white),
                         selectedDecoration: BoxDecoration(
                           color: themeProvider.themeData.primaryColor,
                           shape: BoxShape.circle, // Change shape to circle
                         ),
                       ),
                       headerStyle: HeaderStyle(
-                        titleTextStyle: TextStyle(color: Colors.black),
+                        // titleTextStyle: TextStyle(color: Colors.black),
                         formatButtonVisible: false,
                         leftChevronIcon:
                             Icon(Icons.chevron_left, color: Colors.black),
@@ -168,21 +168,15 @@ class _DiaryScreenState extends State<DiaryScreen> {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(left: 35),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: FloatingActionButton(
-            onPressed: () {
-              _navigateToAddEntryScreen(context, _selectedDate);
-            },
-            backgroundColor: themeProvider.themeData.primaryColor,
-            child: Icon(
-              Icons.add,
-              size: 35,
-              color: Colors.white,
-            ),
-          ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _navigateToAddEntryScreen(context, _selectedDate);
+        },
+        backgroundColor: themeProvider.themeData.primaryColor,
+        child: Icon(
+          Icons.add,
+          size: 35,
+          color: Colors.white,
         ),
       ),
     );

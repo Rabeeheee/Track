@@ -27,11 +27,13 @@ class TaskDialog extends StatefulWidget {
 
 class _TaskDialogState extends State<TaskDialog> {
   DateTime? selectedDateInDialog;
+  late String selectedPriority;
 
   @override
   void initState() {
     super.initState();
     selectedDateInDialog = widget.selectedDate;
+    selectedPriority = widget.selectedPriority;
   }
 
   @override
@@ -44,7 +46,7 @@ class _TaskDialogState extends State<TaskDialog> {
           width: 350,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.4),
+            color: const Color.fromARGB(255, 202, 201, 201),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Column(
@@ -55,7 +57,7 @@ class _TaskDialogState extends State<TaskDialog> {
                 controller: widget.titleController,
                 decoration: InputDecoration(
                   labelText: 'What would you like to do.',
-                  labelStyle: TextStyle(color: Colors.grey),
+                  labelStyle: TextStyle(color: const Color.fromARGB(255, 123, 122, 122)),
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding:
@@ -78,7 +80,7 @@ class _TaskDialogState extends State<TaskDialog> {
                 controller: widget.descriptionController,
                 decoration: InputDecoration(
                   labelText: 'Description',
-                  labelStyle: TextStyle(color: Colors.grey),
+                  labelStyle: TextStyle(color: const Color.fromARGB(255, 107, 107, 107)),
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding:
@@ -100,7 +102,7 @@ class _TaskDialogState extends State<TaskDialog> {
                 dropdownColor: Colors.white,
                 iconEnabledColor: Colors.blueGrey,
                 borderRadius: BorderRadius.circular(10),
-                value: widget.selectedPriority,
+                value: selectedPriority,
                 items: <String>['Top Priority', 'Necessary', 'Regular', 'Delete']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -109,6 +111,9 @@ class _TaskDialogState extends State<TaskDialog> {
                   );
                 }).toList(),
                 onChanged: (String? newValue) {
+                  setState(() {
+                    selectedPriority = newValue!;
+                  });
                   widget.onPriorityChanged(newValue!);
                 },
               ),

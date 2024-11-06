@@ -5,8 +5,7 @@ import 'package:trackitapp/utils/Linear_progress.dart';
 import 'package:trackitapp/utils/colors.dart';
 import 'package:trackitapp/auth/apreciate.dart';
 import 'package:trackitapp/utils/survey_option.dart';
-import '../../utils/rating_calculator.dart'; 
-
+import '../../utils/rating_calculator.dart';
 
 class SurveyQuestion {
   final String questionText;
@@ -38,42 +37,38 @@ class _SurveyScreenState extends State<SurveyScreen> {
   final List<double> questionWeights = List.filled(questions.length, 0.07); // Adjust weights accordingly
 
   void navigateToNextQuestion(String answer) {
-  setState(() {
-    final currentQuestion = questions[currentQuestionIndex];
-    int answerIndex = currentQuestion.options.indexOf(answer);
-    userResponses[currentQuestionIndex] = (answerIndex >= 0) ? 5 - answerIndex : 0;
+    setState(() {
+      final currentQuestion = questions[currentQuestionIndex];
+      int answerIndex = currentQuestion.options.indexOf(answer);
+      userResponses[currentQuestionIndex] = (answerIndex >= 0) ? 5 - answerIndex : 0;
 
-    Provider.of<ProgressProvider>(context, listen: false).updateIndex(currentQuestionIndex);
+      Provider.of<ProgressProvider>(context, listen: false).updateIndex(currentQuestionIndex);
 
-    if (currentQuestionIndex == questions.length - 1) {
-  RatingCalculator ratingCalculator = RatingCalculator(userResponses: userResponses);
-  Map<String, double> ratings = ratingCalculator.calculateSurveyRatings();
+      if (currentQuestionIndex == questions.length - 1) {
+        RatingCalculator ratingCalculator = RatingCalculator(userResponses: userResponses);
+        Map<String, double> ratings = ratingCalculator.calculateSurveyRatings();
 
- 
-print('Calculated Ratings: $ratings'); 
+        print('Calculated Ratings: $ratings');
 
-
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => Apreciate(
-        surveyRatings: ratings, 
-        routineRatings: {}, 
-        userResponses: userResponses, 
-        onContinue: () {}, 
-        habitIndex: 0, 
-        habits: [],
-        ratings: {}, 
-      ),
-    ),
-  );
-}
-else {
-      currentQuestionIndex++;
-    }
-  });
-}
-
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Apreciate(
+              surveyRatings: ratings,
+              routineRatings: {},
+              userResponses: userResponses,
+              onContinue: () {},
+              habitIndex: 0,
+              habits: [],
+              ratings: {},
+            ),
+          ),
+        );
+      } else {
+        currentQuestionIndex++;
+      }
+    });
+  }
 
   void navigateToPreviousQuestion() {
     if (currentQuestionIndex > 0) {
@@ -89,60 +84,69 @@ else {
     final currentQuestion = questions[currentQuestionIndex];
     double progressValue = questionWeights.take(currentQuestionIndex + 1).reduce((a, b) => a + b);
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(15, 255, 255, 255),
-              Color.fromARGB(39, 0, 0, 0),
-              Color.fromARGB(14, 255, 255, 255),
-              Color.fromARGB(39, 0, 0, 0),
-              Color.fromARGB(14, 255, 255, 255),
-            ],
+    return 
+    SafeArea(
+      child: Scaffold(
+        
+        backgroundColor: AppColors.backgroundColor,
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(15, 255, 255, 255),
+                Color.fromARGB(39, 0, 0, 0),
+                Color.fromARGB(14, 255, 255, 255),
+                Color.fromARGB(39, 0, 0, 0),
+                Color.fromARGB(14, 255, 255, 255),
+              ],
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 15),
-              CommonProgressIndicator(progressValue: progressValue),
-              const SizedBox(height: 20),
-              Row(
+          child: Center(
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 900), 
+              padding: const EdgeInsets.symmetric(horizontal: 16.0), 
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 35,
-                    child: IconButton(
-                      onPressed: navigateToPreviousQuestion,
-                      icon: const Icon(Icons.arrow_back_ios),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      currentQuestion.questionText,
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Fonts',
-                        color: AppColors.secondaryColor,
+                  const SizedBox(height: 15),
+                  CommonProgressIndicator(progressValue: progressValue),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Container(
+                        width: 35,
+                        child: IconButton(
+                          onPressed: navigateToPreviousQuestion,
+                          icon: const Icon(Icons.arrow_back_ios),
+                        ),
                       ),
-                    ),
+                      Expanded(
+                        child: Text(
+                          currentQuestion.questionText,
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Fonts',
+                            color: AppColors.secondaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 20.0),
+                  for (var option in currentQuestion.options)
+                    SurveyOption(
+                      emoji: option.substring(0, 2),
+                      text: option.substring(2),
+                      onTap: () => navigateToNextQuestion(option),
+                    ),
                 ],
               ),
-              const SizedBox(height: 20.0),
-              for (var option in currentQuestion.options)
-                SurveyOption(
-                  emoji: option.substring(0, 2),
-                  text: option.substring(2),
-                  onTap: () => navigateToNextQuestion(option),
-                ),
-            ],
+            ),
           ),
         ),
       ),

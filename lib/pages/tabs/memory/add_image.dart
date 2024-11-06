@@ -175,19 +175,11 @@ class _AddImageState extends State<AddImage> {
           },
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(left: 35),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: FloatingActionButton(
-            onPressed: addImage,
-            backgroundColor: themeProvider.themeData.primaryColor,
-            child: Icon(Icons.add_photo_alternate, color: Colors.white),
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: addImage,
+        backgroundColor: themeProvider.themeData.primaryColor,
+        child: Icon(Icons.add_photo_alternate, color: Colors.white),
       ),
     );
   }
 }
-
-

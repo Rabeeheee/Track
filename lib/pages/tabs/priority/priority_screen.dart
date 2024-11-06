@@ -121,7 +121,7 @@ class PriorityContainer extends StatelessWidget {
                     child: Text(
                       'No tasks',
                       style: TextStyle(
-                          color: Colors.white70, fontStyle: FontStyle.italic),
+                          color: Colors.black, fontStyle: FontStyle.italic),
                     ),
                   )
                 : ListView.builder(

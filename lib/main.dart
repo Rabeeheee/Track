@@ -3,7 +3,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/auth/splash_screen.dart';
+import 'package:trackitapp/pages/other/potential.dart';
 import 'package:trackitapp/pages/other/progressprovider.dart';
+import 'package:trackitapp/pages/other/result_screen.dart';
+import 'package:trackitapp/pages/other/routine.dart';
+import 'package:trackitapp/pages/tabs/Habit/habit_screen.dart';
 import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/calender_modal.dart';
@@ -12,6 +16,7 @@ import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/services/models/memory_model.dart';
 import 'package:trackitapp/services/models/progress_modal.dart';
 import 'package:trackitapp/services/models/user_modal.dart';
+import 'package:trackitapp/services/providers/time_service.dart';
 import 'package:trackitapp/utils/login_manager.dart';
 import 'utils/theme_provider.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -34,15 +39,15 @@ Future<void> main() async {
   Hive.registerAdapter(DiaryAdapter());
   Hive.registerAdapter(FolderAdapter());
 
-  // Load theme preference and initialize ThemeProvider with it
   final themeProvider = await ThemeProvider.loadTheme();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
-        ChangeNotifierProvider(create: (_) => themeProvider),  // Updated to use `themeProvider` with loaded theme
+        ChangeNotifierProvider(create: (_) => themeProvider),  
         Provider<HiveService>(create: (_) => HiveService()),
+         ChangeNotifierProvider(create: (_) => TimerService()),
       ],
       child: MyApp(),
     ),
@@ -84,6 +89,7 @@ class MyApp extends StatelessWidget {
             },
           ),
           theme: themeProvider.themeData,
+          debugShowMaterialGrid: false,
         );
       },
     );

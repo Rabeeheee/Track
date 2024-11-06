@@ -26,6 +26,7 @@ class _PartOfDaySelectionState extends State<PartOfDaySelection> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Theme.of(context).cardColor,

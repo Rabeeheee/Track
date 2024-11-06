@@ -62,6 +62,7 @@ import 'package:trackitapp/utils/colors.dart';
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 children: [

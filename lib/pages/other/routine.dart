@@ -84,19 +84,16 @@ class _RoutineScreenState extends State<RoutineScreen> {
 
   void nextHabit() {
     setState(() {
-      log('working..................');
 
       if (habitIndex < habits.length - 1) {
         habitIndex++;
         updateCurrentHabit();
       } else {
-        log('else case working..................');
+       
         Map<String, double> surveyRatings =
             getSurveyRatings(); 
-        log('getSurveyRatings..................');
         Map<String, double> ratings =
             calculateRatings(); 
-        log('calculateRatings..................');
 
         
       
@@ -195,10 +192,13 @@ class _RoutineScreenState extends State<RoutineScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+Widget build(BuildContext context) {
+  return SafeArea(
+    child: Scaffold(
       backgroundColor: Colors.black,
       body: Container(
+         width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerLeft,
@@ -212,159 +212,174 @@ class _RoutineScreenState extends State<RoutineScreen> {
             ],
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 30, left: 5, right: 5),
-          child: Column(
-            children: [
-              Container(
-                width: 350,
-                height: 10,
-                decoration: BoxDecoration(
-                  color: AppColors.grey,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: LinearProgressIndicator(
-                    value: habitProgress[currentHabit],
-                    backgroundColor: Colors.transparent,
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(AppColors.secondaryColor),
-                  ),
-                ),
-              ),
-              Row(
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 900),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0), 
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30, left: 5, right: 5),
+              child: Column(
                 children: [
-                  IconButton(
-                    onPressed: previousHabit,
-                    icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                  ),
-                  Expanded(
-                    child: Text(
-                      'What is your goal for $currentHabit?',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.secondaryColor,
+                  Container(
+                    width: double.infinity,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: AppColors.grey,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: LinearProgressIndicator(
+                        value: habitProgress[currentHabit],
+                        backgroundColor: Colors.transparent,
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(AppColors.secondaryColor),
                       ),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: 20.0),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
+                  // Header Row
+                  Row(
                     children: [
-                      // Display habits in two columns
-                      ...List.generate((habits.length / 2).ceil(), (rowIndex) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Expanded(
-                                child: habitWidget(rowIndex * 2), // First habit
-                              ),
-                              if (rowIndex * 2 + 1 < habits.length)
-                                SizedBox(width: 50), // Check for second habit
-                              Expanded(
-                                child: habitWidget(
-                                    rowIndex * 2 + 1), // Second habit
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                      SizedBox(height: 30),
-                      // Display selected habit option
-                      Text(
-                        habitOptions[currentHabit]![
-                            sliderValues[habitIndex].toInt()],
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.secondaryColor,
-                        ),
+                      IconButton(
+                        onPressed: previousHabit,
+                        icon: Icon(Icons.arrow_back_ios, color: Colors.white),
                       ),
-                      SizedBox(height: 30),
-                      // Slider for selecting value
-                      Slider(
-                        value: sliderValues[habitIndex],
-                        min: 0,
-                        max: 4,
-                        divisions: 4,
-                        onChanged: (newValue) {
-                          setState(() {
-                            sliderValues[habitIndex] = newValue;
-                          });
-                        },
-                        activeColor: AppColors.secondaryColor,
-                        inactiveColor: AppColors.grey,
-                      ),
-                      SizedBox(height: 30),
-                      // Confirm button
-                      ElevatedButton(
-                        onPressed: () {
-                          nextHabit();
-                          print('working fine');
-                        },
+                      Expanded(
                         child: Text(
-                          'Confirm',
+                          'What is your goal for $currentHabit?',
                           style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.secondaryColor,
-                          foregroundColor: AppColors.backgroundColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(7),
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.secondaryColor,
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
+                  SizedBox(height: 20.0),
+                  Container(
+                    
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ...List.generate(
+                            (habits.length / 2).ceil(), (rowIndex) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 20,),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: habitWidget(rowIndex * 2),
+                                    ),
+                                    if (rowIndex * 2 + 1 < habits.length) 
+                                      SizedBox(width: 50),
+                                    if (rowIndex * 2 + 1 < habits.length)
+                                      Expanded(
+                                        child: habitWidget(rowIndex * 2 + 1),
+                                      ),
+                                  ],
+                                ),
+                              );
+                            }),
+                            SizedBox(height: 30),
+                            Text(
+                              habitOptions[currentHabit]![
+                                  sliderValues[habitIndex].toInt()],
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.secondaryColor,
+                              ),
+                            ),
+                            SizedBox(height: 30),
+                            // Slider
+                            Slider(
+                              value: sliderValues[habitIndex],
+                              min: 0,
+                              max: 4,
+                              divisions: 4,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  sliderValues[habitIndex] = newValue;
+                                });
+                              },
+                              activeColor: AppColors.secondaryColor,
+                              inactiveColor: AppColors.grey,
+                            ),
+                            SizedBox(height: 30),
+                            // Confirm Button
+                            ElevatedButton(
+                              onPressed: () {
+                                nextHabit();
+                                print('working fine');
+                              },
+                              child: Text(
+                                'Confirm',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.secondaryColor,
+                                foregroundColor: AppColors.backgroundColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget habitWidget(int index) {
-    if (index >= habits.length)
-      return SizedBox(); // Return an empty widget if index is out of range
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Icon(
-          habits[index].icon,
-          color: currentHabit == habits[index].name
-              ? Colors.white
-              : AppColors.grey,
-        ),
-        SizedBox(width: 10),
-        Flexible(
-          child: Text(
-            habits[index].name,
-            style: TextStyle(
-              color: currentHabit == habits[index].name
-                  ? Colors.white
-                  : AppColors.grey,
-              fontSize: 16,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
         ),
-      ],
-    );
-  }
+      ),
+    ),
+  );
+}
+
+Widget habitWidget(int index) {
+  if (index >= habits.length) return SizedBox();
+
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Icon(
+        habits[index].icon,
+        color: currentHabit == habits[index].name
+            ? Colors.white
+            : AppColors.grey,
+      ),
+      SizedBox(width: 10),
+      Flexible(
+        child: Text(
+          habits[index].name,
+          style: TextStyle(
+            color: currentHabit == habits[index].name
+                ? Colors.white
+                : AppColors.grey,
+            fontSize: 16,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+
+ 
 }
 
 class Habit {

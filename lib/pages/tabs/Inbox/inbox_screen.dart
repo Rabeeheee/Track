@@ -312,21 +312,15 @@ class _InboxScreenState extends State<InboxScreen> {
           ],
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(left: 35),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: FloatingActionButton(
-            onPressed: () {
-              _showTaskDialog(context);
-            },
-            backgroundColor: themeProvider.themeData.primaryColor,
-            child: Icon(
-              Icons.add,
-              size: 35,
-              color: Colors.white,
-            ),
-          ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showTaskDialog(context);
+        },
+        backgroundColor: themeProvider.themeData.primaryColor,
+        child: Icon(
+          Icons.add,
+          size: 35,
+          color: Colors.white,
         ),
       ),
       

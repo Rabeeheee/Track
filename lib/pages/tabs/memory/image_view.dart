@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
@@ -52,8 +53,11 @@ class ImageFullScreen extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Image.file(File(imagePath)),
-      ),
+  child: Image(
+    image: MemoryImage(base64Decode(imagePath)),
+  ),
+),
+
     );
   }
 }

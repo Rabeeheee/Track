@@ -45,21 +45,21 @@ class _DiaryScreenState extends State<DiaryScreen> {
             child: Column(
               children: [
                 Card(
-                  color: themeProvider.themeData.scaffoldBackgroundColor,
+                  color: themeProvider.themeData.cardColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                   elevation: 5,
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 2,
+                          color: const Color.fromARGB(0, 0, 0, 0),
+                          spreadRadius: 4,
                           blurRadius: 5,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -68,9 +68,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         // defaultTextStyle: TextStyle(color: Colors.black),
                         // todayTextStyle: TextStyle(color: Colors.black),
                         // selectedTextStyle: TextStyle(color: Colors.white),
+                        
                         selectedDecoration: BoxDecoration(
                           color: themeProvider.themeData.primaryColor,
-                          shape: BoxShape.circle, // Change shape to circle
+                          shape: BoxShape.circle, 
                         ),
                       ),
                       headerStyle: HeaderStyle(
@@ -154,11 +155,12 @@ class _DiaryScreenState extends State<DiaryScreen> {
                               (entry) => isSameDay(entry.date, _selectedDate))))
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "No Diary for this date",
-                            style: TextStyle(
-                                fontSize: 18, fontStyle: FontStyle.italic),
-                          ),
+                          child:  Image.asset(
+                'assets/images/not_found.webp',
+                height: 150,
+                width: 150,
+                fit: BoxFit.cover,
+              ),
                         ),
                     ],
                   ),

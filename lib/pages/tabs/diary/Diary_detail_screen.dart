@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +65,7 @@ class DiaryDetailScreen extends StatelessWidget {
                     ),
                   ],
                   image: DecorationImage(
-                    image: FileImage(File(diary.selectedImagePath!)),
+                    image: MemoryImage(base64Decode(diary.selectedImagePath!)),
                     fit: BoxFit.cover,
                   ),
                 ),

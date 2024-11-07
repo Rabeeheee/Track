@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +12,7 @@ import 'package:trackitapp/utils/theme_provider.dart';
 
 class AddImage extends StatefulWidget {
   final Folder folder;
-  final Function(File) onNewImage;
+  final Function(String) onNewImage; // Changed to accept base64 String
 
   AddImage({
     required this.folder,
@@ -29,17 +31,21 @@ class _AddImageState extends State<AddImage> {
   @override
   void initState() {
     super.initState();
-    selectedImages = List.generate(widget.folder.imagePaths.length, (_) => false);
+    selectedImages =
+        List.generate(widget.folder.imagePaths.length, (_) => false);
   }
 
- 
-
   void addImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
-      File imageFile = File(pickedFile.path);
-      widget.onNewImage(imageFile);
+      Uint8List bytes = await pickedFile.readAsBytes();
+      String base64Image = base64Encode(bytes);
+
+      widget.onNewImage(base64Image);
+
       setState(() {
+        // widget.folder.imagePaths.add(base64Image);
         selectedImages.add(false);
       });
     }
@@ -65,12 +71,6 @@ class _AddImageState extends State<AddImage> {
                 onPressed: () async {
                   for (int i = selectedImages.length - 1; i >= 0; i--) {
                     if (selectedImages[i]) {
-                      String imagePath = widget.folder.imagePaths[i];
-                      try {
-                        await File(imagePath).delete();
-                      } catch (e) {
-                        print("Error deleting image file: $e");
-                      }
                       setState(() {
                         widget.folder.imagePaths.removeAt(i);
                         selectedImages.removeAt(i);
@@ -79,6 +79,10 @@ class _AddImageState extends State<AddImage> {
                   }
                   await _hiveService.saveFolder(widget.folder);
                   Navigator.of(context).pop();
+
+                  if (widget.folder.imagePaths.isEmpty) {
+                    Navigator.of(context).pop();
+                  }
                 },
               ),
             ],
@@ -88,32 +92,30 @@ class _AddImageState extends State<AddImage> {
     }
   }
 
- void viewImageFullScreen(String imagePath) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ImageFullScreen(
-        imagePath: imagePath,
-        onDelete: (String path) async {
-          try {
-            await File(path).delete();
-            setState(() {
-              int index = widget.folder.imagePaths.indexOf(path);
-              if (index != -1) {
-                widget.folder.imagePaths.removeAt(index);
-                selectedImages.removeAt(index); 
-              }
-            });
-            await _hiveService.saveFolder(widget.folder); 
-          } catch (e) {
-            print("Error deleting image file: $e");
-          }
-        },
+  void viewImageFullScreen(String imagePath) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ImageFullScreen(
+          imagePath: imagePath,
+          onDelete: (String path) async {
+            try {
+              setState(() {
+                int index = widget.folder.imagePaths.indexOf(path);
+                if (index != -1) {
+                  widget.folder.imagePaths.removeAt(index);
+                  selectedImages.removeAt(index);
+                }
+              });
+              await _hiveService.saveFolder(widget.folder);
+            } catch (e) {
+              print("Error deleting image file: $e");
+            }
+          },
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,11 +127,11 @@ class _AddImageState extends State<AddImage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop(); 
-           
+            Navigator.of(context).pop();
           },
         ),
-        title: selectedCount > 0 ? '$selectedCount selected' : widget.folder.name,
+        title:
+            selectedCount > 0 ? '$selectedCount selected' : widget.folder.name,
         actions: [
           if (selectedCount > 0)
             IconButton(
@@ -138,39 +140,48 @@ class _AddImageState extends State<AddImage> {
             ),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            childAspectRatio: 1,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemCount: widget.folder.imagePaths.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onLongPress: () {
-                setState(() {
-                  selectedImages[index] = true; 
-                });
-              },
-              onTap: () {
-                viewImageFullScreen(widget.folder.imagePaths[index]);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: FileImage(File(widget.folder.imagePaths[index])),
-                    fit: BoxFit.cover,
-                  ),
-                  border: selectedImages[index]
-                      ? Border.all(color: Colors.blue, width: 3)
-                      : null,
-                ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            double screenWidth = constraints.maxWidth;
+            int crossAxisCount = (screenWidth / 120).floor();
+
+            double childAspectRatio = screenWidth / (crossAxisCount * 120);
+
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                childAspectRatio: childAspectRatio,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
               ),
+              itemCount: widget.folder.imagePaths.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onLongPress: () {
+                    setState(() {
+                      selectedImages[index] = true;
+                    });
+                  },
+                  onTap: () {
+                    viewImageFullScreen(widget.folder.imagePaths[index]);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: MemoryImage(
+                            base64Decode(widget.folder.imagePaths[index])),
+                        fit: BoxFit.cover,
+                      ),
+                      border: selectedImages[index]
+                          ? Border.all(color: Colors.blue, width: 3)
+                          : null,
+                    ),
+                  ),
+                );
+              },
             );
           },
         ),

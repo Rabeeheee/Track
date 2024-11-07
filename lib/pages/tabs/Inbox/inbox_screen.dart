@@ -71,67 +71,66 @@ class _InboxScreenState extends State<InboxScreen> {
   }
 
   void _showTaskDialog(BuildContext context, {Task? taskToEdit}) {
-  TextEditingController titleController = TextEditingController(
-    text: taskToEdit?.likeToDo ?? '',
-  );
-  TextEditingController descriptionController = TextEditingController(
-    text: taskToEdit?.Descrition ?? '',
-  );
-  String selectedPriority = taskToEdit?.priority ?? 'Top Priority';
-  DateTime selectedDate = taskToEdit?.date ?? DateTime.now();
+    TextEditingController titleController = TextEditingController(
+      text: taskToEdit?.likeToDo ?? '',
+    );
+    TextEditingController descriptionController = TextEditingController(
+      text: taskToEdit?.Descrition ?? '',
+    );
+    String selectedPriority = taskToEdit?.priority ?? 'Top Priority';
+    DateTime selectedDate = taskToEdit?.date ?? DateTime.now();
 
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return TaskDialog(
-        titleController: titleController,
-        descriptionController: descriptionController,
-        selectedPriority: selectedPriority,
-        selectedDate: selectedDate,
-        onPriorityChanged: (String newPriority) {
-          selectedPriority = newPriority;  
-        },
-        onDateChanged: (DateTime? date) {
-          if (date != null) {
-            selectedDate = date;
-          }
-        },
-        onSave: () async {
-          if (titleController.text.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Title cannot be empty!')),
-            );
-            return;
-          }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return TaskDialog(
+          titleController: titleController,
+          descriptionController: descriptionController,
+          selectedPriority: selectedPriority,
+          selectedDate: selectedDate,
+          onPriorityChanged: (String newPriority) {
+            selectedPriority = newPriority;
+          },
+          onDateChanged: (DateTime? date) {
+            if (date != null) {
+              selectedDate = date;
+            }
+          },
+          onSave: () async {
+            if (titleController.text.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Title cannot be empty!')),
+              );
+              return;
+            }
 
-          if (taskToEdit == null) {
-            String uniqueId = Uuid().v4();
-            Task newTask = Task(
-              id: uniqueId,
-              likeToDo: titleController.text,
-              Descrition: descriptionController.text,
-              date: selectedDate,
-              priority: selectedPriority, 
-            );
-            await _hiveService.saveTask(newTask);
-          } else {
-            Task updatedTask = Task(
-              id: taskToEdit.id,
-              likeToDo: titleController.text,
-              Descrition: descriptionController.text,
-              date: selectedDate,
-              priority: selectedPriority, 
-            );
-            await _hiveService.updateTask(taskToEdit.id!, updatedTask);
-          }
+            if (taskToEdit == null) {
+              String uniqueId = Uuid().v4();
+              Task newTask = Task(
+                id: uniqueId,
+                likeToDo: titleController.text,
+                Descrition: descriptionController.text,
+                date: selectedDate,
+                priority: selectedPriority,
+              );
+              await _hiveService.saveTask(newTask);
+            } else {
+              Task updatedTask = Task(
+                id: taskToEdit.id,
+                likeToDo: titleController.text,
+                Descrition: descriptionController.text,
+                date: selectedDate,
+                priority: selectedPriority,
+              );
+              await _hiveService.updateTask(taskToEdit.id!, updatedTask);
+            }
 
-          await _fetchTasksForDate(_selectedDate);
-        },
-      );
-    },
-  );
-}
-
+            await _fetchTasksForDate(_selectedDate);
+          },
+        );
+      },
+    );
+  }
 
   void _toggleTaskCompletion(Task task) async {
     await _hiveService.updateTaskCompletion(task.id!);
@@ -168,62 +167,68 @@ class _InboxScreenState extends State<InboxScreen> {
                   fontFamily: 'Fonts',
                 ),
               ),
-       actions: isAnyTaskSelected
-    ? [
-        IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: () async {
-            var selectedTask = tasksForSelectedDate
-                .firstWhere((task) => task.isSelected);
+        actions: isAnyTaskSelected
+            ? [
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () async {
+                    var selectedTask = tasksForSelectedDate
+                        .firstWhere((task) => task.isSelected);
 
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  backgroundColor: Colors.white,
-                  title: Text("Confirm Deletion",style: TextStyle(
-                    color: themeProvider.themeData.splashColor
-                  ),),
-                  content: Text("Are you sure you want to delete this task?",style: TextStyle(
-                    color: themeProvider.themeData.splashColor
-                  ),),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(); 
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          backgroundColor: Colors.white,
+                          title: Text(
+                            "Confirm Deletion",
+                            style: TextStyle(
+                                color: themeProvider.themeData.splashColor),
+                          ),
+                          content: Text(
+                            "Are you sure you want to delete this task?",
+                            style: TextStyle(
+                                color: themeProvider.themeData.splashColor),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                "Cancel",
+                                style: TextStyle(
+                                    color: themeProvider.themeData.splashColor),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                await _hiveService.deleteTask(selectedTask.id!);
+                                _fetchTasksForDate(_selectedDate);
+                                _resetSelection();
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                "Delete",
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        );
                       },
-                      child: Text("Cancel",style: TextStyle(
-                    color: themeProvider.themeData.splashColor
-                  ),),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        await _hiveService.deleteTask(selectedTask.id!);
-                        _fetchTasksForDate(_selectedDate);
-                        _resetSelection();
-                        Navigator.of(context).pop(); 
-                      },
-                      child: Text("Delete",style: TextStyle(
-                        color: Colors.red
-                      ),),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ),
-        IconButton(
-          icon: Icon(Icons.edit),
-          onPressed: () {
-            var selectedTask = tasksForSelectedDate
-                .firstWhere((task) => task.isSelected);
-            _showTaskDialog(context, taskToEdit: selectedTask);
-          },
-        ),
-      ]
-    : [],
-
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    var selectedTask = tasksForSelectedDate
+                        .firstWhere((task) => task.isSelected);
+                    _showTaskDialog(context, taskToEdit: selectedTask);
+                  },
+                ),
+              ]
+            : [],
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -264,6 +269,7 @@ class _InboxScreenState extends State<InboxScreen> {
                       ),
                       child: ListTile(
                         leading: Checkbox(
+                          checkColor: Colors.white,
                           value: task.isCompleted,
                           onChanged: (bool? value) {
                             setState(() {
@@ -280,21 +286,37 @@ class _InboxScreenState extends State<InboxScreen> {
                             Text(
                               task.likeToDo,
                               style: TextStyle(
-                                color: themeProvider.themeData.splashColor,
+                                  color: themeProvider.themeData.splashColor,
                                 decoration: task.isCompleted
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
+                                    ? TextDecoration
+                                        .lineThrough 
+                                    : TextDecoration
+                                        .none,
+                                decorationColor: task.isCompleted
+                                    ? Colors.black
+                                    : Colors
+                                        .transparent,
+                                decorationThickness:
+                                    2, 
                               ),
                             ),
                             Text(
-                              task.Descrition,
+                              task.Descrition, 
                               style: TextStyle(
                                 color: themeProvider.themeData.splashColor,
                                 decoration: task.isCompleted
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
+                                    ? TextDecoration
+                                        .lineThrough 
+                                    : TextDecoration
+                                        .none,
+                                decorationColor: task.isCompleted
+                                    ? Colors.black
+                                    : Colors
+                                        .transparent,
+                                decorationThickness:
+                                    2, 
                               ),
-                            ),
+                            )
                           ],
                         ),
                         trailing: Text(
@@ -323,7 +345,6 @@ class _InboxScreenState extends State<InboxScreen> {
           color: Colors.white,
         ),
       ),
-      
     );
   }
 }

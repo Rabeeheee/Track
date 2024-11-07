@@ -54,10 +54,11 @@ class _TaskDialogState extends State<TaskDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextField(
+                style: TextStyle(color: Colors.black),
                 controller: widget.titleController,
                 decoration: InputDecoration(
                   labelText: 'What would you like to do.',
-                  labelStyle: TextStyle(color: const Color.fromARGB(255, 123, 122, 122)),
+                  labelStyle: TextStyle(color: const Color.fromARGB(255, 84, 84, 84)),
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding:
@@ -77,10 +78,11 @@ class _TaskDialogState extends State<TaskDialog> {
               ),
               SizedBox(height: 5),
               TextField(
+                style: TextStyle(color: Colors.black),
                 controller: widget.descriptionController,
                 decoration: InputDecoration(
                   labelText: 'Description',
-                  labelStyle: TextStyle(color: const Color.fromARGB(255, 107, 107, 107)),
+                  labelStyle: TextStyle(color: const Color.fromARGB(255, 84, 84, 84)),
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding:
@@ -103,11 +105,15 @@ class _TaskDialogState extends State<TaskDialog> {
                 iconEnabledColor: Colors.blueGrey,
                 borderRadius: BorderRadius.circular(10),
                 value: selectedPriority,
-                items: <String>['Top Priority', 'Necessary', 'Regular', 'Delete']
+                
+                items: <String>['Top Priority', 'Necessary', 'Regular', 'Delete',]
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
+                    
                     value: value,
-                    child: Text(value),
+                    child: Text(value,style: TextStyle(
+                      color: Colors.black
+                    ),),
                   );
                 }).toList(),
                 onChanged: (String? newValue) {
@@ -122,7 +128,7 @@ class _TaskDialogState extends State<TaskDialog> {
                   Text(
                     selectedDateInDialog == null
                         ? "Today"
-                        : "${DateFormat.yMd().format(selectedDateInDialog!)}",
+                        : "${DateFormat.yMd().format(selectedDateInDialog!)}",style: TextStyle(color: Colors.black),
                   ),
                   IconButton(
                     onPressed: () async {
@@ -139,7 +145,7 @@ class _TaskDialogState extends State<TaskDialog> {
                         widget.onDateChanged(picked);
                       }
                     },
-                    icon: Icon(Icons.calendar_today),
+                    icon: Icon(Icons.calendar_today,color: Colors.black,),
                   ),
                 ],
               ),

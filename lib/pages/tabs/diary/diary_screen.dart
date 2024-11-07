@@ -65,9 +65,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     ),
                     child: TableCalendar(
                       calendarStyle: CalendarStyle(
-                        // defaultTextStyle: TextStyle(color: Colors.black),
-                        // todayTextStyle: TextStyle(color: Colors.black),
-                        // selectedTextStyle: TextStyle(color: Colors.white),
+                        defaultTextStyle: TextStyle(color: Colors.black),
+                        todayTextStyle: TextStyle(color: Colors.black),
+                        selectedTextStyle: TextStyle(color: Colors.white),
                         
                         selectedDecoration: BoxDecoration(
                           color: themeProvider.themeData.primaryColor,
@@ -75,7 +75,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         ),
                       ),
                       headerStyle: HeaderStyle(
-                        // titleTextStyle: TextStyle(color: Colors.black),
+                        titleTextStyle: TextStyle(color: Colors.black),
                         formatButtonVisible: false,
                         leftChevronIcon:
                             Icon(Icons.chevron_left, color: Colors.black),
@@ -131,6 +131,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
+                                        color: Colors.black
                                       ),
                                     ),
                                     subtitle: Text(

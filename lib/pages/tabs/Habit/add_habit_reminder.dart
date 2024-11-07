@@ -220,7 +220,9 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                       print(widget.title);
                       print('snackbar top');
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Habit reminder saved!')),
+                        SnackBar(content: Text('Habit saved succesfully!'),
+                        backgroundColor: Colors.green,
+                        ),
                       );
 
                       Navigator.pushAndRemoveUntil(

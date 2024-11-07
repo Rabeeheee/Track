@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackitapp/pages/tabs/Habit/add_habit_reminder.dart';
@@ -12,7 +11,6 @@ import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 
 class NewHabit extends StatefulWidget {
   final int habitId;
@@ -212,26 +210,34 @@ void initState() {
 
     if (_titleController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Name cannot be empty")),
+        SnackBar(content: Text("Name cannot be empty"),
+                backgroundColor: Colors.red,
+),
       );
       return;
     }
     if (_descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Description cannot be empty')),
+        SnackBar(content: Text('Description cannot be empty'),
+                backgroundColor: Colors.red,
+),
       );
       return;
     }
     if (_quoteController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Quote cannot be empty')),
+        SnackBar(content: Text('Quote cannot be empty'),
+                backgroundColor: Colors.red,
+),
       );
       return;
     }
 
     if (selectedAvatar == null || selectedAvatar!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Avatar cannot be empty')),
+        SnackBar(content: Text('Avatar cannot be empty'),
+        backgroundColor: Colors.red,
+        ),
       );
       return;
     }

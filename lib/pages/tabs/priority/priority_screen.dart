@@ -117,12 +117,13 @@ class PriorityContainer extends StatelessWidget {
           ),
           Expanded(
             child: tasks.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No tasks',
-                      style: TextStyle(
-                          color: Colors.black, fontStyle: FontStyle.italic),
-                    ),
+                ? Center(
+                    child: Image.asset(
+                'assets/images/not_found.webp',
+                height: 130,
+                width: 130,
+                fit: BoxFit.cover,
+              ),
                   )
                 : ListView.builder(
                     itemCount: tasks.length,

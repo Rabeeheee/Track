@@ -88,8 +88,10 @@ class MyApp extends StatelessWidget {
               }
             },
           ),
+          
           theme: themeProvider.themeData,
           debugShowMaterialGrid: false,
+          
         );
       },
     );

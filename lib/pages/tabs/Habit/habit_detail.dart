@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -99,16 +100,14 @@ final int? habitId;
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Avatar
             CircleAvatar(
               radius: 50,
               backgroundImage:
-                   FileImage(File(selectedAvatarPath!))
+                   MemoryImage(base64Decode(selectedAvatarPath!))
                  
             ),
             SizedBox(height: 20),
             
-            // Title
             Text(
               title,
               style: TextStyle(
@@ -119,7 +118,6 @@ final int? habitId;
             ),
             SizedBox(height: 10),
     
-            // Subtitle (or Description)
             Text(
               subtitle,
               style: TextStyle(

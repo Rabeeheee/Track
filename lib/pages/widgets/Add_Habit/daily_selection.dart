@@ -58,12 +58,12 @@ class _DailySelectionState extends State<DailySelection> {
               label: Text(
                 day,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: const Color.fromARGB(255, 255, 255, 255),
                 ),
               ),
               selected: isSelected,
               selectedColor: Colors.blue,
-              backgroundColor: Colors.transparent,
+              backgroundColor: const Color.fromARGB(0, 0, 0, 0),
               showCheckmark: false,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),

@@ -5,6 +5,7 @@ class TimerService with ChangeNotifier {
   int _timeLimit = 5; 
   int _remainingTime = 5 * 60; 
   Timer? _timer;
+  Function? onTimerEnd;
 
   int get timeLimit => _timeLimit;
   int get remainingTime => _remainingTime;
@@ -15,7 +16,9 @@ class TimerService with ChangeNotifier {
     notifyListeners();
   }
 
-  void startTimer() {
+  void startTimer({Function? onTimerEnd}) {
+    this.onTimerEnd = onTimerEnd; 
+
     if (_timer != null) return;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_remainingTime > 0) {
@@ -23,6 +26,9 @@ class TimerService with ChangeNotifier {
         notifyListeners();
       } else {
         stopTimer();
+        if (onTimerEnd != null) {
+          onTimerEnd(); 
+        }
       }
     });
   }

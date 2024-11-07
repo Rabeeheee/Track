@@ -62,21 +62,22 @@ class _NewHabitState extends State<NewHabit> {
 
   String? selectedAvatar;
 
-  @override
-  void initState() {
-    super.initState();
-    _loadSelectedAvatar();
-
-    if (widget.habitId != 0) {
-      isEditing = true;
-      loadHabitById(widget.habitId);
-    } else if (widget.title.isNotEmpty && widget.subtitle.isNotEmpty) {
-      _titleController.text = widget.title;
-      _quoteController.text = widget.subtitle;
-      _descriptionController.text = widget.description!;
-      selectedAvatar = widget.selectedAvatarPath;
-    }
+ @override
+void initState() {
+  super.initState();
+  
+  if (widget.habitId != 0) { 
+    isEditing = true;
+    loadHabitById(widget.habitId);
+    // _loadSelectedAvatar();
+  } else if (widget.title.isNotEmpty && widget.subtitle.isNotEmpty) {
+    _titleController.text = widget.title;
+    _quoteController.text = widget.subtitle;
+    _descriptionController.text = widget.description ?? '';
+    selectedAvatar = widget.selectedAvatarPath;
   }
+}
+
 
   loadHabitById(int habitId) async {
     if (isEditing) {
@@ -89,6 +90,11 @@ class _NewHabitState extends State<NewHabit> {
       });
     }
   }
+
+  Future<void> _clearStoredAvatar() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove('selectedAvatar');
+}
 
   void _saveHabit() async {
     int habitId = await _generateUniqueId();
@@ -105,6 +111,10 @@ class _NewHabitState extends State<NewHabit> {
       );
 
       await _hiveService.saveHabit(newHabit);
+
+      setState(() {
+        selectedAvatar == null;
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -161,47 +171,35 @@ class _NewHabitState extends State<NewHabit> {
   Uint8List? imageBytes;
 
   if (kIsWeb) {
-    // For web, handle the image differently since File API is not available
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       final bytes = await pickedFile.readAsBytes();
       base64Image = base64Encode(bytes);
       imageBytes = bytes;
       print("Picked image for web as base64: $base64Image");
-      await _storeImageLocally(base64Image);
     }
   } else {
-    // For mobile platforms (iOS/Android)
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       final bytes = await File(pickedFile.path).readAsBytes();
       base64Image = base64Encode(bytes);
       imageBytes = bytes;
-      await _storeImageLocally(base64Image);
     }
   }
 
   if (imageBytes != null) {
     setState(() {
-      selectedAvatar = base64Image; // Store base64 string
+      selectedAvatar = base64Image; 
     });
   }
 }
 
   Future<String> _convertImageToBase64(String imagePath) async {
     final imageBytes = await File(imagePath).readAsBytes();
-    return base64Encode(imageBytes); // Convert the image bytes to base64
+    return base64Encode(imageBytes); 
   }
 
- Future<void> _storeImageLocally(String base64Image) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('selectedAvatar', base64Image); // Save as base64
 
-  print("Stored avatar as base64 in SharedPreferences");
-  setState(() {
-    selectedAvatar = base64Image; // Update avatar as base64
-  });
-}
   void _randomizeQuote() {
     final randomIndex = Random().nextInt(Quotes.length);
     setState(() {

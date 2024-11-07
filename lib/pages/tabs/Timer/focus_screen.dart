@@ -157,8 +157,7 @@ class _FocusScreenState extends State<FocusScreen> {
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    timerService.startTimer();
-                    // Optional: Start timer notification
+                    timerService.startTimer(onTimerEnd: _showAlarm); 
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,

@@ -9,6 +9,7 @@ import 'package:trackitapp/pages/widgets/Add_Habit/reminder.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/section_title.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/weekly_selection.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
+import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/services/models/notification_services.dart';
@@ -225,13 +226,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HabitScreen(
-                            name: widget.title,
-                            quote: widget.quote,
-                            selectedAvatarPath: widget.image ?? '', 
-                            isEditing: false, 
-                            description: widget.description, habitId: habitId,
-                          ),
+                          builder: (context) => BottomNav()
                         ),
                         (Route<dynamic> route) => false,
                       );

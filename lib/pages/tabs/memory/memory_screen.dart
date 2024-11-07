@@ -204,9 +204,9 @@ class _MemoryScreenState extends State<MemoryScreen> {
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                 color: selectedFolders.contains(folders[index])
-                                    ? Colors.black 
+                                    ? themeProvider.themeData.canvasColor 
                                     : Colors.transparent, 
-                                width: 2, 
+                                width: 3, 
                               ),
                               image: folders[index].imagePaths.isNotEmpty
                                   ? DecorationImage(

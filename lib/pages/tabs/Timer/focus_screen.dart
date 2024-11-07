@@ -78,7 +78,7 @@ class _FocusScreenState extends State<FocusScreen> {
                     controller: customTimeController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: 'Custom time in minutes (max 180)',
+                      hintText: 'Enter time between " 1-180 "',
                       errorText: _isInvalidInput ? 'Invalid input! Must be 1-180 minutes.' : null,
                     ),
                   ),

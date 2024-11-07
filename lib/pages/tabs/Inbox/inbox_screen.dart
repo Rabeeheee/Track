@@ -269,7 +269,7 @@ class _InboxScreenState extends State<InboxScreen> {
                       ),
                       child: ListTile(
                         leading: Checkbox(
-                          checkColor: Colors.white,
+                          checkColor: themeProvider.themeData.canvasColor,
                           value: task.isCompleted,
                           onChanged: (bool? value) {
                             setState(() {
@@ -293,7 +293,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                     : TextDecoration
                                         .none,
                                 decorationColor: task.isCompleted
-                                    ? Colors.black
+                                    ? themeProvider.themeData.canvasColor
                                     : Colors
                                         .transparent,
                                 decorationThickness:
@@ -310,7 +310,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                     : TextDecoration
                                         .none,
                                 decorationColor: task.isCompleted
-                                    ? Colors.black
+                                    ? themeProvider.themeData.canvasColor
                                     : Colors
                                         .transparent,
                                 decorationThickness:

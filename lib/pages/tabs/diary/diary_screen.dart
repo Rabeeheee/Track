@@ -65,29 +65,32 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     ),
                     child: TableCalendar(
                       calendarStyle: CalendarStyle(
-                        defaultTextStyle: TextStyle(color: Colors.black),
-                        todayTextStyle: TextStyle(color: Colors.black),
-                        selectedTextStyle: TextStyle(color: Colors.white),
+                        defaultTextStyle: TextStyle(color: themeProvider.themeData.canvasColor),
+                        selectedTextStyle: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
                         
                         selectedDecoration: BoxDecoration(
                           color: themeProvider.themeData.primaryColor,
                           shape: BoxShape.circle, 
                         ),
+                        outsideTextStyle: TextStyle(color: const Color.fromARGB(255, 87, 87, 87))
                       ),
+
                       headerStyle: HeaderStyle(
-                        titleTextStyle: TextStyle(color: Colors.black),
+                        titleTextStyle: TextStyle(color: themeProvider.themeData.canvasColor),
                         formatButtonVisible: false,
                         leftChevronIcon:
-                            Icon(Icons.chevron_left, color: Colors.black),
+                            Icon(Icons.chevron_left, color: themeProvider.themeData.canvasColor),
                         rightChevronIcon:
-                            Icon(Icons.chevron_right, color: Colors.black),
+                            Icon(Icons.chevron_right, color: themeProvider.themeData.canvasColor),
                       ),
                       focusedDay: _selectedDate,
                       firstDay: DateTime.utc(2000, 1, 1),
                       lastDay: DateTime.utc(2100, 12, 31),
                       calendarFormat: CalendarFormat.month,
+                      
                       availableCalendarFormats: const {
                         CalendarFormat.month: 'Month'
+                        
                       },
                       selectedDayPredicate: (day) =>
                           isSameDay(_selectedDate, day),
@@ -131,7 +134,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black
+                                        color: themeProvider.themeData.canvasColor
                                       ),
                                     ),
                                     subtitle: Text(

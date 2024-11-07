@@ -21,12 +21,12 @@ class ThemeProvider with ChangeNotifier {
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.black,
         ),
-        cardColor: Colors.white,
+        cardColor: const Color.fromARGB(255, 35, 35, 35),
         canvasColor: Colors.white,
-        splashColor: Colors.black,
+        splashColor: const Color.fromARGB(255, 255, 255, 255),
         hoverColor: AppColors.primaryColor,
         focusColor: Colors.black,
-        shadowColor: const Color(0xFF3c3c3c),
+        shadowColor: const Color.fromARGB(255, 86, 86, 86),
         dividerColor: Colors.white,
       );
     } else {
@@ -43,6 +43,7 @@ class ThemeProvider with ChangeNotifier {
         hoverColor: Colors.white,
         focusColor: Colors.white,
         dividerColor: Colors.black,
+        shadowColor: Colors.white
       );
     }
   }

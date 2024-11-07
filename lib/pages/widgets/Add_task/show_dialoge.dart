@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:trackitapp/utils/theme_provider.dart';
 
 class TaskDialog extends StatefulWidget {
   final TextEditingController titleController;
@@ -38,6 +40,8 @@ class _TaskDialogState extends State<TaskDialog> {
 
   @override
   Widget build(BuildContext context) {
+        final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Center(
       child: Material(
         color: Colors.transparent,
@@ -46,7 +50,7 @@ class _TaskDialogState extends State<TaskDialog> {
           width: 350,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 202, 201, 201),
+            color: themeProvider.themeData.cardColor,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Column(
@@ -54,13 +58,13 @@ class _TaskDialogState extends State<TaskDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextField(
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: themeProvider.themeData.canvasColor),
                 controller: widget.titleController,
                 decoration: InputDecoration(
                   labelText: 'What would you like to do.',
-                  labelStyle: TextStyle(color: const Color.fromARGB(255, 84, 84, 84)),
+                  labelStyle: TextStyle(color: themeProvider.themeData.canvasColor),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: themeProvider.themeData.shadowColor,
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                   border: OutlineInputBorder(
@@ -78,13 +82,13 @@ class _TaskDialogState extends State<TaskDialog> {
               ),
               SizedBox(height: 5),
               TextField(
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: themeProvider.themeData.canvasColor),
                 controller: widget.descriptionController,
                 decoration: InputDecoration(
                   labelText: 'Description',
-                  labelStyle: TextStyle(color: const Color.fromARGB(255, 84, 84, 84)),
+                  labelStyle: TextStyle(color:themeProvider.themeData.canvasColor),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: themeProvider.themeData.shadowColor,
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                   border: OutlineInputBorder(
@@ -101,7 +105,7 @@ class _TaskDialogState extends State<TaskDialog> {
                 ),
               ),
               DropdownButton<String>(
-                dropdownColor: Colors.white,
+                dropdownColor: themeProvider.themeData.cardColor,
                 iconEnabledColor: Colors.blueGrey,
                 borderRadius: BorderRadius.circular(10),
                 value: selectedPriority,
@@ -112,7 +116,7 @@ class _TaskDialogState extends State<TaskDialog> {
                     
                     value: value,
                     child: Text(value,style: TextStyle(
-                      color: Colors.black
+                      color: themeProvider.themeData.canvasColor
                     ),),
                   );
                 }).toList(),
@@ -128,7 +132,7 @@ class _TaskDialogState extends State<TaskDialog> {
                   Text(
                     selectedDateInDialog == null
                         ? "Today"
-                        : "${DateFormat.yMd().format(selectedDateInDialog!)}",style: TextStyle(color: Colors.black),
+                        : "${DateFormat.yMd().format(selectedDateInDialog!)}",style: TextStyle(color: themeProvider.themeData.canvasColor),
                   ),
                   IconButton(
                     onPressed: () async {
@@ -145,7 +149,7 @@ class _TaskDialogState extends State<TaskDialog> {
                         widget.onDateChanged(picked);
                       }
                     },
-                    icon: Icon(Icons.calendar_today,color: Colors.black,),
+                    icon: Icon(Icons.calendar_today,color: themeProvider.themeData.canvasColor,),
                   ),
                 ],
               ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trackitapp/pages/tabs/Habit/habit_screen.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/daily_selection.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/date_goal_selection.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/frequency_selection.dart';
@@ -159,7 +158,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                 quote: widget.quote,
               ),
               const SizedBox(height: 10),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   child: Text('Save',

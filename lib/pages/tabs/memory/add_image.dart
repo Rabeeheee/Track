@@ -12,7 +12,7 @@ import 'package:trackitapp/utils/theme_provider.dart';
 
 class AddImage extends StatefulWidget {
   final Folder folder;
-  final Function(String) onNewImage; // Changed to accept base64 String
+  final Function(String) onNewImage;
 
   AddImage({
     required this.folder,

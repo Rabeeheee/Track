@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -35,7 +34,6 @@ class _RoutineScreenState extends State<RoutineScreen> {
     updateCurrentHabit();
   }
 
-  // Habit data mapping
   Map<String, List<String>> habitOptions = {
     "Wake up Early": ['5AM or earlier', '6AM', '7AM', '8AM', '9AM or later'],
     "Drink Water": ['1L', '2L', '3L', '4L', '5L'],
@@ -47,7 +45,6 @@ class _RoutineScreenState extends State<RoutineScreen> {
     "Take Shower": ['1 min', '5 min', '10 min', '15 min', '20 min'],
   };
 
-  // Progress values mapping for each habit
   Map<String, double> habitProgress = {
     "Wake up Early": 0.49,
     "Drink Water": 0.56,
@@ -59,7 +56,6 @@ class _RoutineScreenState extends State<RoutineScreen> {
     "Take Shower": 0.98,
   };
 
-  // List of habits with their icons
   List<Habit> habits = [
     Habit(name: "Wake up Early", icon: FontAwesomeIcons.sun),
     Habit(name: "Drink Water", icon: FontAwesomeIcons.glassWater),
@@ -237,7 +233,6 @@ Widget build(BuildContext context) {
                       ),
                     ),
                   ),
-                  // Header Row
                   Row(
                     children: [
                       IconButton(
@@ -298,7 +293,6 @@ Widget build(BuildContext context) {
                               ),
                             ),
                             SizedBox(height: 30),
-                            // Slider
                             Slider(
                               value: sliderValues[habitIndex],
                               min: 0,
@@ -313,7 +307,6 @@ Widget build(BuildContext context) {
                               inactiveColor: AppColors.grey,
                             ),
                             SizedBox(height: 30),
-                            // Confirm Button
                             ElevatedButton(
                               onPressed: () {
                                 nextHabit();

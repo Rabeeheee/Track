@@ -5,7 +5,7 @@ class SelectableTextWidget extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  SelectableTextWidget({required this.text, required this.isSelected, required this.onTap});
+  const SelectableTextWidget({super.key, required this.text, required this.isSelected, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

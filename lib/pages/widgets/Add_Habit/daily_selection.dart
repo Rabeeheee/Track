@@ -77,7 +77,7 @@ class _DailySelectionState extends State<DailySelection> {
                     selectedDays.remove(fullDay);
                   }
                 });
-                widget.onDaySelected(selectedDays); // Pass updated days
+                widget.onDaySelected(selectedDays); 
               },
             );
           }),

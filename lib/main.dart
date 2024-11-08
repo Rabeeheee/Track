@@ -3,11 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/auth/splash_screen.dart';
-import 'package:trackitapp/pages/other/potential.dart';
 import 'package:trackitapp/pages/other/progressprovider.dart';
-import 'package:trackitapp/pages/other/result_screen.dart';
-import 'package:trackitapp/pages/other/routine.dart';
-import 'package:trackitapp/pages/tabs/Habit/habit_screen.dart';
 import 'package:trackitapp/pages/widgets/bottomnav.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/calender_modal.dart';
@@ -47,7 +43,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
         ChangeNotifierProvider(create: (_) => themeProvider),  
         Provider<HiveService>(create: (_) => HiveService()),
-         ChangeNotifierProvider(create: (_) => TimerService()),
+        ChangeNotifierProvider(create: (_) => TimerService()),
       ],
       child: MyApp(),
     ),
@@ -73,27 +69,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
-    return AnimatedBuilder(
-      animation: themeProvider,
-      builder: (context, _) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: FutureBuilder(
-            future: LoginManager.getLoginStatus(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data == true) {
-                return BottomNav();
-              } else {
-                return SplashScreen();
-              }
-            },
-          ),
-          
-          theme: themeProvider.themeData,
-          debugShowMaterialGrid: false,
-          
-        );
-      },
+    return AnimatedTheme(
+      data: themeProvider.themeData,
+      duration: const Duration(seconds: 5), 
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: FutureBuilder(
+          future: LoginManager.getLoginStatus(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data == true) {
+              return BottomNav();
+            } else {
+              return SplashScreen();
+            }
+          },
+        ),
+        theme: themeProvider.themeData,
+        debugShowMaterialGrid: false,
+      ),
     );
   }
 }

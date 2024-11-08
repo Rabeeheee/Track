@@ -5,10 +5,10 @@ class SectionTitleWidget extends StatelessWidget {
   final bool isSelected;
 
   const SectionTitleWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.isSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class SectionTitleWidget extends StatelessWidget {
         Container(
           height: 2,
           width: 50,
-          color: isSelected ? Colors.blue : Colors.transparent, // Blue underline when selected
+          color: isSelected ? Colors.blue : Colors.transparent,
         ),
       ],
     );

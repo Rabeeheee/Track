@@ -10,7 +10,7 @@ class DateGoalSelection extends StatelessWidget {
   final ValueChanged<DateTime> onDateChanged;
   final ValueChanged<String> onGoalChanged;
 
-  DateGoalSelection({
+  const DateGoalSelection({
     required this.selectedStartDate,
     required this.goalDays,
     required this.onDateChanged,
@@ -44,7 +44,6 @@ class DateGoalSelection extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Start Date
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -88,7 +87,6 @@ class DateGoalSelection extends StatelessWidget {
                 ),
               ],
             ),
-            // Goal Days
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

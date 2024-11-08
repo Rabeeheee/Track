@@ -11,12 +11,11 @@ class ResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the screen size
     Size screenSize = MediaQuery.of(context).size;
     double textScaleFactor = MediaQuery.of(context).textScaleFactor;
 
     int crossAxisCount =
-        screenSize.width > 600 ? 3 : 2; // Change 600 to your preferred width
+        screenSize.width > 600 ? 3 : 2; 
 
     double overallRating = (surveyRatings['overallRating'] ?? 0) +
         (routineRatings['overallRating'] ?? 0);
@@ -68,11 +67,11 @@ class ResultScreen extends StatelessWidget {
                     textScaleFactor *
                     (screenSize.width > 600
                         ? 1.2
-                        : 1.0), // Increase size for wider screens
+                        : 1.0),
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 30), // Increased space between title and description
+            const SizedBox(height: 30), 
             Text(
               'Based on your answer, this is your current TrackIt rating, which reflects your lifestyle and habits now.',
               style: TextStyle(
@@ -81,10 +80,10 @@ class ResultScreen extends StatelessWidget {
                     textScaleFactor *
                     (screenSize.width > 600
                         ? 1.2
-                        : 1.0), // Increase size for wider screens
+                        : 1.0), 
               ),
             ),
-            SizedBox(height: 30), // Added space after description
+            SizedBox(height: 30),
             Expanded(
               child: GridView.builder(
                 padding: EdgeInsets.all(8.0),

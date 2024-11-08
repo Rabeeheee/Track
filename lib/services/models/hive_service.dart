@@ -4,7 +4,7 @@ import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/diary_model.dart';
 import 'package:trackitapp/services/models/memory_model.dart';
 import 'package:trackitapp/services/models/progress_modal.dart';
-import 'package:trackitapp/services/models/calender_modal.dart'; // Import the Task model
+import 'package:trackitapp/services/models/calender_modal.dart'; 
 
 ValueNotifier<List<WeeklyProgress>> progressListNotifier = ValueNotifier([]);
 
@@ -264,7 +264,7 @@ await getWeeklyProgress();
   // Update a task
   Future<void> updateTask(String id, Task task) async {
     var box = await openTaskBox();
-    await box.put(id, task); // Update using the unique ID
+    await box.put(id, task); 
   }
 
   // Delete a task by ID
@@ -359,8 +359,7 @@ Future<void> deleteFolder(String folderName) async {
   if (folder != null) {
     // ignore: unused_local_variable
     for (var imagePath in folder.imagePaths) {
-      // Your image deletion logic here
-      // If you want to delete images from the device, you can use File(imagePath).delete();
+      
     }
     
     await box.delete(folderName); 

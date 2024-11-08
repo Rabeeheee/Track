@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
+// ignore: unnecessary_import
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -190,7 +190,7 @@ class HabitScreenState extends State<HabitScreen> {
                 _buildMustDoSection(themeProvider),
                 const SizedBox(height: 10),
 
-                // Displaying Morning Habits
+                //  Morning ........
                 _buildHabitSection(
                   title: 'Morning',
                   habits: _morningHabits,
@@ -205,7 +205,7 @@ class HabitScreenState extends State<HabitScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                // Displaying Afternoon Habits
+                // Afternoon ......
                 _buildHabitSection(
                   title: 'Afternoon',
                   habits: _afternoonHabits,
@@ -220,7 +220,7 @@ class HabitScreenState extends State<HabitScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                // Displaying Night Habits
+                //  Night .....
                 _buildHabitSection(
                   title: 'Night',
                   habits: _nightHabits,
@@ -235,7 +235,7 @@ class HabitScreenState extends State<HabitScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                // Displaying Other Habits
+                //  Other .......
                 _buildHabitSection(
                   title: 'Other',
                   habits: _otherHabits,

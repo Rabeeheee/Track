@@ -25,14 +25,14 @@ class SectionTitleWidget extends StatelessWidget {
             fontSize: 16,
             fontFamily: 'Fonts',
             fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.blue : Colors.white,
+            color: themeProvider.themeData.splashColor,
           ),
         ),
         SizedBox(height: 8),
         Container(
           height: 2,
-          width: 50,
-          color: isSelected ? Colors.blue : Colors.white,
+          width: 90,
+          color: themeProvider.themeData.splashColor,
         ),
       ],
     );

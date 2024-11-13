@@ -8,7 +8,7 @@ class FrequencySelectionWidget extends StatelessWidget {
   const FrequencySelectionWidget({
     Key? key,
     required this.selectedFrequency,
-    required this.onSelectFrequency,
+    required this.onSelectFrequency,z
   }) : super(key: key);
 
   @override

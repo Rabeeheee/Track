@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trackitapp/utils/colors.dart';
+import 'package:trackitapp/utils/theme_provider.dart';
 
 class SurveyOption extends StatelessWidget {
   final String emoji;
@@ -10,6 +12,8 @@ class SurveyOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final themeProvider = Provider.of<ThemeProvider>(context);
+
     return GestureDetector(
       onTap: onTap, 
       child: Container(
@@ -30,7 +34,7 @@ class SurveyOption extends StatelessWidget {
             Expanded(
               child: Text(
                 text,
-                style: TextStyle(fontSize: 16.0),
+                style: TextStyle(fontSize: 16.0,color: Colors.black),
               ),
             ),
           ],

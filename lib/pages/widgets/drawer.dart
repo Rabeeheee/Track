@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+// ignore: unnecessary_import
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,10 @@ import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 
 class AppDrawer extends StatefulWidget {
+  const AppDrawer({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _AppDrawerState createState() => _AppDrawerState();
 }
 
@@ -79,6 +83,7 @@ class _AppDrawerState extends State<AppDrawer> {
   }
 
   void _showEditDialog() {
+    // ignore: no_leading_underscores_for_local_identifiers
     TextEditingController _usernameController =
         TextEditingController(text: username);
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
@@ -96,7 +101,7 @@ class _AppDrawerState extends State<AppDrawer> {
           title: Row(
             children: [
               Icon(Icons.edit, color: theme.primaryColor),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(
                 'Edit Username',
                 style: TextStyle(
@@ -128,7 +133,7 @@ class _AppDrawerState extends State<AppDrawer> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Cancel',
                 style: TextStyle(
                     color: Colors.redAccent, fontWeight: FontWeight.bold),
@@ -229,7 +234,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Material(
@@ -253,7 +258,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   onChanged: (value) {
                     themeProvider.toggleTheme();
                   },
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),

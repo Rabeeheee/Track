@@ -63,11 +63,11 @@ class _DailySelectionState extends State<DailySelection> {
               ),
               selected: isSelected,
               selectedColor: Colors.blue,
-              backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+              backgroundColor: const Color.fromARGB(255, 0, 0, 0),
               showCheckmark: false,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
-                side: BorderSide(color: isSelected ? Colors.blue : Colors.grey),
+                side: BorderSide(color: isSelected ? Colors.blue : Colors.transparent),
               ),
               onSelected: (selected) {
                 setState(() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/widgets/Add_task/show_dialoge.dart';
+import 'package:trackitapp/pages/widgets/customfab.dart';
 
 import 'package:trackitapp/services/models/calender_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
@@ -137,214 +138,205 @@ class _InboxScreenState extends State<InboxScreen> {
     _fetchTasksForDate(_selectedDate);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+ @override
+Widget build(BuildContext context) {
+  final themeProvider = Provider.of<ThemeProvider>(context);
 
-    return Scaffold(
-      backgroundColor: themeProvider.themeData.scaffoldBackgroundColor,
-      appBar: AppBar(
-        leading: isAnyTaskSelected
-            ? IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: _resetSelection,
-              )
-            : null,
-        title: isAnyTaskSelected
-            ? Text(
-                "Select Task",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Fonts',
-                ),
-              )
-            : Text(
-                "Inbox",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Fonts',
-                ),
+  return Scaffold(
+    backgroundColor: themeProvider.themeData.scaffoldBackgroundColor,
+    appBar: AppBar(
+      leading: isAnyTaskSelected
+          ? IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: _resetSelection,
+            )
+          : null,
+      title: isAnyTaskSelected
+          ? Text(
+              "Select Task",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Fonts',
               ),
-        actions: isAnyTaskSelected
-            ? [
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () async {
-                    var selectedTask = tasksForSelectedDate
-                        .firstWhere((task) => task.isSelected);
+            )
+          : Text(
+              "Inbox",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Fonts',
+              ),
+            ),
+      actions: isAnyTaskSelected
+          ? [
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () async {
+                  var selectedTask = tasksForSelectedDate
+                      .firstWhere((task) => task.isSelected);
 
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          backgroundColor: Colors.white,
-                          title: Text(
-                            "Confirm Deletion",
-                            style: TextStyle(
-                                color: themeProvider.themeData.splashColor),
-                          ),
-                          content: Text(
-                            "Are you sure you want to delete this task?",
-                            style: TextStyle(
-                                color: themeProvider.themeData.splashColor),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(
-                                "Cancel",
-                                style: TextStyle(
-                                    color: themeProvider.themeData.splashColor),
-                              ),
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        backgroundColor: themeProvider.themeData.cardColor,
+                        title: Text(
+                          "Confirm Deletion",
+                          style: TextStyle(
+                              color: themeProvider.themeData.splashColor),
+                        ),
+                        content: Text(
+                          "Are you sure you want to delete this task?",
+                          style: TextStyle(
+                              color: themeProvider.themeData.splashColor),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                  color: themeProvider.themeData.splashColor),
                             ),
-                            TextButton(
-                              onPressed: () async {
-                                await _hiveService.deleteTask(selectedTask.id!);
-                                _fetchTasksForDate(_selectedDate);
-                                _resetSelection();
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(
-                                "Delete",
-                                style: TextStyle(color: Colors.red),
-                              ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await _hiveService.deleteTask(selectedTask.id!);
+                              _fetchTasksForDate(_selectedDate);
+                              _resetSelection();
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              "Delete",
+                              style: TextStyle(color: Colors.red),
                             ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    var selectedTask = tasksForSelectedDate
-                        .firstWhere((task) => task.isSelected);
-                    _showTaskDialog(context, taskToEdit: selectedTask);
-                  },
-                ),
-              ]
-            : [],
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: Column(
-          children: [
-            // DatePickercelender(
-            //   currentDate: _selectedDate,
-            //   onDateSelected: (DateTime date) {
-            //     setState(() {
-            //       _selectedDate = date;
-            //     });
-            //     _fetchTasksForDate(date);
-            //   },
-            // ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: tasksForSelectedDate.length,
-                itemBuilder: (context, index) {
-                  final task = tasksForSelectedDate[index];
-                  return GestureDetector(
-                    onLongPress: () => _selectTask(task),
-                    onTap: _resetSelection,
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      decoration: BoxDecoration(
-                        color: task.isSelected
-                            ? Colors.grey
-                            : themeProvider.themeData.cardColor,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
                           ),
                         ],
-                      ),
-                      child: ListTile(
-                        leading: Checkbox(
-                          checkColor: themeProvider.themeData.canvasColor,
-                          value: task.isCompleted,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              _toggleTaskCompletion(task);
-                            });
-                          },
-                          activeColor: themeProvider.themeData.primaryColor,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 10.0),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              task.likeToDo,
-                              style: TextStyle(
-                                  color: themeProvider.themeData.splashColor,
-                                decoration: task.isCompleted
-                                    ? TextDecoration
-                                        .lineThrough 
-                                    : TextDecoration
-                                        .none,
-                                decorationColor: task.isCompleted
-                                    ? themeProvider.themeData.canvasColor
-                                    : Colors
-                                        .transparent,
-                                decorationThickness:
-                                    2, 
-                              ),
-                            ),
-                            Text(
-                              task.Descrition, 
-                              style: TextStyle(
-                                color: themeProvider.themeData.splashColor,
-                                decoration: task.isCompleted
-                                    ? TextDecoration
-                                        .lineThrough 
-                                    : TextDecoration
-                                        .none,
-                                decorationColor: task.isCompleted
-                                    ? themeProvider.themeData.canvasColor
-                                    : Colors
-                                        .transparent,
-                                decorationThickness:
-                                    2, 
-                              ),
-                            )
-                          ],
-                        ),
-                        trailing: Text(
-                          task.priority,
-                          style: TextStyle(
-                            color: themeProvider.themeData.splashColor,
-                          ),
-                        ),
-                      ),
-                    ),
+                      );
+                    },
                   );
                 },
               ),
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  var selectedTask = tasksForSelectedDate
+                      .firstWhere((task) => task.isSelected);
+                  _showTaskDialog(context, taskToEdit: selectedTask);
+                },
+              ),
+            ]
+          : [],
+    ),
+    body: Padding(
+      padding: EdgeInsets.all(8),
+      child: tasksForSelectedDate.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/no_item.png',
+                    width: 150,
+                    height: 150,
+                  ),
+                 
+                 
+                ],
+              ),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: tasksForSelectedDate.length,
+                    itemBuilder: (context, index) {
+                      final task = tasksForSelectedDate[index];
+                      return GestureDetector(
+                        onLongPress: () => _selectTask(task),
+                        onTap: _resetSelection,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 5),
+                          decoration: BoxDecoration(
+                            color: task.isSelected
+                                ? Colors.grey
+                                : themeProvider.themeData.cardColor,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 1,
+                                blurRadius: 5,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: ListTile(
+                            leading: Checkbox(
+                              checkColor: themeProvider.themeData.canvasColor,
+                              value: task.isCompleted,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _toggleTaskCompletion(task);
+                                });
+                              },
+                              activeColor: themeProvider.themeData.primaryColor,
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 10.0),
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  task.likeToDo,
+                                  style: TextStyle(
+                                    color: themeProvider.themeData.splashColor,
+                                    decoration: task.isCompleted
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none,
+                                    decorationColor: task.isCompleted
+                                        ? themeProvider.themeData.canvasColor
+                                        : Colors.transparent,
+                                    decorationThickness: 2,
+                                  ),
+                                ),
+                                Text(
+                                  task.Descrition,
+                                  style: TextStyle(
+                                    color: themeProvider.themeData.splashColor,
+                                    decoration: task.isCompleted
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none,
+                                    decorationColor: task.isCompleted
+                                        ? themeProvider.themeData.canvasColor
+                                        : Colors.transparent,
+                                    decorationThickness: 2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            trailing: Text(
+                              task.priority,
+                              style: TextStyle(
+                                color: themeProvider.themeData.splashColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showTaskDialog(context);
-        },
-        backgroundColor: themeProvider.themeData.primaryColor,
-        child: Icon(
-          Icons.add,
-          size: 35,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
+    ),
+    floatingActionButton: CustomFAB(onPressed: (){
+       _showTaskDialog(context);
+    })
+  );
+}
+
 }

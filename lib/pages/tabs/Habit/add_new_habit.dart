@@ -379,9 +379,9 @@ void initState() {
               controller: controller,
               decoration: InputDecoration(
                 hintText: hintText,
-                hintStyle: TextStyle(color: Colors.grey),
+                hintStyle: TextStyle(color: const Color.fromARGB(255, 112, 111, 111)),
                 filled: true,
-                fillColor: const Color.fromARGB(255, 202, 201, 201),
+                fillColor: themeProvider.themeData.hintColor,
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 border: OutlineInputBorder(

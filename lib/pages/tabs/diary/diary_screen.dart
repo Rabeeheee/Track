@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:trackitapp/pages/tabs/diary/Diary_detail_screen.dart';
 import 'package:trackitapp/pages/tabs/diary/add_diary_screen.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
+import 'package:trackitapp/pages/widgets/customfab.dart';
 import 'package:trackitapp/services/models/diary_model.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
@@ -65,32 +66,31 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     ),
                     child: TableCalendar(
                       calendarStyle: CalendarStyle(
-                        defaultTextStyle: TextStyle(color: themeProvider.themeData.canvasColor),
-                        selectedTextStyle: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
-                        
-                        selectedDecoration: BoxDecoration(
-                          color: themeProvider.themeData.primaryColor,
-                          shape: BoxShape.circle, 
-                        ),
-                        outsideTextStyle: TextStyle(color: const Color.fromARGB(255, 87, 87, 87))
-                      ),
-
+                          defaultTextStyle: TextStyle(
+                              color: themeProvider.themeData.canvasColor),
+                          selectedTextStyle: TextStyle(
+                              color: const Color.fromARGB(255, 255, 255, 255)),
+                          selectedDecoration: BoxDecoration(
+                            color: themeProvider.themeData.primaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                          outsideTextStyle: TextStyle(
+                              color: const Color.fromARGB(255, 87, 87, 87))),
                       headerStyle: HeaderStyle(
-                        titleTextStyle: TextStyle(color: themeProvider.themeData.canvasColor),
+                        titleTextStyle: TextStyle(
+                            color: themeProvider.themeData.canvasColor),
                         formatButtonVisible: false,
-                        leftChevronIcon:
-                            Icon(Icons.chevron_left, color: themeProvider.themeData.canvasColor),
-                        rightChevronIcon:
-                            Icon(Icons.chevron_right, color: themeProvider.themeData.canvasColor),
+                        leftChevronIcon: Icon(Icons.chevron_left,
+                            color: themeProvider.themeData.canvasColor),
+                        rightChevronIcon: Icon(Icons.chevron_right,
+                            color: themeProvider.themeData.canvasColor),
                       ),
                       focusedDay: _selectedDate,
                       firstDay: DateTime.utc(2000, 1, 1),
                       lastDay: DateTime.utc(2100, 12, 31),
                       calendarFormat: CalendarFormat.month,
-                      
                       availableCalendarFormats: const {
                         CalendarFormat.month: 'Month'
-                        
                       },
                       selectedDayPredicate: (day) =>
                           isSameDay(_selectedDate, day),
@@ -132,10 +132,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                     title: Text(
                                       entry.title,
                                       style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: themeProvider.themeData.canvasColor
-                                      ),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: themeProvider
+                                              .themeData.canvasColor),
                                     ),
                                     subtitle: Text(
                                       "${entry.date.day}/${entry.date.month}/${entry.date.year}",
@@ -159,12 +159,12 @@ class _DiaryScreenState extends State<DiaryScreen> {
                               (entry) => isSameDay(entry.date, _selectedDate))))
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child:  Image.asset(
-                'assets/images/not_found.webp',
-                height: 150,
-                width: 150,
-                fit: BoxFit.cover,
-              ),
+                          child: Image.asset(
+                            'assets/images/no_item.png',
+                            height: 150,
+                            width: 150,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                     ],
                   ),
@@ -174,17 +174,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _navigateToAddEntryScreen(context, _selectedDate);
-        },
-        backgroundColor: themeProvider.themeData.primaryColor,
-        child: Icon(
-          Icons.add,
-          size: 35,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton: CustomFAB(onPressed: (){
+        _navigateToAddEntryScreen(context, _selectedDate);
+      })
     );
   }
 

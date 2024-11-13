@@ -1,10 +1,13 @@
 // ignore_for_file: file_names, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/utils/colors.dart';
 import 'package:trackitapp/auth/getstart.dart';
 import 'package:trackitapp/utils/login_manager.dart';
+import 'package:trackitapp/utils/theme_provider.dart';
+
 
 // ignore: use_key_in_widget_constructors
 class LoginScreen extends StatelessWidget {
@@ -14,6 +17,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
@@ -52,7 +57,7 @@ class LoginScreen extends StatelessWidget {
                 width: 300,
                 height: 200,
                 child: Card(
-                  color: Colors.white,
+                  color: themeProvider.themeData.cardColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(7.0),
                   ),
@@ -63,13 +68,13 @@ class LoginScreen extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text(
+                           Text(
                             'Welcome',
                             style: TextStyle(
                               fontSize: 23.0,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Fonts',
-                              color: Colors.black,
+                              color: themeProvider.themeData.canvasColor,
                             ),
                           ),
                           const SizedBox(height: 8.0),

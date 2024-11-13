@@ -10,6 +10,7 @@ import 'package:trackitapp/pages/tabs/Habit/add_def_habit.dart';
 import 'package:trackitapp/pages/tabs/Habit/habit_detail.dart';
 import 'package:trackitapp/pages/tabs/Habit/progress.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
+import 'package:trackitapp/pages/widgets/customfab.dart';
 import 'package:trackitapp/pages/widgets/date_row.dart';
 import 'package:trackitapp/pages/widgets/drawer.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
@@ -256,9 +257,8 @@ class HabitScreenState extends State<HabitScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+      floatingActionButton: CustomFAB(onPressed: (){
+         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => AddDefHabit(
@@ -270,14 +270,7 @@ class HabitScreenState extends State<HabitScreen> {
               ),
             ),
           );
-        },
-        backgroundColor: themeProvider.themeData.primaryColor,
-        child: const Icon(
-          Icons.add,
-          size: 35,
-          color: Colors.white,
-        ),
-      ),
+      }),
     );
   }
 

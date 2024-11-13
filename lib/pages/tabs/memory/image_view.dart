@@ -1,26 +1,25 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ImageFullScreen extends StatelessWidget {
   final String imagePath;
   final Function(String) onDelete; 
 
-  ImageFullScreen({required this.imagePath, required this.onDelete});
+  const ImageFullScreen({super.key, required this.imagePath, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: () {
               
               showDialog(

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trackitapp/auth/splash_screen2.dart';
+import 'package:trackitapp/services/models/routine_modals.dart';
 import 'package:trackitapp/utils/colors.dart';
 
 class RoutineScreen extends StatefulWidget {
@@ -375,9 +376,4 @@ Widget habitWidget(int index) {
  
 }
 
-class Habit {
-  final String name;
-  final IconData icon;
 
-  Habit({required this.name, required this.icon});
-}

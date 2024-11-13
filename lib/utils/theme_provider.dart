@@ -28,6 +28,7 @@ class ThemeProvider with ChangeNotifier {
         focusColor: Colors.black,
         shadowColor: const Color.fromARGB(255, 86, 86, 86),
         dividerColor: Colors.white,
+        hintColor: const Color.fromARGB(255, 56, 56, 56),
       );
     } else {
       return ThemeData.light().copyWith(
@@ -43,7 +44,8 @@ class ThemeProvider with ChangeNotifier {
         hoverColor: Colors.white,
         focusColor: Colors.white,
         dividerColor: Colors.black,
-        shadowColor: Colors.white
+        shadowColor: Colors.white,
+        hintColor:  const Color.fromARGB(255, 202, 201, 201),
       );
     }
   }

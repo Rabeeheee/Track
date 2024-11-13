@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/widgets/Add_task/show_dialoge.dart';
+import 'package:trackitapp/pages/widgets/customfab.dart';
 import 'package:trackitapp/pages/widgets/date_pickercelender.dart';
 import 'package:trackitapp/services/models/calender_modal.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
@@ -189,7 +190,7 @@ class _CelanderScreenState extends State<CelanderScreen> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  backgroundColor: Colors.white,
+                  backgroundColor: themeProvider.themeData.cardColor,
                   title: Text("Confirm Deletion",style: TextStyle(
                     color: themeProvider.themeData.splashColor
                   ),),
@@ -255,7 +256,7 @@ class _CelanderScreenState extends State<CelanderScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/not_found.webp',
+                'assets/images/no_item.png',
                 height: 150,
                 width: 150,
                 fit: BoxFit.cover,
@@ -339,17 +340,9 @@ class _CelanderScreenState extends State<CelanderScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showTaskDialog(context);
-        },
-        backgroundColor: themeProvider.themeData.primaryColor,
-        child: Icon(
-          Icons.add,
-          size: 35,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton: CustomFAB(onPressed: (){
+        _showTaskDialog(context);
+      })
     );
   }
 }

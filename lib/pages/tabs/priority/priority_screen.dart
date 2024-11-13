@@ -119,7 +119,7 @@ class PriorityContainer extends StatelessWidget {
             child: tasks.isEmpty
                 ? Center(
                     child: Image.asset(
-                'assets/images/not_found.webp',
+                'assets/images/no_item.png',
                 height: 130,
                 width: 130,
                 fit: BoxFit.cover,

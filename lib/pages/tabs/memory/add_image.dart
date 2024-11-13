@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/tabs/memory/image_view.dart';
 import 'package:trackitapp/pages/widgets/app_bar.dart';
+import 'package:trackitapp/pages/widgets/customfab.dart';
 import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/services/models/memory_model.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
@@ -117,80 +117,90 @@ class _AddImageState extends State<AddImage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    int selectedCount = selectedImages.where((isSelected) => isSelected).length;
+ @override
+Widget build(BuildContext context) {
+  final themeProvider = Provider.of<ThemeProvider>(context);
+  int selectedCount = selectedImages.where((isSelected) => isSelected).length;
 
-    return Scaffold(
-      appBar: CustomAppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title:
-            selectedCount > 0 ? '$selectedCount selected' : widget.folder.name,
-        actions: [
-          if (selectedCount > 0)
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: deleteSelectedImage,
-            ),
-        ],
+  return Scaffold(
+    appBar: CustomAppBar(
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            double screenWidth = constraints.maxWidth;
-            int crossAxisCount = (screenWidth / 120).floor();
-
-            double childAspectRatio = screenWidth / (crossAxisCount * 120);
-
-            return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                childAspectRatio: childAspectRatio,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemCount: widget.folder.imagePaths.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onLongPress: () {
-                    setState(() {
-                      selectedImages[index] = true;
-                    });
-                  },
-                  onTap: () {
-                    viewImageFullScreen(widget.folder.imagePaths[index]);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: MemoryImage(
-                            base64Decode(widget.folder.imagePaths[index])),
-                        fit: BoxFit.cover,
-                      ),
-                      border: selectedImages[index]
-                          ? Border.all(color: Colors.blue, width: 3)
-                          : null,
-                    ),
+      title: selectedCount > 0 ? '$selectedCount selected' : widget.folder.name,
+      actions: [
+        if (selectedCount > 0)
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: deleteSelectedImage,
+          ),
+      ],
+    ),
+    body: Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: widget.folder.imagePaths.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/no_item.png',
+                    height: 150,
+                    width: 150,
+                    fit: BoxFit.cover,
                   ),
+                 
+                ],
+              ),
+            )
+          : LayoutBuilder(
+              builder: (context, constraints) {
+                double screenWidth = constraints.maxWidth;
+                int crossAxisCount = (screenWidth / 120).floor();
+                double childAspectRatio = screenWidth / (crossAxisCount * 120);
+
+                return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    childAspectRatio: childAspectRatio,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: widget.folder.imagePaths.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onLongPress: () {
+                        setState(() {
+                          selectedImages[index] = true;
+                        });
+                      },
+                      onTap: () {
+                        viewImageFullScreen(widget.folder.imagePaths[index]);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: MemoryImage(
+                                base64Decode(widget.folder.imagePaths[index])),
+                            fit: BoxFit.cover,
+                          ),
+                          border: selectedImages[index]
+                              ? Border.all(color: Colors.blue, width: 3)
+                              : null,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
-            );
-          },
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: addImage,
-        backgroundColor: themeProvider.themeData.primaryColor,
-        child: Icon(Icons.add_photo_alternate, color: Colors.white),
-      ),
-    );
-  }
+            ),
+    ),
+    floatingActionButton: CustomFAB(onPressed: addImage),
+  );
+}
+
 }

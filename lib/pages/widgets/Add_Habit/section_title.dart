@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trackitapp/utils/theme_provider.dart';
 
 class SectionTitleWidget extends StatelessWidget {
   final String title;
@@ -12,6 +14,8 @@ class SectionTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -21,14 +25,14 @@ class SectionTitleWidget extends StatelessWidget {
             fontSize: 16,
             fontFamily: 'Fonts',
             fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.blue : Colors.black,
+            color: isSelected ? Colors.blue : Colors.white,
           ),
         ),
         SizedBox(height: 8),
         Container(
           height: 2,
           width: 50,
-          color: isSelected ? Colors.blue : Colors.transparent,
+          color: isSelected ? Colors.blue : Colors.white,
         ),
       ],
     );

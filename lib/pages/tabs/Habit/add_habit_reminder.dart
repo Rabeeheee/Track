@@ -98,6 +98,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                               selectedFrequency = frequency;
                             });
                           },
+
                         ),
                         const SizedBox(height: 32),
                         if (selectedFrequency == 'Daily')
@@ -219,7 +220,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                       print(widget.title);
                       print('snackbar top');
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Habit saved succesfully!'),
+                        SnackBar(content: Text('Habit saved succesfully!',style: TextStyle(color: themeProvider.themeData.splashColor,),),
                         backgroundColor: Colors.green,
                         ),
                       );

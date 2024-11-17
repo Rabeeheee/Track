@@ -4,6 +4,7 @@ class GoalDaysPopup extends StatelessWidget {
   final String selectedGoalDays;
   final Function(String) onSelectGoalDays;
 
+  // ignore: use_super_parameters
   const GoalDaysPopup({
     Key? key,
     required this.selectedGoalDays,
@@ -18,42 +19,42 @@ class GoalDaysPopup extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
-            title: Text('Forever'),
+            title: const Text('Forever'),
             onTap: () {
               onSelectGoalDays('Forever');
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: Text('7 days'),
+            title: const Text('7 days'),
             onTap: () {
               onSelectGoalDays('7 days');
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: Text('21 days'),
+            title: const Text('21 days'),
             onTap: () {
               onSelectGoalDays('21 days');
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: Text('30 days'),
+            title: const Text('30 days'),
             onTap: () {
               onSelectGoalDays('30 days');
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: Text('100 days'),
+            title: const Text('100 days'),
             onTap: () {
               onSelectGoalDays('100 days');
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: Text('365 days'),
+            title: const Text('365 days'),
             onTap: () {
               onSelectGoalDays('365 days');
               Navigator.pop(context);

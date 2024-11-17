@@ -6,7 +6,6 @@ import 'package:trackitapp/auth/point4.dart';
 import 'package:trackitapp/auth/point5.dart';
 import 'package:trackitapp/auth/point6.dart';
 
-
 class WidgetCollection extends StatefulWidget {
   const WidgetCollection({super.key});
 
@@ -15,7 +14,6 @@ class WidgetCollection extends StatefulWidget {
 }
 
 class _WidgetCollectionState extends State<WidgetCollection> {
-  
   List<Widget Function(BuildContext)> screens = [
     (context) => build1(context),
     (context) => build2(context),
@@ -23,7 +21,6 @@ class _WidgetCollectionState extends State<WidgetCollection> {
     (context) => build4(context),
     (context) => build5(context),
     (context) => build6(context),
-
   ];
 
   int currentIndex = 0;
@@ -33,7 +30,6 @@ class _WidgetCollectionState extends State<WidgetCollection> {
     return Scaffold(
       body: GestureDetector(
         onTap: () {
-          
           setState(() {
             currentIndex = (currentIndex + 1);
           });

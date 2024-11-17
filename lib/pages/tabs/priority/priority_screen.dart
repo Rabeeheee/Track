@@ -30,7 +30,7 @@ class PriorityScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'Eisenhower Matrix'),
+      appBar: const CustomAppBar(title: 'Eisenhower Matrix'),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder(
@@ -80,6 +80,7 @@ class PriorityContainer extends StatelessWidget {
   final Color color;
   final List<Task> tasks;
 
+  // ignore: use_key_in_widget_constructors
   const PriorityContainer({
     required this.title,
     required this.color,
@@ -119,11 +120,11 @@ class PriorityContainer extends StatelessWidget {
             child: tasks.isEmpty
                 ? Center(
                     child: Image.asset(
-                'assets/images/no_item.png',
-                height: 130,
-                width: 130,
-                fit: BoxFit.cover,
-              ),
+                      'assets/images/no_item.png',
+                      height: 130,
+                      width: 130,
+                      fit: BoxFit.cover,
+                    ),
                   )
                 : ListView.builder(
                     itemCount: tasks.length,

@@ -6,19 +6,20 @@ import 'package:trackitapp/utils/theme_provider.dart';
 class SurveyOption extends StatelessWidget {
   final String emoji;
   final String text;
-  final VoidCallback onTap; 
+  final VoidCallback onTap;
 
-  SurveyOption({required this.emoji, required this.text, required this.onTap});
+  const SurveyOption({super.key, required this.emoji, required this.text, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-        final themeProvider = Provider.of<ThemeProvider>(context);
+    // ignore: unused_local_variable
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return GestureDetector(
-      onTap: onTap, 
+      onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8.0),
-        padding: EdgeInsets.all(12.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           color: AppColors.secondaryColor,
           border: Border.all(color: Colors.grey),
@@ -28,13 +29,12 @@ class SurveyOption extends StatelessWidget {
           children: [
             Text(
               emoji,
-              style: TextStyle(fontSize: 16.0),
+              style: const TextStyle(fontSize: 16.0),
             ),
-          
             Expanded(
               child: Text(
                 text,
-                style: TextStyle(fontSize: 16.0,color: Colors.black),
+                style: const TextStyle(fontSize: 16.0, color: Colors.black),
               ),
             ),
           ],

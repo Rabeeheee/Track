@@ -17,7 +17,9 @@ class FocusScreen extends StatefulWidget {
 }
 
 class _FocusScreenState extends State<FocusScreen> {
-  FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
+  // ignore: prefer_final_fields
+  FlutterLocalNotificationsPlugin _notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   @override
   void initState() {
@@ -27,7 +29,8 @@ class _FocusScreenState extends State<FocusScreen> {
 
   Future<void> _initializeNotifications() async {
     const androidSettings = AndroidInitializationSettings('@mipmap/app_icon');
-    final settings = InitializationSettings(android: androidSettings);
+    // ignore: prefer_const_declarations
+    final settings = const InitializationSettings(android: androidSettings);
     await _notificationsPlugin.initialize(settings);
 
     if (Platform.isAndroid && await Permission.notification.isDenied) {
@@ -36,29 +39,33 @@ class _FocusScreenState extends State<FocusScreen> {
 
     if (Platform.isAndroid) {
       const androidChannel = AndroidNotificationChannel(
-        'timer_alarm', 
-        'Timer Alarm', 
+        'timer_alarm',
+        'Timer Alarm',
         description: 'Channel for timer alarm notifications',
         importance: Importance.max,
       );
-      await _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      await _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(androidChannel);
     }
   }
 
   void _showAlarm() async {
     const androidDetails = AndroidNotificationDetails(
-      'timer_alarm', 
-      'Timer Alarm', 
-      importance: Importance.max, 
+      'timer_alarm',
+      'Timer Alarm',
+      importance: Importance.max,
       priority: Priority.high,
     );
     const notificationDetails = NotificationDetails(android: androidDetails);
-    await _notificationsPlugin.show(0, 'Time’s up!', 'Your timer has ended.', notificationDetails);
+    await _notificationsPlugin.show(
+        0, 'Time’s up!', 'Your timer has ended.', notificationDetails);
   }
 
   void _openTimeDialog() {
     TextEditingController customTimeController = TextEditingController();
+    // ignore: no_leading_underscores_for_local_identifiers
     bool _isInvalidInput = false;
 
     showDialog(
@@ -67,19 +74,27 @@ class _FocusScreenState extends State<FocusScreen> {
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              title: Text('Select Time Limit'),
+              title: const Text('Select Time Limit'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextButton(onPressed: () => _setTimeLimit(10), child: Text('10 minutes')),
-                  TextButton(onPressed: () => _setTimeLimit(30), child: Text('30 minutes')),
-                  TextButton(onPressed: () => _setTimeLimit(60), child: Text('1 hour')),
+                  TextButton(
+                      onPressed: () => _setTimeLimit(10),
+                      child: const Text('10 minutes')),
+                  TextButton(
+                      onPressed: () => _setTimeLimit(30),
+                      child: const Text('30 minutes')),
+                  TextButton(
+                      onPressed: () => _setTimeLimit(60),
+                      child: const Text('1 hour')),
                   TextField(
                     controller: customTimeController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: 'Enter time between " 1-180 "',
-                      errorText: _isInvalidInput ? 'Invalid input! Must be 1-180 minutes.' : null,
+                      errorText: _isInvalidInput
+                          ? 'Invalid input! Must be 1-180 minutes.'
+                          : null,
                     ),
                   ),
                 ],
@@ -97,11 +112,11 @@ class _FocusScreenState extends State<FocusScreen> {
                       });
                     }
                   },
-                  child: Text('Set'),
+                  child: const Text('Set'),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text('Close', style: TextStyle(color: Colors.red)),
+                  child: const Text('Close', style: TextStyle(color: Colors.red)),
                 ),
               ],
             );
@@ -117,18 +132,19 @@ class _FocusScreenState extends State<FocusScreen> {
 
   void _restartTimer() {
     final timerService = Provider.of<TimerService>(context, listen: false);
-    timerService.stopTimer(); 
-    timerService.resetTimer(); 
+    timerService.stopTimer();
+    timerService.resetTimer();
   }
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final timerService = Provider.of<TimerService>(context);
-    double progress = timerService.remainingTime / (timerService.timeLimit * 60);
+    double progress =
+        timerService.remainingTime / (timerService.timeLimit * 60);
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'Focus Period'),
+      appBar: const CustomAppBar(title: 'Focus Period'),
       body: Container(
         decoration: BoxDecoration(
           color: themeProvider.themeData.scaffoldBackgroundColor,
@@ -145,19 +161,22 @@ class _FocusScreenState extends State<FocusScreen> {
                   percent: progress,
                   center: Text(
                     '${(timerService.remainingTime / 60).floor().toString().padLeft(2, '0')}:${(timerService.remainingTime % 60).toString().padLeft(2, '0')}',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: themeProvider.themeData.canvasColor),
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: themeProvider.themeData.canvasColor),
                   ),
                   progressColor: const Color.fromARGB(255, 69, 69, 69),
                   backgroundColor: const Color.fromARGB(255, 139, 138, 138),
                   circularStrokeCap: CircularStrokeCap.round,
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    timerService.startTimer(onTimerEnd: _showAlarm); 
+                    timerService.startTimer(onTimerEnd: _showAlarm);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
@@ -165,13 +184,14 @@ class _FocusScreenState extends State<FocusScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  icon: Icon(Icons.play_arrow, color: Colors.white),
-                  label: Text('Start Timer', style: TextStyle(color: Colors.white)),
+                  icon: const Icon(Icons.play_arrow, color: Colors.white),
+                  label: const Text('Start Timer',
+                      style: TextStyle(color: Colors.white)),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton.icon(
                   onPressed: () {
                     timerService.stopTimer();
@@ -182,13 +202,14 @@ class _FocusScreenState extends State<FocusScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  icon: Icon(Icons.stop, color: Colors.white),
-                  label: Text('Stop Timer', style: TextStyle(color: Colors.white)),
+                  icon: const Icon(Icons.stop, color: Colors.white),
+                  label:
+                      const Text('Stop Timer', style: TextStyle(color: Colors.white)),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton.icon(
                   onPressed: _restartTimer,
                   style: ElevatedButton.styleFrom(
@@ -198,7 +219,8 @@ class _FocusScreenState extends State<FocusScreen> {
                     ),
                   ),
                   icon: const Icon(Icons.refresh, color: Colors.white),
-                  label: const Text('Restart Timer', style: TextStyle(color: Colors.white)),
+                  label: const Text('Restart Timer',
+                      style: TextStyle(color: Colors.white)),
                 ),
               ),
               const SizedBox(height: 10),

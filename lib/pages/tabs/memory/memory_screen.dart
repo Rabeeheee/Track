@@ -58,14 +58,18 @@ class _MemoryScreenState extends State<MemoryScreen> {
 
                 if (newFolderName.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Folder name cannot be empty.')),
+                    const SnackBar(
+                        content: Text('Folder name cannot be empty.')),
                   );
-                } else if (folders.any((folder) => folder.name == newFolderName)) {
+                } else if (folders
+                    .any((folder) => folder.name == newFolderName)) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Folder name already exists.')),
+                    const SnackBar(
+                        content: Text('Folder name already exists.')),
                   );
                 } else {
-                  Folder newFolder = Folder(name: newFolderName, imagePaths: []);
+                  Folder newFolder =
+                      Folder(name: newFolderName, imagePaths: []);
                   await _hiveService.saveFolder(newFolder);
                   await loadFolders();
                   // ignore: use_build_context_synchronously
@@ -86,11 +90,12 @@ class _MemoryScreenState extends State<MemoryScreen> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Delete Confirmation'),
-          content: const Text('Are you sure you want to delete the selected folders?'),
+          content: const Text(
+              'Are you sure you want to delete the selected folders?'),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); 
+                Navigator.pop(context);
               },
               child: const Text('Cancel'),
             ),
@@ -105,7 +110,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
                   selectedFolders.clear();
                 });
                 // ignore: use_build_context_synchronously
-                Navigator.pop(context); 
+                Navigator.pop(context);
               },
               child: const Text('Delete'),
             ),
@@ -131,125 +136,137 @@ class _MemoryScreenState extends State<MemoryScreen> {
     }
   }
 
- @override
-Widget build(BuildContext context) {
-  final themeProvider = Provider.of<ThemeProvider>(context);
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
-  return Scaffold(
-    appBar: CustomAppBar(
-      title: (isSelectionMode ? '${selectedFolders.length} Selected' : 'Memories'),
-      actions: isSelectionMode
-          ? [
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: showDeleteConfirmationDialog,
-              ),
-            ]
-          : null,
-    ),
-    body: Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: folders.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/no_item.png', 
-                    height: 150,
-                    width: 150,
-                    fit: BoxFit.cover,
+    return Scaffold(
+        appBar: CustomAppBar(
+          title: (isSelectionMode
+              ? '${selectedFolders.length} Selected'
+              : 'Memories'),
+          actions: isSelectionMode
+              ? [
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: showDeleteConfirmationDialog,
                   ),
-                 
-                ],
-              ),
-            )
-          : RefreshIndicator(
-              onRefresh: loadFolders,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  double screenWidth = constraints.maxWidth;
-                  int crossAxisCount = (screenWidth / 150).floor();
-                  double childAspectRatio = 1.0;
+                ]
+              : null,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: folders.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/no_item.png',
+                        height: 150,
+                        width: 150,
+                        fit: BoxFit.cover,
+                      ),
+                    ],
+                  ),
+                )
+              : RefreshIndicator(
+                  onRefresh: loadFolders,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      double screenWidth = constraints.maxWidth;
+                      int crossAxisCount = (screenWidth / 150).floor();
+                      double childAspectRatio = 1.0;
 
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      childAspectRatio: childAspectRatio,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemCount: folders.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onLongPress: () {
-                          toggleSelection(folders[index]);
-                        },
-                        onTap: () {
-                          if (isSelectionMode) {
-                            toggleSelection(folders[index]);
-                          } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => AddImage(
-                                  folder: folders[index],
-                                  onNewImage: (image) async {
-                                    setState(() {
-                                      folders[index].imagePaths.add(image);
-                                    });
-                                    await _hiveService.saveFolder(folders[index]);
-                                  },
-                                ),
-                              ),
-                            ).then((_) {
-                              loadFolders();
-                            });
-                          }
-                        },
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: selectedFolders.contains(folders[index])
-                                      ? Colors.red
-                                      : Colors.blueAccent,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: selectedFolders.contains(folders[index])
-                                        ? themeProvider.themeData.canvasColor
-                                        : Colors.transparent,
-                                    width: 3,
-                                  ),
-                                  image: folders[index].imagePaths.isNotEmpty
-                                      ? DecorationImage(
-                                          image: MemoryImage(base64Decode(folders[index].imagePaths.last)),
-                                          fit: BoxFit.cover,
-                                        )
-                                      : null,
-                                ),
-                                child: folders[index].imagePaths.isEmpty
-                                    ? const Center(child: Icon(Icons.folder, color: Colors.white, size: 50))
-                                    : null,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              folders[index].name,
-                              style: TextStyle(color: themeProvider.themeData.dividerColor),
-                            ),
-                          ],
+                      return GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          childAspectRatio: childAspectRatio,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
                         ),
+                        itemCount: folders.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onLongPress: () {
+                              toggleSelection(folders[index]);
+                            },
+                            onTap: () {
+                              if (isSelectionMode) {
+                                toggleSelection(folders[index]);
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => AddImage(
+                                      folder: folders[index],
+                                      onNewImage: (image) async {
+                                        setState(() {
+                                          folders[index].imagePaths.add(image);
+                                        });
+                                        await _hiveService
+                                            .saveFolder(folders[index]);
+                                      },
+                                    ),
+                                  ),
+                                ).then((_) {
+                                  loadFolders();
+                                });
+                              }
+                            },
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: selectedFolders
+                                              .contains(folders[index])
+                                          ? Colors.red
+                                          : Colors.blueAccent,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: selectedFolders
+                                                .contains(folders[index])
+                                            ? themeProvider
+                                                .themeData.canvasColor
+                                            : Colors.transparent,
+                                        width: 3,
+                                      ),
+                                      image: folders[index]
+                                              .imagePaths
+                                              .isNotEmpty
+                                          ? DecorationImage(
+                                              image: MemoryImage(base64Decode(
+                                                  folders[index]
+                                                      .imagePaths
+                                                      .last)),
+                                              fit: BoxFit.cover,
+                                            )
+                                          : null,
+                                    ),
+                                    child: folders[index].imagePaths.isEmpty
+                                        ? const Center(
+                                            child: Icon(Icons.folder,
+                                                color: Colors.white, size: 50))
+                                        : null,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  folders[index].name,
+                                  style: TextStyle(
+                                      color:
+                                          themeProvider.themeData.dividerColor),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       );
                     },
-                  );
-                },
-              ),
-            ),
-    ),
-      floatingActionButton: CustomFAB(
-        onPressed: createFolder)
-    );
+                  ),
+                ),
+        ),
+        floatingActionButton: CustomFAB(onPressed: createFolder));
   }
 }

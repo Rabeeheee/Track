@@ -36,7 +36,6 @@ class ThemeProvider with ChangeNotifier {
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
-          
         ),
         cardColor: Colors.blueGrey[100],
         canvasColor: Colors.black,
@@ -45,7 +44,7 @@ class ThemeProvider with ChangeNotifier {
         focusColor: Colors.white,
         dividerColor: Colors.black,
         shadowColor: Colors.white,
-        hintColor:  const Color.fromARGB(255, 202, 201, 201),
+        hintColor: const Color.fromARGB(255, 202, 201, 201),
       );
     }
   }

@@ -4,16 +4,16 @@ import 'package:trackitapp/utils/theme_provider.dart';
 
 class DailySelection extends StatefulWidget {
   final Function(List<String>) onDaySelected;
-  
 
-  DailySelection({required this.onDaySelected});
+  // ignore: use_key_in_widget_constructors
+  const DailySelection({required this.onDaySelected});
 
   @override
+  // ignore: library_private_types_in_public_api
   _DailySelectionState createState() => _DailySelectionState();
 }
 
 class _DailySelectionState extends State<DailySelection> {
-
   List<String> selectedDays = [
     'Monday',
     'Tuesday',
@@ -37,16 +37,19 @@ class _DailySelectionState extends State<DailySelection> {
 
   @override
   Widget build(BuildContext context) {
-        final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Select Days:',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: themeProvider.themeData.splashColor),
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: themeProvider.themeData.splashColor),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Wrap(
           spacing: 8.0,
           children: List.generate(daysOfWeek.length, (index) {
@@ -57,8 +60,8 @@ class _DailySelectionState extends State<DailySelection> {
             return ChoiceChip(
               label: Text(
                 day,
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 255, 255, 255),
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255),
                 ),
               ),
               selected: isSelected,
@@ -67,7 +70,8 @@ class _DailySelectionState extends State<DailySelection> {
               showCheckmark: false,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
-                side: BorderSide(color: isSelected ? Colors.blue : Colors.transparent),
+                side: BorderSide(
+                    color: isSelected ? Colors.blue : Colors.transparent),
               ),
               onSelected: (selected) {
                 setState(() {
@@ -77,7 +81,7 @@ class _DailySelectionState extends State<DailySelection> {
                     selectedDays.remove(fullDay);
                   }
                 });
-                widget.onDaySelected(selectedDays); 
+                widget.onDaySelected(selectedDays);
               },
             );
           }),

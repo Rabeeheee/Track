@@ -9,9 +9,12 @@ class SplashScreen2 extends StatefulWidget {
   final Map<String, double> surveyRatings;
   final Map<String, double> routineRatings;
 
-  const SplashScreen2({required this.surveyRatings, required this.routineRatings});
+  // ignore: use_key_in_widget_constructors
+  const SplashScreen2(
+      {required this.surveyRatings, required this.routineRatings});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SplashScreenState createState() => _SplashScreenState();
 }
 
@@ -80,8 +83,8 @@ class _SplashScreenState extends State<SplashScreen2> {
                 child: LinearProgressIndicator(
                   value: _progressValue,
                   backgroundColor: Colors.transparent,
-                  valueColor:
-                      const AlwaysStoppedAnimation<Color>(AppColors.secondaryColor),
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                      AppColors.secondaryColor),
                 ),
               ),
             ),

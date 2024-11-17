@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trackitapp/auth/splash_screen2.dart';
@@ -10,20 +9,19 @@ class RoutineScreen extends StatefulWidget {
   final Map<String, double> habitProgress;
   final Map<String, double> surveyRatings;
 
+  // ignore: use_key_in_widget_constructors
   const RoutineScreen({
     required this.userResponses,
     required this.habitProgress,
     required this.surveyRatings,
   });
 
-  
-
   @override
+  // ignore: library_private_types_in_public_api
   _RoutineScreenState createState() => _RoutineScreenState();
 }
 
 class _RoutineScreenState extends State<RoutineScreen> {
-
   int habitIndex = 0;
   String currentHabit = "Wake up Early";
 
@@ -60,8 +58,10 @@ class _RoutineScreenState extends State<RoutineScreen> {
   List<Habit> habits = [
     Habit(name: "Wake up Early", icon: FontAwesomeIcons.sun),
     Habit(name: "Drink Water", icon: FontAwesomeIcons.glassWater),
+    // ignore: deprecated_member_use
     Habit(name: "Run", icon: FontAwesomeIcons.running),
     Habit(name: "Gym Workout", icon: Icons.sports_gymnastics),
+    // ignore: deprecated_member_use
     Habit(name: "Meditate", icon: FontAwesomeIcons.medkit),
     Habit(name: "Read Books", icon: Icons.book),
     Habit(name: "Social Media\nLimit", icon: FontAwesomeIcons.mobile),
@@ -81,19 +81,12 @@ class _RoutineScreenState extends State<RoutineScreen> {
 
   void nextHabit() {
     setState(() {
-
       if (habitIndex < habits.length - 1) {
         habitIndex++;
         updateCurrentHabit();
       } else {
-       
-        Map<String, double> surveyRatings =
-            getSurveyRatings(); 
-        Map<String, double> ratings =
-            calculateRatings(); 
-
-        
-      
+        Map<String, double> surveyRatings = getSurveyRatings();
+        Map<String, double> ratings = calculateRatings();
 
         Navigator.push(
           context,
@@ -123,7 +116,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
   Map<String, List<String>> habitToCategories = {
     "Wake up Early": ['disciplineRating'],
     "Drink Water": ['focusRating'],
-    "Run": ['strengthRating','confidenceRating'], 
+    "Run": ['strengthRating', 'confidenceRating'],
     "Gym Workout": ['strengthRating', 'confidenceRating'],
     "Meditate": ['wisdomRating'],
     "Read Books": ['wisdomRating'],
@@ -139,17 +132,12 @@ class _RoutineScreenState extends State<RoutineScreen> {
     double confidenceRating = 0;
     double disciplineRating = 0;
 
-    
     for (int i = 0; i < habits.length; i++) {
-      double habitValue =
-          sliderValues[i];
-      double ratingPercentage =
-          (habitValue / 4) * 100; 
+      double habitValue = sliderValues[i];
+      double ratingPercentage = (habitValue / 4) * 100;
 
       overallRating += ratingPercentage;
 
-    
-    
       habitToCategories[habits[i].name]?.forEach((category) {
         switch (category) {
           case 'wisdomRating':
@@ -189,191 +177,191 @@ class _RoutineScreenState extends State<RoutineScreen> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return SafeArea(
-    child: Scaffold(
-      backgroundColor: Colors.black,
-      body: Container(
-         width: MediaQuery.of(context).size.width,
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Container(
+          width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(15, 255, 255, 255),
-              Color.fromARGB(39, 0, 0, 0),
-              Color.fromARGB(14, 255, 255, 255),
-              Color.fromARGB(39, 0, 0, 0),
-              Color.fromARGB(14, 255, 255, 255),
-            ],
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(15, 255, 255, 255),
+                Color.fromARGB(39, 0, 0, 0),
+                Color.fromARGB(14, 255, 255, 255),
+                Color.fromARGB(39, 0, 0, 0),
+                Color.fromARGB(14, 255, 255, 255),
+              ],
+            ),
           ),
-        ),
-        child: Center(
-          child: Container(
-            constraints: BoxConstraints(maxWidth: 900),
-              padding: const EdgeInsets.symmetric(horizontal: 16.0), 
-            child: Padding(
-              padding: const EdgeInsets.only(top: 30, left: 5, right: 5),
-              child: Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: AppColors.grey,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: LinearProgressIndicator(
-                        value: habitProgress[currentHabit],
-                        backgroundColor: Colors.transparent,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(AppColors.secondaryColor),
+          child: Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 900),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30, left: 5, right: 5),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: AppColors.grey,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: LinearProgressIndicator(
+                          value: habitProgress[currentHabit],
+                          backgroundColor: Colors.transparent,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              AppColors.secondaryColor),
+                        ),
                       ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: previousHabit,
-                        icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                      ),
-                      Expanded(
-                        child: Text(
-                          'What is your goal for $currentHabit?',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.secondaryColor,
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: previousHabit,
+                          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'What is your goal for $currentHabit?',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.secondaryColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20.0),
+                    // ignore: avoid_unnecessary_containers
+                    Container(
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ...List.generate((habits.length / 2).ceil(),
+                                  (rowIndex) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                    bottom: 20,
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: habitWidget(rowIndex * 2),
+                                      ),
+                                      if (rowIndex * 2 + 1 < habits.length)
+                                        const SizedBox(width: 50),
+                                      if (rowIndex * 2 + 1 < habits.length)
+                                        Expanded(
+                                          child: habitWidget(rowIndex * 2 + 1),
+                                        ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                              const SizedBox(height: 30),
+                              Text(
+                                habitOptions[currentHabit]![
+                                    sliderValues[habitIndex].toInt()],
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.secondaryColor,
+                                ),
+                              ),
+                              const SizedBox(height: 30),
+                              Slider(
+                                value: sliderValues[habitIndex],
+                                min: 0,
+                                max: 4,
+                                divisions: 4,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    sliderValues[habitIndex] = newValue;
+                                  });
+                                },
+                                activeColor: AppColors.secondaryColor,
+                                inactiveColor: AppColors.grey,
+                              ),
+                              const SizedBox(height: 30),
+                              ElevatedButton(
+                                onPressed: () {
+                                  nextHabit();
+                                  // ignore: avoid_print
+                                  print('working fine');
+                                },
+                                // ignore: sort_child_properties_last
+                                child: const Text(
+                                  'Confirm',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.secondaryColor,
+                                  foregroundColor: AppColors.backgroundColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 20.0),
-                  Container(
-                    
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ...List.generate(
-                            (habits.length / 2).ceil(), (rowIndex) {
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 20,),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: habitWidget(rowIndex * 2),
-                                    ),
-                                    if (rowIndex * 2 + 1 < habits.length) 
-                                      SizedBox(width: 50),
-                                    if (rowIndex * 2 + 1 < habits.length)
-                                      Expanded(
-                                        child: habitWidget(rowIndex * 2 + 1),
-                                      ),
-                                  ],
-                                ),
-                              );
-                            }),
-                            SizedBox(height: 30),
-                            Text(
-                              habitOptions[currentHabit]![
-                                  sliderValues[habitIndex].toInt()],
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.secondaryColor,
-                              ),
-                            ),
-                            SizedBox(height: 30),
-                            Slider(
-                              value: sliderValues[habitIndex],
-                              min: 0,
-                              max: 4,
-                              divisions: 4,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  sliderValues[habitIndex] = newValue;
-                                });
-                              },
-                              activeColor: AppColors.secondaryColor,
-                              inactiveColor: AppColors.grey,
-                            ),
-                            SizedBox(height: 30),
-                            ElevatedButton(
-                              onPressed: () {
-                                nextHabit();
-                                print('working fine');
-                              },
-                              child: Text(
-                                'Confirm',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.secondaryColor,
-                                foregroundColor: AppColors.backgroundColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(7),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget habitWidget(int index) {
-  if (index >= habits.length) return SizedBox();
+  Widget habitWidget(int index) {
+    if (index >= habits.length) return const SizedBox();
 
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      Icon(
-        habits[index].icon,
-        color: currentHabit == habits[index].name
-            ? Colors.white
-            : AppColors.grey,
-      ),
-      SizedBox(width: 10),
-      Flexible(
-        child: Text(
-          habits[index].name,
-          style: TextStyle(
-            color: currentHabit == habits[index].name
-                ? Colors.white
-                : AppColors.grey,
-            fontSize: 16,
-            overflow: TextOverflow.ellipsis,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(
+          habits[index].icon,
+          color: currentHabit == habits[index].name
+              ? Colors.white
+              : AppColors.grey,
+        ),
+        const SizedBox(width: 10),
+        Flexible(
+          child: Text(
+            habits[index].name,
+            style: TextStyle(
+              color: currentHabit == habits[index].name
+                  ? Colors.white
+                  : AppColors.grey,
+              fontSize: 16,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
 }
-
-
- 
-}
-
-

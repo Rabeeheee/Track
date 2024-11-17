@@ -8,17 +8,17 @@ class Apreciate extends StatelessWidget {
   final List<dynamic> habits;
   final Map<String, double> ratings;
   final List<int> userResponses;
-  final Map<String, double> surveyRatings; 
+  final Map<String, double> surveyRatings;
   final Map<String, double> routineRatings;
 
-  const Apreciate({
+  const Apreciate({super.key, 
     required this.onContinue,
     required this.habitIndex,
     required this.habits,
     required this.ratings,
     required this.userResponses,
-    required this.surveyRatings, 
-    required this.routineRatings, 
+    required this.surveyRatings,
+    required this.routineRatings,
   });
 
   void navigateToNextScreen(BuildContext context) {
@@ -27,7 +27,7 @@ class Apreciate extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => RoutineScreen(
           userResponses: userResponses,
-          habitProgress: const {}, 
+          habitProgress: const {},
           surveyRatings: surveyRatings,
         ),
       ),
@@ -36,8 +36,6 @@ class Apreciate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
@@ -59,8 +57,8 @@ class Apreciate extends StatelessWidget {
           ),
           child: Center(
             child: Container(
-               constraints: BoxConstraints(maxWidth: 600),
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              constraints: const BoxConstraints(maxWidth: 600),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
                   Padding(
@@ -117,6 +115,7 @@ class Apreciate extends StatelessWidget {
                           const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () => navigateToNextScreen(context),
+                            // ignore: sort_child_properties_last
                             child: const Text(
                               'Got it',
                               style: TextStyle(

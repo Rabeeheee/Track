@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 class TimerService with ChangeNotifier {
-  int _timeLimit = 5; 
-  int _remainingTime = 5 * 60; 
+  int _timeLimit = 5;
+  int _remainingTime = 5 * 60;
   Timer? _timer;
   Function? onTimerEnd;
 
@@ -17,17 +17,17 @@ class TimerService with ChangeNotifier {
   }
 
   void startTimer({Function? onTimerEnd}) {
-    this.onTimerEnd = onTimerEnd; 
+    this.onTimerEnd = onTimerEnd;
 
     if (_timer != null) return;
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_remainingTime > 0) {
         _remainingTime--;
         notifyListeners();
       } else {
         stopTimer();
         if (onTimerEnd != null) {
-          onTimerEnd(); 
+          onTimerEnd();
         }
       }
     });
@@ -44,6 +44,7 @@ class TimerService with ChangeNotifier {
     notifyListeners();
   }
 
+  @override
   void dispose() {
     _timer?.cancel();
     super.dispose();

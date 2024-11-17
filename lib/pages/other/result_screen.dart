@@ -7,15 +7,16 @@ class ResultScreen extends StatelessWidget {
   final Map<String, double> surveyRatings;
   final Map<String, double> routineRatings;
 
-  ResultScreen({required this.surveyRatings, required this.routineRatings});
+  // ignore: use_key_in_widget_constructors
+  const ResultScreen({required this.surveyRatings, required this.routineRatings});
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
+    // ignore: deprecated_member_use
     double textScaleFactor = MediaQuery.of(context).textScaleFactor;
 
-    int crossAxisCount =
-        screenSize.width > 600 ? 3 : 2; 
+    int crossAxisCount = screenSize.width > 600 ? 3 : 2;
 
     double overallRating = (surveyRatings['overallRating'] ?? 0) +
         (routineRatings['overallRating'] ?? 0);
@@ -63,183 +64,178 @@ class ResultScreen extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Fonts',
                 color: AppColors.secondaryColor,
-                fontSize: 26 *
-                    textScaleFactor *
-                    (screenSize.width > 600
-                        ? 1.2
-                        : 1.0),
+                fontSize:
+                    26 * textScaleFactor * (screenSize.width > 600 ? 1.2 : 1.0),
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 30), 
+            const SizedBox(height: 30),
             Text(
               'Based on your answer, this is your current TrackIt rating, which reflects your lifestyle and habits now.',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 14 *
-                    textScaleFactor *
-                    (screenSize.width > 600
-                        ? 1.2
-                        : 1.0), 
+                fontSize:
+                    14 * textScaleFactor * (screenSize.width > 600 ? 1.2 : 1.0),
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Expanded(
               child: GridView.builder(
-                padding: EdgeInsets.all(8.0),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                  crossAxisSpacing: 10.0,
-                  mainAxisSpacing: 10.0,
-                  childAspectRatio: 165 / 115,
-                ),
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  String title;
-                  double rating;
+                  padding: const EdgeInsets.all(8.0),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0,
+                    childAspectRatio: 165 / 115,
+                  ),
+                  itemCount: 6,
+                  itemBuilder: (context, index) {
+                    String title;
+                    double rating;
 
-                  switch (index) {
-                    case 0:
-                      title = 'Overall';
-                      rating = overallRating;
-                      break;
-                    case 1:
-                      title = 'Wisdom';
-                      rating = wisdomRating;
-                      break;
-                    case 2:
-                      title = 'Strength';
-                      rating = strengthRating;
-                      break;
-                    case 3:
-                      title = 'Focus';
-                      rating = focusRating;
-                      break;
-                    case 4:
-                      title = 'Confidence';
-                      rating = confidenceRating;
-                      break;
-                    case 5:
-                      title = 'Discipline';
-                      rating = disciplineRating;
-                      break;
-                    default:
-                      title = '';
-                      rating = 0;
-                  }
+                    switch (index) {
+                      case 0:
+                        title = 'Overall';
+                        rating = overallRating;
+                        break;
+                      case 1:
+                        title = 'Wisdom';
+                        rating = wisdomRating;
+                        break;
+                      case 2:
+                        title = 'Strength';
+                        rating = strengthRating;
+                        break;
+                      case 3:
+                        title = 'Focus';
+                        rating = focusRating;
+                        break;
+                      case 4:
+                        title = 'Confidence';
+                        rating = confidenceRating;
+                        break;
+                      case 5:
+                        title = 'Discipline';
+                        rating = disciplineRating;
+                        break;
+                      default:
+                        title = '';
+                        rating = 0;
+                    }
 
-                  rating = adjustRating(rating);
+                    rating = adjustRating(rating);
 
-                  Color backgroundColor;
-                  Color textColor;
-                  Color progressColor;
-                  Color progressBack;
+                    Color backgroundColor;
+                    Color textColor;
+                    Color progressColor;
+                    Color progressBack;
 
-                  if (index == 0) {
-                    backgroundColor = AppColors.red;
-                    textColor = Colors.white;
-                    progressColor = Colors.white;
-                    progressBack = const Color.fromARGB(161, 255, 9, 9);
-                  } else {
-                    backgroundColor = Colors.white;
-                    textColor = Colors.black;
-                    progressColor = AppColors.red;
-                    progressBack = const Color.fromARGB(137, 255, 255, 255);
-                  }
+                    if (index == 0) {
+                      backgroundColor = AppColors.red;
+                      textColor = Colors.white;
+                      progressColor = Colors.white;
+                      progressBack = const Color.fromARGB(161, 255, 9, 9);
+                    } else {
+                      backgroundColor = Colors.white;
+                      textColor = Colors.black;
+                      progressColor = AppColors.red;
+                      progressBack = const Color.fromARGB(137, 255, 255, 255);
+                    }
 
-                  return ConstrainedBox(
-                    constraints: const BoxConstraints(),
-                    child: Container(
-                      constraints: const BoxConstraints(maxWidth: 900),
-                      padding: const EdgeInsets.symmetric(horizontal: 1.0),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(7),
-                        color: backgroundColor,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Icon(
-                                    Icons.gpp_good_rounded,
-                                    color: textColor,
-                                    size: 25 * textScaleFactor,
-                                  ),
-                                ),
-                                const SizedBox(width: 5),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    title,
-                                    style: TextStyle(
+                    return ConstrainedBox(
+                      constraints: const BoxConstraints(),
+                      child: Container(
+                        constraints: const BoxConstraints(maxWidth: 900),
+                        padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: backgroundColor,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: Icon(
+                                      Icons.gpp_good_rounded,
                                       color: textColor,
-                                      fontSize: 18 *
-                                          textScaleFactor *
-                                          (screenSize.width > 600
-                                              ? 1.2
-                                              : 1.0),
-                                      fontWeight: FontWeight.bold,
+                                      size: 25 * textScaleFactor,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 5),
-                                  child: Text(
-                                    '${rating.toStringAsFixed(0)}',
-                                    style: TextStyle(
-                                      color: textColor,
-                                      fontSize: 27 *
-                                          textScaleFactor *
-                                          (screenSize.width > 600
-                                              ? 1.2
-                                              : 1.0),
-                                      fontWeight: FontWeight.bold,
+                                  const SizedBox(width: 5),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: Text(
+                                      title,
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 18 *
+                                            textScaleFactor *
+                                            (screenSize.width > 600
+                                                ? 1.2
+                                                : 1.0),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const Spacer(),
-                            Container(
-                              height: 10,
-                              decoration: BoxDecoration(
-                                color: AppColors.grey,
-                                borderRadius: BorderRadius.circular(10),
+                                ],
                               ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: LinearProgressIndicator(
-                                  value: rating / 100,
-                                  backgroundColor: progressBack,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      progressColor),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: Text(
+                                      // ignore: unnecessary_string_interpolations
+                                      '${rating.toStringAsFixed(0)}',
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 27 *
+                                            textScaleFactor *
+                                            (screenSize.width > 600
+                                                ? 1.2
+                                                : 1.0),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              Container(
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  color: AppColors.grey,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: LinearProgressIndicator(
+                                    value: rating / 100,
+                                    backgroundColor: progressBack,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        progressColor),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
             ),
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                padding: EdgeInsets.only(right: 8, bottom: 100, top: 8),
+                padding: const EdgeInsets.only(right: 8, bottom: 100, top: 8),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
@@ -269,14 +265,12 @@ class ResultScreen extends StatelessWidget {
                           color: AppColors.secondaryColor,
                           fontSize: 16 *
                               textScaleFactor *
-                              (screenSize.width > 600
-                                  ? 1.2
-                                  : 1.0),
+                              (screenSize.width > 600 ? 1.2 : 1.0),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(width: 8),
-                      Icon(
+                      const SizedBox(width: 8),
+                      const Icon(
                         Icons.arrow_forward,
                         color: AppColors.secondaryColor,
                       ),

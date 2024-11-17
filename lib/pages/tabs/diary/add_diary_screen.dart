@@ -14,77 +14,82 @@ class AddDiaryScreen extends StatefulWidget {
   final DateTime date;
   final Diary? diary;
 
-  AddDiaryScreen({required this.date, this.diary});
+  // ignore: use_key_in_widget_constructors
+  const AddDiaryScreen({required this.date, this.diary});
 
   @override
+  // ignore: library_private_types_in_public_api
   _AddDiaryScreenState createState() => _AddDiaryScreenState();
 }
 
 class _AddDiaryScreenState extends State<AddDiaryScreen> {
+  // ignore: prefer_final_fields
   TextEditingController _titleController = TextEditingController();
+  // ignore: prefer_final_fields
   TextEditingController _diaryController = TextEditingController();
   String? _selectedImage;
 
- @override
-void initState() {
-  super.initState();
-  if (widget.diary != null) {
-    _titleController.text = widget.diary!.title;
-    _diaryController.text = widget.diary!.content;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.diary != null) {
+      _titleController.text = widget.diary!.title;
+      _diaryController.text = widget.diary!.content;
 
-    if (widget.diary!.selectedImagePath != null) {
-      if (widget.diary!.selectedImagePath!.startsWith('/9j')) {
-        _selectedImage = widget.diary!.selectedImagePath;
-      } else {
-        _convertImageToBase64(widget.diary!.selectedImagePath!).then((base64Image) {
-          setState(() {
-            _selectedImage = base64Image;
+      if (widget.diary!.selectedImagePath != null) {
+        if (widget.diary!.selectedImagePath!.startsWith('/9j')) {
+          _selectedImage = widget.diary!.selectedImagePath;
+        } else {
+          _convertImageToBase64(widget.diary!.selectedImagePath!)
+              .then((base64Image) {
+            setState(() {
+              _selectedImage = base64Image;
+            });
           });
-        });
+        }
       }
     }
   }
-}
-
 
   Future<void> _pickImage() async {
-  String? base64Image;
-  Uint8List? imageBytes;
+    String? base64Image;
+    Uint8List? imageBytes;
 
-  if (kIsWeb) {
-    final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      final bytes = await pickedImage.readAsBytes();
-      base64Image = base64Encode(bytes);
-      imageBytes = bytes;
+    if (kIsWeb) {
+      final pickedImage =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedImage != null) {
+        final bytes = await pickedImage.readAsBytes();
+        base64Image = base64Encode(bytes);
+        imageBytes = bytes;
+      }
+    } else {
+      final XFile? pickedImage =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedImage != null) {
+        final bytes = await File(pickedImage.path).readAsBytes();
+        base64Image = base64Encode(bytes);
+        imageBytes = bytes;
+      }
     }
-  } else {
-    final XFile? pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      final bytes = await File(pickedImage.path).readAsBytes();
-      base64Image = base64Encode(bytes);
-      imageBytes = bytes; 
+
+    if (imageBytes != null) {
+      setState(() {
+        _selectedImage = base64Image;
+      });
     }
   }
-
-  if (imageBytes != null) {
-    setState(() {
-      _selectedImage = base64Image; 
-    });
-  }
-}
-
 
   Future<String> _convertImageToBase64(String imagePath) async {
     final imageBytes = await File(imagePath).readAsBytes();
-    return base64Encode(imageBytes); 
+    return base64Encode(imageBytes);
   }
 
   void _saveDiaryEntry() async {
     final title = _titleController.text;
     final diaryContent = _diaryController.text;
     final imagePath = _selectedImage;
-    final uniqueId = Uuid().v4();
+    final uniqueId = const Uuid().v4();
 
     if (title.isNotEmpty && diaryContent.isNotEmpty) {
       final diary = Diary(
@@ -98,10 +103,11 @@ void initState() {
       final diaryBox = await Hive.openBox<Diary>('diarybox');
       await diaryBox.put(diary.id, diary);
 
+      // ignore: use_build_context_synchronously
       Navigator.popUntil(context, (route) => route.isFirst);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please fill in the title and diary ")),
+        const SnackBar(content: Text("Please fill in the title and diary ")),
       );
     }
   }
@@ -118,7 +124,7 @@ void initState() {
             Navigator.pop(context);
           },
           icon:
-              Icon(Icons.arrow_back, color: const Color.fromARGB(255, 0, 0, 0)),
+              const Icon(Icons.arrow_back, color: Color.fromARGB(255, 0, 0, 0)),
         ),
         title: (widget.diary == null ? "Write your Day" : "Edit Diary Entry"),
       ),
@@ -130,18 +136,18 @@ void initState() {
             children: [
               Text(
                 "Date: ${widget.date.toLocal()}".split(' ')[0],
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: _titleController,
                 style: TextStyle(color: themeProvider.themeData.splashColor),
                 decoration: InputDecoration(
                   labelText: "Diary Title",
-                  labelStyle: TextStyle(color: Colors.grey),
+                  labelStyle: const TextStyle(color: Colors.grey),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide:
@@ -187,14 +193,14 @@ void initState() {
                       : null,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: _diaryController,
                 style: TextStyle(color: themeProvider.themeData.splashColor),
                 maxLines: null,
                 decoration: InputDecoration(
                   labelText: "Write your diary here",
-                  labelStyle: TextStyle(color: Colors.grey),
+                  labelStyle: const TextStyle(color: Colors.grey),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(9),
                     borderSide:
@@ -207,15 +213,17 @@ void initState() {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
+              // ignore: sized_box_for_whitespace
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _saveDiaryEntry,
-                  child: Text(
+                  // ignore: sort_child_properties_last
+                  child: const Text(
                     "Save",
                     style: TextStyle(
-                      color: const Color.fromARGB(255, 254, 254, 254),
+                      color: Color.fromARGB(255, 254, 254, 254),
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -225,7 +233,7 @@ void initState() {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(7),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
                 ),
               ),

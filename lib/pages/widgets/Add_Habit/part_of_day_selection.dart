@@ -5,12 +5,14 @@ class PartOfDaySelection extends StatefulWidget {
   final Function(String) onSelectPartOfDay;
 
   const PartOfDaySelection({
-    Key? key,
+    super.key,
     required this.selectedPartOfDay,
-    required this.onSelectPartOfDay, required Null Function(String part) onPartOfDaySelected,
-  }) : super(key: key);
+    required this.onSelectPartOfDay,
+    required Null Function(String part) onPartOfDaySelected,
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _PartOfDaySelectionState createState() => _PartOfDaySelectionState();
 }
 
@@ -45,17 +47,17 @@ class _PartOfDaySelectionState extends State<PartOfDaySelection> {
                 color: Theme.of(context).splashColor,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
                   _buildSelectionButton('Morning'),
-                  SizedBox(width: 10), 
+                  const SizedBox(width: 10),
                   _buildSelectionButton('Afternoon'),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   _buildSelectionButton('Night'),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   _buildSelectionButton('Other'),
                 ],
               ),
@@ -72,7 +74,8 @@ class _PartOfDaySelectionState extends State<PartOfDaySelection> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         foregroundColor: isSelected ? Colors.white : Colors.black,
-        backgroundColor: isSelected ? Theme.of(context).primaryColor : Colors.grey[300],
+        backgroundColor:
+            isSelected ? Theme.of(context).primaryColor : Colors.grey[300],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),

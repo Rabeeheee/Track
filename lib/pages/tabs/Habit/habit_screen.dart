@@ -150,7 +150,7 @@ class HabitScreenState extends State<HabitScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ProgressScreen(
+                      builder: (context) => const ProgressScreen(
                             overallprogress: 0,
                           )));
             },
@@ -172,7 +172,7 @@ class HabitScreenState extends State<HabitScreen> {
           }),
         ],
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: RefreshIndicator(
@@ -249,7 +249,7 @@ class HabitScreenState extends State<HabitScreen> {
                   },
                   selectedHabits: [],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 75,
                 )
               ],
@@ -257,19 +257,19 @@ class HabitScreenState extends State<HabitScreen> {
           ),
         ),
       ),
-      floatingActionButton: CustomFAB(onPressed: (){
-         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddDefHabit(
-                habitId: 0,
-                title: '',
-                subtitle: '',
-                selectedAvatarPath: null,
-                description: '',
-              ),
+      floatingActionButton: CustomFAB(onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AddDefHabit(
+              habitId: 0,
+              title: '',
+              subtitle: '',
+              selectedAvatarPath: null,
+              description: '',
             ),
-          );
+          ),
+        );
       }),
     );
   }
@@ -420,7 +420,8 @@ class HabitScreenState extends State<HabitScreen> {
                               backgroundImage: habits[index].isCompleted
                                   ? const AssetImage('assets/images/Tick.png')
                                   : habits[index].selectedAvatarPath != null
-                                      ? MemoryImage(base64Decode(habits[index].selectedAvatarPath!))
+                                      ? MemoryImage(base64Decode(
+                                          habits[index].selectedAvatarPath!))
                                       : null,
                             ),
                             const SizedBox(width: 10),

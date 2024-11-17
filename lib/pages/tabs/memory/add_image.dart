@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,12 +15,14 @@ class AddImage extends StatefulWidget {
   final Folder folder;
   final Function(String) onNewImage;
 
-  AddImage({
+  // ignore: use_key_in_widget_constructors
+  const AddImage({
     required this.folder,
     required this.onNewImage,
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _AddImageState createState() => _AddImageState();
 }
 
@@ -35,19 +38,34 @@ class _AddImageState extends State<AddImage> {
         List.generate(widget.folder.imagePaths.length, (_) => false);
   }
 
-  void addImage() async {
-    XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+  Future<void> addImage() async {
+    String? base64Image;
+    Uint8List? imageBytes;
 
-    if (pickedFile != null) {
-      Uint8List bytes = await pickedFile.readAsBytes();
-      String base64Image = base64Encode(bytes);
+    if (kIsWeb) {
+      final PickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (PickedFile != null) {
+        final bytes = await PickedFile.readAsBytes();
+        base64Image = base64Encode(bytes);
+        imageBytes = bytes;
+      }
+    } else {
+      final XFile? pickedFile =
+          await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        final bytes = await File(pickedFile.path).readAsBytes();
+        base64Image = base64Encode(bytes);
+        imageBytes = bytes;
+      }
+    }
 
-      widget.onNewImage(base64Image);
-
+    if (imageBytes != null) {
       setState(() {
-        // widget.folder.imagePaths.add(base64Image);
+        widget.folder.imagePaths
+            .add(base64Image!); // Add new image to the folder
         selectedImages.add(false);
       });
+      await _hiveService.saveFolder(widget.folder); // Save changes to storage
     }
   }
 
@@ -57,17 +75,17 @@ class _AddImageState extends State<AddImage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Confirm Deletion'),
-            content: Text('Are you sure you want to delete selected images?'),
+            title: const Text('Confirm Deletion'),
+            content: const Text('Are you sure you want to delete selected images?'),
             actions: [
               TextButton(
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                child: Text('Delete'),
+                child: const Text('Delete'),
                 onPressed: () async {
                   for (int i = selectedImages.length - 1; i >= 0; i--) {
                     if (selectedImages[i]) {
@@ -78,9 +96,11 @@ class _AddImageState extends State<AddImage> {
                     }
                   }
                   await _hiveService.saveFolder(widget.folder);
+                  // ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
 
                   if (widget.folder.imagePaths.isEmpty) {
+                    // ignore: use_build_context_synchronously
                     Navigator.of(context).pop();
                   }
                 },
@@ -109,6 +129,7 @@ class _AddImageState extends State<AddImage> {
               });
               await _hiveService.saveFolder(widget.folder);
             } catch (e) {
+              // ignore: avoid_print
               print("Error deleting image file: $e");
             }
           },
@@ -117,90 +138,91 @@ class _AddImageState extends State<AddImage> {
     );
   }
 
- @override
-Widget build(BuildContext context) {
-  final themeProvider = Provider.of<ThemeProvider>(context);
-  int selectedCount = selectedImages.where((isSelected) => isSelected).length;
+  @override
+  Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    int selectedCount = selectedImages.where((isSelected) => isSelected).length;
 
-  return Scaffold(
-    appBar: CustomAppBar(
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
-      title: selectedCount > 0 ? '$selectedCount selected' : widget.folder.name,
-      actions: [
-        if (selectedCount > 0)
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: deleteSelectedImage,
-          ),
-      ],
-    ),
-    body: Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: widget.folder.imagePaths.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/no_item.png',
-                    height: 150,
-                    width: 150,
-                    fit: BoxFit.cover,
-                  ),
-                 
-                ],
-              ),
-            )
-          : LayoutBuilder(
-              builder: (context, constraints) {
-                double screenWidth = constraints.maxWidth;
-                int crossAxisCount = (screenWidth / 120).floor();
-                double childAspectRatio = screenWidth / (crossAxisCount * 120);
-
-                return GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    childAspectRatio: childAspectRatio,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemCount: widget.folder.imagePaths.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onLongPress: () {
-                        setState(() {
-                          selectedImages[index] = true;
-                        });
-                      },
-                      onTap: () {
-                        viewImageFullScreen(widget.folder.imagePaths[index]);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: MemoryImage(
-                                base64Decode(widget.folder.imagePaths[index])),
-                            fit: BoxFit.cover,
-                          ),
-                          border: selectedImages[index]
-                              ? Border.all(color: Colors.blue, width: 3)
-                              : null,
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
+    return Scaffold(
+      appBar: CustomAppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title:
+            selectedCount > 0 ? '$selectedCount selected' : widget.folder.name,
+        actions: [
+          if (selectedCount > 0)
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: deleteSelectedImage,
             ),
-    ),
-    floatingActionButton: CustomFAB(onPressed: addImage),
-  );
-}
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: widget.folder.imagePaths.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/no_item.png',
+                      height: 150,
+                      width: 150,
+                      fit: BoxFit.cover,
+                    ),
+                  ],
+                ),
+              )
+            : LayoutBuilder(
+                builder: (context, constraints) {
+                  double screenWidth = constraints.maxWidth;
+                  int crossAxisCount = (screenWidth / 120).floor();
+                  double childAspectRatio =
+                      screenWidth / (crossAxisCount * 120);
 
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      childAspectRatio: childAspectRatio,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemCount: widget.folder.imagePaths.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onLongPress: () {
+                          setState(() {
+                            selectedImages[index] = true;
+                          });
+                        },
+                        onTap: () {
+                          viewImageFullScreen(widget.folder.imagePaths[index]);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: MemoryImage(base64Decode(
+                                  widget.folder.imagePaths[index])),
+                              fit: BoxFit.cover,
+                            ),
+                            border: selectedImages[index]
+                                ? Border.all(color: Colors.blue, width: 3)
+                                : null,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+      ),
+      floatingActionButton: CustomFAB(onPressed: addImage),
+    );
+  }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:hive/hive.dart';
 import 'package:trackitapp/services/models/addhabit_modal.dart';
 import 'package:trackitapp/services/models/diary_model.dart';
 import 'package:trackitapp/services/models/memory_model.dart';
 import 'package:trackitapp/services/models/progress_modal.dart';
-import 'package:trackitapp/services/models/calender_modal.dart'; 
+import 'package:trackitapp/services/models/calender_modal.dart';
 
 ValueNotifier<List<WeeklyProgress>> progressListNotifier = ValueNotifier([]);
 
@@ -61,13 +62,14 @@ class HiveService {
   // Save a new habit with a unique ID
   Future<void> saveHabit(AddhabitModal habit) async {
     var box = await getHabitsBox();
-    
+
     if (habit.id == null || habit.id == 0) {
       habit.id = box.isNotEmpty ? box.keys.cast<int>().last + 1 : 1;
     }
     if (habit.name != null && habit.goalDays != null) {
       await box.put(habit.id, habit);
     } else {
+      // ignore: avoid_print
       print('Not saving habit: missing required fields');
     }
   }
@@ -148,11 +150,13 @@ class HiveService {
       return 0;
     }
 
-    var completedHabits = habits.where((habit) =>
-        habit.completedDate != null &&
-        habit.completedDate!.day == day.day &&
-        habit.completedDate!.month == day.month &&
-        habit.completedDate!.year == day.year).length;
+    var completedHabits = habits
+        .where((habit) =>
+            habit.completedDate != null &&
+            habit.completedDate!.day == day.day &&
+            habit.completedDate!.month == day.month &&
+            habit.completedDate!.year == day.year)
+        .length;
 
     return (completedHabits / totalHabits) * 100;
   }
@@ -160,15 +164,16 @@ class HiveService {
   // Get total habits for a day
   Future<int> getTotalHabitsForDay(DateTime day) async {
     var habits = await getAllHabits();
-    return habits.where((habit) =>
-        habit.goalDays != null &&
-        habit.isCompleted == false).length;
+    return habits
+        .where((habit) => habit.goalDays != null && habit.isCompleted == false)
+        .length;
   }
 
   // Function to update daily points after completing a habit
   Future<void> updateDailyPoints() async {
     DateTime today = DateTime.now();
     int totalPointsToday = await calculatePointsForDay(today);
+    // ignore: avoid_print
     print("Total Points for Today: $totalPointsToday out of 100");
   }
 
@@ -200,26 +205,25 @@ class HiveService {
   }
 
   //clear weeklyprogressbox
-Future<void> clearWeeklyProgressBox() async {
-  var box = await openWeeklyProgressBox();
-  await box.clear();
-}
-    
+  Future<void> clearWeeklyProgressBox() async {
+    var box = await openWeeklyProgressBox();
+    await box.clear();
+  }
+
 //   Future<void> clearWeekl() async {
 //   var box = await openTaskBox();
-//   await box.clear(); 
+//   await box.clear();
 // }
 
-
   // Save weekly progress
-  Future<void> saveWeeklyProgress(List<WeeklyProgress> weeklyProgressList) async {
+  Future<void> saveWeeklyProgress(
+      List<WeeklyProgress> weeklyProgressList) async {
     var box = await openWeeklyProgressBox();
     await box.clear();
 
     for (var progress in weeklyProgressList) {
       await box.put(progress.day, progress);
-await getWeeklyProgress();
-      
+      await getWeeklyProgress();
     }
   }
 
@@ -231,22 +235,21 @@ await getWeeklyProgress();
     return progressList;
   }
 
-   // Open the task box
+  // Open the task box
   Future<Box<Task>> openTaskBox() async {
     return await Hive.openBox<Task>('taskBox');
   }
 
-   // Clear the habitBox
+  // Clear the habitBox
   Future<void> clearTaskBox() async {
-  var box = await openTaskBox();
-  await box.clear(); 
-}
-
+    var box = await openTaskBox();
+    await box.clear();
+  }
 
   // Save a new task
   Future<void> saveTask(Task task) async {
     var box = await openTaskBox();
-    await box.put(task.id, task); 
+    await box.put(task.id, task);
   }
 
   // Get all tasks
@@ -264,7 +267,7 @@ await getWeeklyProgress();
   // Update a task
   Future<void> updateTask(String id, Task task) async {
     var box = await openTaskBox();
-    await box.put(id, task); 
+    await box.put(id, task);
   }
 
   // Delete a task by ID
@@ -274,98 +277,91 @@ await getWeeklyProgress();
   }
 
   // Update task completion status
-Future<void> updateTaskCompletion(String id) async {
-  var box = await openTaskBox();
-  Task? task = box.get(id);
+  Future<void> updateTaskCompletion(String id) async {
+    var box = await openTaskBox();
+    Task? task = box.get(id);
 
-  if (task != null) {
-    task.isCompleted = !task.isCompleted; 
-    await box.put(id, task); 
+    if (task != null) {
+      task.isCompleted = !task.isCompleted;
+      await box.put(id, task);
+    }
   }
-}
 
-
- // Open the diary box
-Future<Box<Diary>> openDiaryBox() async {
-  return await Hive.openBox<Diary>('diarybox');
-}
+  // Open the diary box
+  Future<Box<Diary>> openDiaryBox() async {
+    return await Hive.openBox<Diary>('diarybox');
+  }
 
   //clear Diarybox
-Future<void> clearDiaryBox() async {
-  var box = await openDiaryBox();
-  await box.clear();
-}
+  Future<void> clearDiaryBox() async {
+    var box = await openDiaryBox();
+    await box.clear();
+  }
 
 // Save a new diary entry
-Future<void> saveDiary(Diary diary) async {
-  var box = await openDiaryBox();
-  await box.put(diary.id, diary); 
-}
+  Future<void> saveDiary(Diary diary) async {
+    var box = await openDiaryBox();
+    await box.put(diary.id, diary);
+  }
 
 // Get all diary entries
-Future<List<Diary>> getAllDiaryEntries() async {
-  var box = await openDiaryBox();
-  return box.values.toList();
-}
+  Future<List<Diary>> getAllDiaryEntries() async {
+    var box = await openDiaryBox();
+    return box.values.toList();
+  }
 
 // Get a specific diary entry by ID
-Future<Diary?> getDiaryById(String id) async {
-  var box = await openDiaryBox();
-  return box.get(id);
-}
+  Future<Diary?> getDiaryById(String id) async {
+    var box = await openDiaryBox();
+    return box.get(id);
+  }
 
 // Update a diary entry
-Future<void> updateDiary(String id, Diary diary) async {
-  var box = await openDiaryBox();
-  await box.put(id, diary); 
-}
+  Future<void> updateDiary(String id, Diary diary) async {
+    var box = await openDiaryBox();
+    await box.put(id, diary);
+  }
 
 // Delete a diary entry by ID
-Future<void> deleteDiary(String id) async {
-  var box = await openDiaryBox();
-  await box.delete(id);
-}
-
+  Future<void> deleteDiary(String id) async {
+    var box = await openDiaryBox();
+    await box.delete(id);
+  }
 
   // Open the folderBox
-Future<Box<Folder>> openFolderBox() async {
-  return await Hive.openBox<Folder>('folderBox');
-}
+  Future<Box<Folder>> openFolderBox() async {
+    return await Hive.openBox<Folder>('folderBox');
+  }
 
   //clear folderbox
-Future<void> clearFolderBox() async {
-  var box = await openFolderBox();
-  await box.clear();
-}
+  Future<void> clearFolderBox() async {
+    var box = await openFolderBox();
+    await box.clear();
+  }
 
 // Save a new folder with image paths
-Future<void> saveFolder(Folder folder) async {
-  var box = await openFolderBox();
-  await box.put(folder.name, folder);
-}
+  Future<void> saveFolder(Folder folder) async {
+    var box = await openFolderBox();
+    await box.put(folder.name, folder);
+  }
 
 // Get all folders
-Future<List<Folder>> getAllFolders() async {
-  var box = await openFolderBox();
-  return box.values.toList();
-}
+  Future<List<Folder>> getAllFolders() async {
+    var box = await openFolderBox();
+    return box.values.toList();
+  }
 
 // Delete a folder by name and remove its images
-Future<void> deleteFolder(String folderName) async {
-  var box = await openFolderBox();
-  
-  // Retrieve the folder to delete its images
-  Folder? folder = box.get(folderName);
-  if (folder != null) {
-    // ignore: unused_local_variable
-    for (var imagePath in folder.imagePaths) {
-      
+  Future<void> deleteFolder(String folderName) async {
+    var box = await openFolderBox();
+
+    // Retrieve the folder to delete its images
+    Folder? folder = box.get(folderName);
+    if (folder != null) {
+      // ignore: unused_local_variable
+      for (var imagePath in folder.imagePaths) {}
+
+      await box.delete(folderName);
     }
-    
-    await box.delete(folderName); 
   }
 }
-
-}
-
- 

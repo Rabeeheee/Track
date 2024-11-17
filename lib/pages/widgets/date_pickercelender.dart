@@ -8,12 +8,13 @@ class DatePickercelender extends StatefulWidget {
   final Function(DateTime) onDateSelected;
 
   const DatePickercelender({
-    Key? key, 
+    super.key,
     required this.currentDate,
-    required this.onDateSelected, 
-    }) : super(key: key);
+    required this.onDateSelected,
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _DateRowState createState() => _DateRowState();
 }
 
@@ -45,34 +46,39 @@ class _DateRowState extends State<DatePickercelender> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    
-    DateTime startOfWeek = selectedDate!.subtract(Duration(days: selectedDate!.weekday - 1));
+
+    DateTime startOfWeek =
+        selectedDate!.subtract(Duration(days: selectedDate!.weekday - 1));
 
     return GestureDetector(
-      onDoubleTap: () => _selectDate(context), 
+      onDoubleTap: () => _selectDate(context),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(7, (index) {
-          DateTime date = startOfWeek.add(Duration(days: index)); 
-          bool isSelected = date.day == selectedDate!.day && date.month == selectedDate!.month && date.year == selectedDate!.year;
+          DateTime date = startOfWeek.add(Duration(days: index));
+          bool isSelected = date.day == selectedDate!.day &&
+              date.month == selectedDate!.month &&
+              date.year == selectedDate!.year;
 
           return Column(
             children: [
               Text(
-                DateFormat.E().format(date), 
+                DateFormat.E().format(date),
                 style: TextStyle(
                   fontSize: 12,
                   color: themeProvider.themeData.canvasColor,
                   decoration: TextDecoration.none,
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               CircleAvatar(
                 backgroundColor: isSelected ? Colors.blue : Colors.transparent,
                 child: Text(
                   date.day.toString(),
                   style: TextStyle(
-                    color: isSelected ? Colors.white : themeProvider.themeData.canvasColor,
+                    color: isSelected
+                        ? Colors.white
+                        : themeProvider.themeData.canvasColor,
                   ),
                 ),
               ),

@@ -7,7 +7,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final List<Widget>? actions;
 
-  const CustomAppBar({required this.title, this.leading, this.actions});
+  const CustomAppBar({super.key, required this.title, this.leading, this.actions});
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -17,11 +17,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: TextStyle(
-          color: themeProvider.themeData.canvasColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-          fontFamily: 'Fonts'
-        ),
+            color: themeProvider.themeData.canvasColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+            fontFamily: 'Fonts'),
       ),
       leading: leading,
       actions: actions,

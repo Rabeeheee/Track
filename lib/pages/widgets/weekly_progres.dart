@@ -5,31 +5,30 @@ import 'package:trackitapp/services/models/hive_service.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 
 class WeeklyProgressGraph extends StatelessWidget {
+  const WeeklyProgressGraph({super.key});
+
   @override
   Widget build(BuildContext context) {
-
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return FutureBuilder(
       future: HiveService().calculateWeeklyPoints(),
       builder: (context, AsyncSnapshot<Map<String, int>> snapshot) {
         if (!snapshot.hasData) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
               backgroundColor: Colors.amber,
             ),
           );
         }
 
-        
-
         var weeklyPoints = snapshot.data!;
         List<BarChartGroupData> barGroups = [];
 
-        List<int> daysOrder = [1, 2, 3, 4, 5, 6, 7]; 
+        List<int> daysOrder = [1, 2, 3, 4, 5, 6, 7];
 
         for (int day in daysOrder) {
-          int points = weeklyPoints[day.toString()] ?? 0; 
+          int points = weeklyPoints[day.toString()] ?? 0;
           double percentage = (points / 100.0) * 100;
 
           barGroups.add(BarChartGroupData(
@@ -67,34 +66,56 @@ class WeeklyProgressGraph extends StatelessWidget {
             height: 300,
             child: BarChart(
               BarChartData(
-                gridData: FlGridData(show: false),
+                gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: false),
                 maxY: 100,
                 barGroups: barGroups,
                 titlesData: FlTitlesData(
                   show: true,
-                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles:
+                      const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
                       getTitlesWidget: (double value, TitleMeta meta) {
                         switch (value.toInt()) {
                           case 1:
-                            return Text('Mon', style: TextStyle(color: themeProvider.themeData.canvasColor, fontWeight: FontWeight.bold));
+                            return Text('Mon',
+                                style: TextStyle(
+                                    color: themeProvider.themeData.canvasColor,
+                                    fontWeight: FontWeight.bold));
                           case 2:
-                            return Text('Tue', style: TextStyle(color: themeProvider.themeData.canvasColor, fontWeight: FontWeight.bold));
+                            return Text('Tue',
+                                style: TextStyle(
+                                    color: themeProvider.themeData.canvasColor,
+                                    fontWeight: FontWeight.bold));
                           case 3:
-                            return Text('Wed', style: TextStyle(color: themeProvider.themeData.canvasColor, fontWeight: FontWeight.bold));
+                            return Text('Wed',
+                                style: TextStyle(
+                                    color: themeProvider.themeData.canvasColor,
+                                    fontWeight: FontWeight.bold));
                           case 4:
-                            return Text('Thu', style: TextStyle(color: themeProvider.themeData.canvasColor, fontWeight: FontWeight.bold));
+                            return Text('Thu',
+                                style: TextStyle(
+                                    color: themeProvider.themeData.canvasColor,
+                                    fontWeight: FontWeight.bold));
                           case 5:
-                            return Text('Fri', style: TextStyle(color: themeProvider.themeData.canvasColor, fontWeight: FontWeight.bold));
+                            return Text('Fri',
+                                style: TextStyle(
+                                    color: themeProvider.themeData.canvasColor,
+                                    fontWeight: FontWeight.bold));
                           case 6:
-                            return Text('Sat', style: TextStyle(color: themeProvider.themeData.canvasColor, fontWeight: FontWeight.bold));
+                            return Text('Sat',
+                                style: TextStyle(
+                                    color: themeProvider.themeData.canvasColor,
+                                    fontWeight: FontWeight.bold));
                           case 7:
-                            return Text('Sun', style: TextStyle(color: themeProvider.themeData.canvasColor, fontWeight: FontWeight.bold));
+                            return Text('Sun',
+                                style: TextStyle(
+                                    color: themeProvider.themeData.canvasColor,
+                                    fontWeight: FontWeight.bold));
                           default:
-                            return Text('');
+                            return const Text('');
                         }
                       },
                       reservedSize: 30,
@@ -106,7 +127,9 @@ class WeeklyProgressGraph extends StatelessWidget {
                       getTitlesWidget: (double value, TitleMeta meta) {
                         return Text(
                           '${value.toInt()}%',
-                          style: TextStyle(color: themeProvider.themeData.canvasColor, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: themeProvider.themeData.canvasColor,
+                              fontWeight: FontWeight.bold),
                         );
                       },
                       interval: 10,

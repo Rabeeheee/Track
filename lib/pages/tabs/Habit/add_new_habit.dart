@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -60,22 +62,21 @@ class _NewHabitState extends State<NewHabit> {
 
   String? selectedAvatar;
 
- @override
-void initState() {
-  super.initState();
-  
-  if (widget.habitId != 0) { 
-    isEditing = true;
-    loadHabitById(widget.habitId);
-    // _loadSelectedAvatar();
-  } else if (widget.title.isNotEmpty && widget.subtitle.isNotEmpty) {
-    _titleController.text = widget.title;
-    _quoteController.text = widget.subtitle;
-    _descriptionController.text = widget.description ?? '';
-    selectedAvatar = widget.selectedAvatarPath;
-  }
-}
+  @override
+  void initState() {
+    super.initState();
 
+    if (widget.habitId != 0) {
+      isEditing = true;
+      loadHabitById(widget.habitId);
+      // _loadSelectedAvatar();
+    } else if (widget.title.isNotEmpty && widget.subtitle.isNotEmpty) {
+      _titleController.text = widget.title;
+      _quoteController.text = widget.subtitle;
+      _descriptionController.text = widget.description ?? '';
+      selectedAvatar = widget.selectedAvatarPath;
+    }
+  }
 
   loadHabitById(int habitId) async {
     if (isEditing) {
@@ -89,11 +90,13 @@ void initState() {
     }
   }
 
+  // ignore: unused_element
   Future<void> _clearStoredAvatar() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.remove('selectedAvatar');
-}
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('selectedAvatar');
+  }
 
+  // ignore: unused_element
   void _saveHabit() async {
     int habitId = await _generateUniqueId();
 
@@ -114,8 +117,10 @@ void initState() {
         selectedAvatar == null;
       });
 
+      // ignore: duplicate_ignore
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Habit added successfully'),
           backgroundColor: Colors.green,
         ),
@@ -131,8 +136,10 @@ void initState() {
 
       await _hiveService.updateHabit(updatedHabit);
 
+      // ignore: duplicate_ignore
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Habit updated successfully'),
           backgroundColor: Colors.green,
         ),
@@ -155,6 +162,7 @@ void initState() {
   Future<void> _loadSelectedAvatar() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? loadedAvatarBase64 = prefs.getString('selectedAvatar');
+    // ignore: avoid_print
     print("Loaded avatar base64 from SharedPreferences: $loadedAvatarBase64");
 
     if (loadedAvatarBase64 != null) {
@@ -164,39 +172,41 @@ void initState() {
     }
   }
 
- Future<void> _pickImage() async {
-  String? base64Image;
-  Uint8List? imageBytes;
+  Future<void> _pickImage() async {
+    String? base64Image;
+    Uint8List? imageBytes;
 
-  if (kIsWeb) {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final bytes = await pickedFile.readAsBytes();
-      base64Image = base64Encode(bytes);
-      imageBytes = bytes;
-      print("Picked image for web as base64: $base64Image");
+    if (kIsWeb) {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        final bytes = await pickedFile.readAsBytes();
+        base64Image = base64Encode(bytes);
+        imageBytes = bytes;
+        // ignore: avoid_print
+        print("Picked image for web as base64: $base64Image");
+      }
+    } else {
+      final XFile? pickedFile =
+          await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        final bytes = await File(pickedFile.path).readAsBytes();
+        base64Image = base64Encode(bytes);
+        imageBytes = bytes;
+      }
     }
-  } else {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final bytes = await File(pickedFile.path).readAsBytes();
-      base64Image = base64Encode(bytes);
-      imageBytes = bytes;
+
+    if (imageBytes != null) {
+      setState(() {
+        selectedAvatar = base64Image;
+      });
     }
   }
 
-  if (imageBytes != null) {
-    setState(() {
-      selectedAvatar = base64Image; 
-    });
-  }
-}
-
+  // ignore: unused_element
   Future<String> _convertImageToBase64(String imagePath) async {
     final imageBytes = await File(imagePath).readAsBytes();
-    return base64Encode(imageBytes); 
+    return base64Encode(imageBytes);
   }
-
 
   void _randomizeQuote() {
     final randomIndex = Random().nextInt(Quotes.length);
@@ -209,34 +219,40 @@ void initState() {
     await _loadSelectedAvatar();
 
     if (_titleController.text.isEmpty) {
+      // ignore: duplicate_ignore
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Name cannot be empty"),
-                backgroundColor: Colors.red,
-),
+        const SnackBar(
+          content: Text("Name cannot be empty"),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
     if (_descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Description cannot be empty'),
-                backgroundColor: Colors.red,
-),
+        const SnackBar(
+          content: Text('Description cannot be empty'),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
     if (_quoteController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Quote cannot be empty'),
-                backgroundColor: Colors.red,
-),
+        const SnackBar(
+          content: Text('Quote cannot be empty'),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
 
     if (selectedAvatar == null || selectedAvatar!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Avatar cannot be empty'),
-        backgroundColor: Colors.red,
+        const SnackBar(
+          content: Text('Avatar cannot be empty'),
+          backgroundColor: Colors.red,
         ),
       );
       return;
@@ -268,11 +284,11 @@ void initState() {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -282,22 +298,23 @@ void initState() {
                   GestureDetector(
                     onTap: _pickImage,
                     child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: selectedAvatar != null
-                        ? MemoryImage(base64Decode(selectedAvatar!))
-                        : null,
-                    child: selectedAvatar == null
-                        ? Icon(Icons.add_a_photo, size: 50, color: Colors.grey)
-                        : null,
+                      radius: 50,
+                      backgroundImage: selectedAvatar != null
+                          ? MemoryImage(base64Decode(selectedAvatar!))
+                          : null,
+                      child: selectedAvatar == null
+                          ? const Icon(Icons.add_a_photo,
+                              size: 50, color: Colors.grey)
+                          : null,
+                    ),
                   ),
-                  ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   _buildTextField(themeProvider, 'Name', _titleController,
                       'Daily Check-in'),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   _buildTextField(themeProvider, 'Description',
                       _descriptionController, 'Description'),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   _buildTextField(
                     themeProvider,
                     'Quote',
@@ -305,22 +322,24 @@ void initState() {
                     'Believe in yourself.',
                     iconButton: IconButton(
                       onPressed: _randomizeQuote,
-                      icon: Icon(Icons.replay_outlined,
+                      icon: const Icon(Icons.replay_outlined,
                           size: 20, color: Colors.blueAccent),
                     ),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Column(
                 children: [
+                  // ignore: sized_box_for_whitespace
                   Container(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: _navigateToReminderScreen,
-                      child: Text(
+                      // ignore: sort_child_properties_last
+                      child: const Text(
                         'Next',
                         style: TextStyle(
                             color: Colors.white,
@@ -333,7 +352,7 @@ void initState() {
                           borderRadius: BorderRadius.circular(7),
                         ),
                         padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       ),
                     ),
                   ),
@@ -357,7 +376,7 @@ void initState() {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -374,16 +393,17 @@ void initState() {
                 if (iconButton != null) iconButton,
               ],
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             TextField(
               controller: controller,
               decoration: InputDecoration(
                 hintText: hintText,
-                hintStyle: TextStyle(color: const Color.fromARGB(255, 112, 111, 111)),
+                hintStyle:
+                    const TextStyle(color: Color.fromARGB(255, 112, 111, 111)),
                 filled: true,
                 fillColor: themeProvider.themeData.hintColor,
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,

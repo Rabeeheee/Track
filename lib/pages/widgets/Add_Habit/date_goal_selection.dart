@@ -10,7 +10,7 @@ class DateGoalSelection extends StatelessWidget {
   final ValueChanged<DateTime> onDateChanged;
   final ValueChanged<String> onGoalChanged;
 
-  const DateGoalSelection({
+  const DateGoalSelection({super.key, 
     required this.selectedStartDate,
     required this.goalDays,
     required this.onDateChanged,
@@ -56,8 +56,7 @@ class DateGoalSelection extends StatelessWidget {
                   children: [
                     Text(
                       DateFormat('MMM dd, yyyy').format(
-                        selectedStartDate ??
-                            DateTime.now(), 
+                        selectedStartDate ?? DateTime.now(),
                       ),
                       style: TextStyle(
                         fontSize: 12,
@@ -77,7 +76,7 @@ class DateGoalSelection extends StatelessWidget {
                           onDateChanged(pickedDate);
                         }
                       },
-                      icon:  Icon(
+                      icon: Icon(
                         Icons.calendar_today,
                         size: 15,
                         color: themeProvider.themeData.splashColor,
@@ -98,13 +97,13 @@ class DateGoalSelection extends StatelessWidget {
                 Row(
                   children: [
                     Text(goalDays,
-                        style:  TextStyle(
+                        style: TextStyle(
                             fontSize: 12,
                             color: themeProvider.themeData.splashColor,
                             fontWeight: FontWeight.bold)),
                     IconButton(
                       onPressed: () => _showGoalDaysPopup(context),
-                      icon:  Icon(
+                      icon: Icon(
                         Icons.arrow_forward_ios,
                         size: 15,
                         color: themeProvider.themeData.splashColor,

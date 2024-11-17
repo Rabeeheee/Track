@@ -17,7 +17,8 @@ import 'package:trackitapp/utils/login_manager.dart';
 import 'utils/theme_provider.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,18 +42,20 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProgressProvider()),
-        ChangeNotifierProvider(create: (_) => themeProvider),  
+        ChangeNotifierProvider(create: (_) => themeProvider),
         Provider<HiveService>(create: (_) => HiveService()),
         ChangeNotifierProvider(create: (_) => TimerService()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
 Future<void> _initializeNotifications() async {
-  const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-  final InitializationSettings initializationSettings = InitializationSettings(
+  const AndroidInitializationSettings androidInitializationSettings =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  // ignore: prefer_const_declarations
+  final InitializationSettings initializationSettings = const InitializationSettings(
     android: androidInitializationSettings,
   );
   await flutterLocalNotificationsPlugin.initialize(
@@ -65,22 +68,24 @@ void initializeTimeZones() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return AnimatedTheme(
       data: themeProvider.themeData,
-      duration: const Duration(seconds: 5), 
+      duration: const Duration(seconds: 5),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: FutureBuilder(
           future: LoginManager.getLoginStatus(),
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data == true) {
-              return BottomNav();
+              return const BottomNav();
             } else {
-              return SplashScreen();
+              return const SplashScreen();
             }
           },
         ),

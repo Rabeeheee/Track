@@ -8,27 +8,30 @@ import 'package:trackitapp/utils/theme_provider.dart';
 class HabitCard extends StatelessWidget {
   final Habit habit;
 
-  HabitCard({required this.habit});
+  const HabitCard({super.key, required this.habit});
 
   @override
   Widget build(BuildContext context) {
-      final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>NewHabit( 
-          habitId:0, 
-          title: habit.title, 
-          subtitle: habit.subtitle,
-          description: '',
-          )));
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NewHabit(
+                      habitId: 0,
+                      title: habit.title,
+                      subtitle: habit.subtitle,
+                      description: '',
+                    )));
       },
       child: Card(
         color: themeProvider.themeData.cardColor,
-        margin: EdgeInsets.symmetric(vertical: 8.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
         child: ListTile(
           leading: CircleAvatar(
-            radius: 20, 
-            backgroundImage: AssetImage(habit.image), 
+            radius: 20,
+            backgroundImage: AssetImage(habit.image),
           ),
           title: Text(
             habit.title,
@@ -40,7 +43,7 @@ class HabitCard extends StatelessWidget {
           ),
           subtitle: Text(
             habit.subtitle,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.grey,
               fontSize: 14,
             ),

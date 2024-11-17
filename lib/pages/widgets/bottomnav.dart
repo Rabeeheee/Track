@@ -14,6 +14,7 @@ class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _BottomNavState createState() => _BottomNavState();
 }
 
@@ -21,7 +22,7 @@ class _BottomNavState extends State<BottomNav> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    HabitScreen(
+    const HabitScreen(
       name: '',
       quote: '',
       selectedAvatarPath: '',
@@ -92,14 +93,15 @@ class _BottomNavState extends State<BottomNav> {
 
   Color _getIconColor(int index) {
     return _selectedIndex == index
-        ? Provider.of<ThemeProvider>(context).themeData.brightness == Brightness.dark
+        ? Provider.of<ThemeProvider>(context).themeData.brightness ==
+                Brightness.dark
             ? Colors.white
             : Colors.black
-        : Colors.grey; 
+        : Colors.grey;
   }
 
   double _getIconSize(int index) {
-    return _selectedIndex == index ? 30.0 : 24.0; 
+    return _selectedIndex == index ? 30.0 : 24.0;
   }
 
   @override
@@ -123,8 +125,9 @@ class _BottomNavState extends State<BottomNav> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(FontAwesomeIcons.feather, color: _getIconColor(0), size: _getIconSize(0)),
-                    Text('Habit'),
+                    Icon(FontAwesomeIcons.feather,
+                        color: _getIconColor(0), size: _getIconSize(0)),
+                    const Text('Habit'),
                   ],
                 ),
               ),
@@ -133,8 +136,9 @@ class _BottomNavState extends State<BottomNav> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(FontAwesomeIcons.calendarWeek, color: _getIconColor(1), size: _getIconSize(1)),
-                    Text('Calendar'),
+                    Icon(FontAwesomeIcons.calendarWeek,
+                        color: _getIconColor(1), size: _getIconSize(1)),
+                    const Text('Calendar'),
                   ],
                 ),
               ),
@@ -143,8 +147,9 @@ class _BottomNavState extends State<BottomNav> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.grid_view_rounded, color: _getIconColor(2), size: _getIconSize(2)),
-                    Text('Priority'),
+                    Icon(Icons.grid_view_rounded,
+                        color: _getIconColor(2), size: _getIconSize(2)),
+                    const Text('Priority'),
                   ],
                 ),
               ),
@@ -153,8 +158,9 @@ class _BottomNavState extends State<BottomNav> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(FontAwesomeIcons.clock, color: _getIconColor(3), size: _getIconSize(3)),
-                    Text('Focus'),
+                    Icon(FontAwesomeIcons.clock,
+                        color: _getIconColor(3), size: _getIconSize(3)),
+                    const Text('Focus'),
                   ],
                 ),
               ),
@@ -163,8 +169,9 @@ class _BottomNavState extends State<BottomNav> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.more_horiz_outlined, size: _getIconSize(4), color: _getIconColor(4)),
-                    Text('More'),
+                    Icon(Icons.more_horiz_outlined,
+                        size: _getIconSize(4), color: _getIconColor(4)),
+                    const Text('More'),
                   ],
                 ),
               ),

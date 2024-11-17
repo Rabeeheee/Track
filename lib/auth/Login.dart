@@ -8,7 +8,6 @@ import 'package:trackitapp/auth/getstart.dart';
 import 'package:trackitapp/utils/login_manager.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 
-
 // ignore: use_key_in_widget_constructors
 class LoginScreen extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -68,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                           Text(
+                          Text(
                             'Welcome',
                             style: TextStyle(
                               fontSize: 23.0,
@@ -82,13 +81,13 @@ class LoginScreen extends StatelessWidget {
                           Container(
                             height: 60,
                             child: TextFormField(
-                              controller: _usernameController, 
+                              controller: _usernameController,
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: const Color.fromARGB(103, 158, 158, 158),
-                                labelText: 'Username',labelStyle: TextStyle(
-                                  color: Colors.grey
-                                ),
+                                fillColor:
+                                    const Color.fromARGB(103, 158, 158, 158),
+                                labelText: 'Username',
+                                labelStyle: const TextStyle(color: Colors.grey),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                   borderSide: const BorderSide(
@@ -125,13 +124,14 @@ class LoginScreen extends StatelessWidget {
                             child: ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                 await _hiveService.saveUsername(_usernameController.text);
-                                 await LoginManager.setLoginStatus(true);
+                                  await _hiveService
+                                      .saveUsername(_usernameController.text);
+                                  await LoginManager.setLoginStatus(true);
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => Getstart(
-                                        username: _usernameController.text, 
+                                        username: _usernameController.text,
                                       ),
                                     ),
                                   );

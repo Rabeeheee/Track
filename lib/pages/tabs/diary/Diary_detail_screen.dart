@@ -1,3 +1,6 @@
+
+// ignore_for_file: file_names
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +13,8 @@ import 'package:trackitapp/utils/theme_provider.dart';
 class DiaryDetailScreen extends StatelessWidget {
   final Diary diary;
 
-  DiaryDetailScreen({required this.diary});
+  // ignore: use_key_in_widget_constructors
+  const DiaryDetailScreen({required this.diary});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,8 @@ class DiaryDetailScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back, color: themeProvider.themeData.splashColor),
+          icon: Icon(Icons.arrow_back,
+              color: themeProvider.themeData.splashColor),
         ),
         title: diary.title,
         actions: [
@@ -32,13 +37,15 @@ class DiaryDetailScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddDiaryScreen(date: diary.date, diary: diary),
+                  builder: (context) =>
+                      AddDiaryScreen(date: diary.date, diary: diary),
                 ),
               );
             },
           ),
           IconButton(
-            icon: Icon(Icons.delete, color: themeProvider.themeData.splashColor),
+            icon:
+                Icon(Icons.delete, color: themeProvider.themeData.splashColor),
             onPressed: () {
               _showDeleteConfirmationDialog(context);
             },
@@ -60,7 +67,7 @@ class DiaryDetailScreen extends StatelessWidget {
                     BoxShadow(
                       color: Colors.black.withOpacity(0.2),
                       blurRadius: 10,
-                      offset: Offset(0, 5), 
+                      offset: const Offset(0, 5),
                     ),
                   ],
                   image: DecorationImage(
@@ -69,7 +76,7 @@ class DiaryDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
             ],
             Text(
               "Date: ${diary.date.toLocal().toString().split(' ')[0]}",
@@ -79,7 +86,7 @@ class DiaryDetailScreen extends StatelessWidget {
                 color: themeProvider.themeData.splashColor,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
@@ -91,13 +98,13 @@ class DiaryDetailScreen extends StatelessWidget {
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
                         blurRadius: 8,
-                        offset: Offset(0, 4),
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
                   child: Text(
                     diary.content,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       color: Colors.black87,
                     ),
@@ -116,26 +123,29 @@ class DiaryDetailScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Delete Diary Entry"),
-          content: Text("Are you sure you want to delete this diary entry?"),
+          title: const Text("Delete Diary Entry"),
+          content: const Text("Are you sure you want to delete this diary entry?"),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             TextButton(
               onPressed: () async {
                 final diaryBox = await Hive.openBox<Diary>('diarybox');
                 await diaryBox.delete(diary.id);
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
+                // ignore: use_build_context_synchronously
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Diary entry deleted successfully")),
+                  const SnackBar(content: Text("Diary entry deleted successfully")),
                 );
               },
-              child: Text("Delete"),
+              child: const Text("Delete"),
             ),
           ],
         );

@@ -5,17 +5,20 @@ import 'package:trackitapp/services/models/notification_services.dart';
 import 'package:trackitapp/utils/theme_provider.dart';
 
 class ReminderWidget extends StatefulWidget {
-    final String title;
+  final String title;
   final String quote;
   final Function(List<DateTime>) onReminderTimesChanged;
   final DateTime? startDate;
 
-  ReminderWidget({
+  const ReminderWidget({super.key, 
     required this.onReminderTimesChanged,
-    required this.startDate, required this.title, required this.quote, 
+    required this.startDate,
+    required this.title,
+    required this.quote,
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _ReminderWidgetState createState() => _ReminderWidgetState();
 }
 
@@ -23,48 +26,44 @@ class _ReminderWidgetState extends State<ReminderWidget> {
   List<DateTime> selectedReminderTimes = [];
   final NotificationServices notificationService = NotificationServices();
 
-
   Future<void> _selectTime(BuildContext context) async {
-    
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
     if (pickedTime != null && widget.startDate != null) {
       final DateTime finalReminderTime = DateTime(
-        widget.startDate!.year, 
+        widget.startDate!.year,
         widget.startDate!.month,
         widget.startDate!.day,
         pickedTime.hour,
         pickedTime.minute,
       );
-      
+
       setState(() {
         selectedReminderTimes.add(finalReminderTime);
       });
 
       widget.onReminderTimesChanged(selectedReminderTimes);
-      
-      
+
       DateTime now = DateTime.now();
       if (finalReminderTime.isBefore(now)) {
-        finalReminderTime.add(Duration(days: 1));
+        finalReminderTime.add(const Duration(days: 1));
       }
       Duration delay = finalReminderTime.difference(now);
 
-   
       notificationService.scheduleNotification(
-        id: finalReminderTime.hashCode,  
+        id: finalReminderTime.hashCode,
         title: widget.title,
         body: widget.quote,
-        delay: delay.inSeconds,  
+        delay: delay.inSeconds,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-        final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -80,10 +79,9 @@ class _ReminderWidgetState extends State<ReminderWidget> {
                 Text(
                   'Reminder',
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: themeProvider.themeData.splashColor
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: themeProvider.themeData.splashColor),
                 ),
                 IconButton(
                   icon: const Icon(Icons.add, color: Colors.blueAccent),
@@ -99,15 +97,15 @@ class _ReminderWidgetState extends State<ReminderWidget> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.access_time, color: Colors.blueAccent),
+                          const Icon(Icons.access_time,
+                              color: Colors.blueAccent),
                           const SizedBox(width: 8),
                           Text(
                             DateFormat('hh:mm a').format(reminderTime),
                             style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black
-                            ),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                         ],
                       ),
@@ -116,13 +114,14 @@ class _ReminderWidgetState extends State<ReminderWidget> {
                         onPressed: () {
                           setState(() {
                             selectedReminderTimes.remove(reminderTime);
-                            widget.onReminderTimesChanged(selectedReminderTimes);
+                            widget
+                                .onReminderTimesChanged(selectedReminderTimes);
                           });
                         },
                       ),
                     ],
                   );
-                }).toList(),
+                }),
               ],
             ),
           ],

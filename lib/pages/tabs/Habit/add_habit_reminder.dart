@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackitapp/pages/widgets/Add_Habit/daily_selection.dart';
@@ -20,16 +22,14 @@ class AddHabitReminder extends StatefulWidget {
   final String? image;
   final int habitId;
   final String description;
-  
 
   const AddHabitReminder(
       {super.key,
       required this.title,
       required this.quote,
       required this.image,
-      required this.habitId, 
-      required this.description
-      });
+      required this.habitId,
+      required this.description});
 
   @override
   State<AddHabitReminder> createState() => _AddHabitReminderState();
@@ -53,9 +53,6 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
     super.initState();
     notificationService.initNotification();
   }
-
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +95,6 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                               selectedFrequency = frequency;
                             });
                           },
-
                         ),
                         const SizedBox(height: 32),
                         if (selectedFrequency == 'Daily')
@@ -118,7 +114,6 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                               });
                             },
                           ),
-                       
                       ],
                     )),
               ),
@@ -162,7 +157,8 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  child: Text('Save',
+                  // ignore: sort_child_properties_last
+                  child: const Text('Save',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -171,6 +167,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                     if (widget.title.isNotEmpty && widget.quote.isNotEmpty) {
                       int habitId = widget.habitId;
 
+                      // ignore: avoid_print
                       print('not empty');
 
                       AddhabitModal? existingHabit =
@@ -184,7 +181,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                         frequency: selectedFrequency ?? 'Daily',
                         partOfDay: selectedPartOfDay,
                         isCompleted: existingHabit?.isCompleted ?? false,
-                        id: habitId, 
+                        id: habitId,
                         description: widget.description,
                       );
 
@@ -204,7 +201,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
 
                         if (scheduledDateTime.isBefore(now)) {
                           scheduledDateTime =
-                              scheduledDateTime.add(Duration(days: 1));
+                              scheduledDateTime.add(const Duration(days: 1));
                         }
 
                         Duration delay = scheduledDateTime.difference(now);
@@ -217,19 +214,27 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                         );
                       }
 
+                      // ignore: avoid_print
                       print(widget.title);
+                      // ignore: avoid_print
                       print('snackbar top');
+                      // ignore: duplicate_ignore
+                      // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Habit saved succesfully!',style: TextStyle(color: themeProvider.themeData.splashColor,),),
-                        backgroundColor: Colors.green,
+                        SnackBar(
+                          content: Text(
+                            'Habit saved succesfully!',
+                            style: TextStyle(
+                              color: themeProvider.themeData.splashColor,
+                            ),
+                          ),
+                          backgroundColor: Colors.green,
                         ),
                       );
 
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => BottomNav()
-                        ),
+                        MaterialPageRoute(builder: (context) => const BottomNav()),
                         (Route<dynamic> route) => false,
                       );
                     }
@@ -239,7 +244,7 @@ class _AddHabitReminderState extends State<AddHabitReminder> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(7),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
                 ),
               ),

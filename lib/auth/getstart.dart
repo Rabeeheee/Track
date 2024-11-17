@@ -1,13 +1,12 @@
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trackitapp/utils/colors.dart';
 
 import 'package:trackitapp/pages/other/servey.dart';
 
-
 class Getstart extends StatelessWidget {
   final String username;
-  const Getstart({super.key,required this.username});
+  const Getstart({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -70,42 +69,50 @@ class Getstart extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white, 
+                    color: Colors.white,
                   ),
                 ),
               ),
-              const SizedBox(height: 15,),
-              Text("Hello , $username \n To let you know your rating, let's \n go through some \n questions.",
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 17,
-                color: AppColors.secondaryColor,
-                fontWeight: FontWeight.w400
-              ),),
-              const SizedBox(height: 15,),
-             ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SurveyScreen(habitProgress: {},)));
-                              },
-                              // ignore: sort_child_properties_last
-                              child: const Text(
-                                'Get Started',
-                                style: TextStyle(
-                                  fontFamily: 'Fonts',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.secondaryColor,
-                                foregroundColor: AppColors.backgroundColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(7),
-                                ),
-                              ),
-                            ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                "Hello , $username \n To let you know your rating, let's \n go through some \n questions.",
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontSize: 17,
+                    color: AppColors.secondaryColor,
+                    fontWeight: FontWeight.w400),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SurveyScreen(
+                                habitProgress: {},
+                              )));
+                },
+                // ignore: sort_child_properties_last
+                child: const Text(
+                  'Get Started',
+                  style: TextStyle(
+                    fontFamily: 'Fonts',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.secondaryColor,
+                  foregroundColor: AppColors.backgroundColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

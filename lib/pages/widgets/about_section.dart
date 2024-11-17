@@ -7,6 +7,7 @@ class AboutSection extends StatefulWidget {
   final bool isAboutExpanded;
   final Function toggleAboutSection;
 
+  // ignore: use_super_parameters
   const AboutSection({
     Key? key,
     required this.isAboutExpanded,
@@ -14,6 +15,7 @@ class AboutSection extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AboutSectionState createState() => _AboutSectionState();
 }
 
@@ -33,7 +35,7 @@ class _AboutSectionState extends State<AboutSection> {
               Icons.star_rate_rounded,
               color: themeProvider.themeData.canvasColor,
             ),
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
             Text(
               'About TrackIt',
               style: TextStyle(
@@ -54,7 +56,7 @@ class _AboutSectionState extends State<AboutSection> {
           ],
         ),
         if (widget.isAboutExpanded) ...[
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           for (var note in _aboutNotes)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),

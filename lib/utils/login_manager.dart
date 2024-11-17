@@ -10,7 +10,7 @@ class LoginManager {
 
   static Future<bool> getLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_isLoggedInKey) ?? false; 
+    return prefs.getBool(_isLoggedInKey) ?? false;
   }
 
   static Future<void> clearLoginStatus() async {

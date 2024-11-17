@@ -16,7 +16,7 @@ class HabitDeletionService {
     required List<int> selectedNightIndex,
     required List<AddhabitModal> otherHabits,
     required List<int> selectedOtherIndex,
-    required VoidCallback onHabitsDeleted, 
+    required VoidCallback onHabitsDeleted,
   }) async {
     List<AddhabitModal> habitsToDelete = [];
 
@@ -24,10 +24,10 @@ class HabitDeletionService {
         selectedMorningIndex.contains(morningHabits.indexOf(habit))));
     habitsToDelete.addAll(afternoonHabits.where((habit) =>
         selectedAfternoonIndex.contains(afternoonHabits.indexOf(habit))));
-    habitsToDelete.addAll(nightHabits.where((habit) =>
-        selectedNightIndex.contains(nightHabits.indexOf(habit))));
-    habitsToDelete.addAll(otherHabits.where((habit) =>
-        selectedOtherIndex.contains(otherHabits.indexOf(habit))));
+    habitsToDelete.addAll(nightHabits.where(
+        (habit) => selectedNightIndex.contains(nightHabits.indexOf(habit))));
+    habitsToDelete.addAll(otherHabits.where(
+        (habit) => selectedOtherIndex.contains(otherHabits.indexOf(habit))));
 
     for (var habit in habitsToDelete) {
       await _hiveService.deleteHabit(habit as int);

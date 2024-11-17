@@ -14,7 +14,7 @@ class SectionTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +28,7 @@ class SectionTitleWidget extends StatelessWidget {
             color: themeProvider.themeData.splashColor,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Container(
           height: 2,
           width: 90,

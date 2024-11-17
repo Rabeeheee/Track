@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:trackitapp/auth/Login.dart';
 import 'package:trackitapp/utils/colors.dart';
 
-
 Widget build6(BuildContext context) {
   return GestureDetector(
     onTap: () {
@@ -18,11 +17,11 @@ Widget build6(BuildContext context) {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 50, right: 50, top: 90),
+          const Padding(
+            padding: EdgeInsets.only(left: 50, right: 50, top: 90),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Padding(
                   padding: EdgeInsets.only(right: 300),
                   child: Icon(
@@ -69,7 +68,7 @@ Widget build6(BuildContext context) {
                 decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 72, 72, 72),
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                           color: Colors.black,
                           spreadRadius: 2,
@@ -143,10 +142,10 @@ Widget build6(BuildContext context) {
               ),
             ],
           ),
-          Center(
+          const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
+              children: [
                 Padding(
                   padding: EdgeInsets.only(bottom: 60),
                   child: Text(

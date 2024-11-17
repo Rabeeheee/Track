@@ -6,22 +6,17 @@ import 'package:trackitapp/utils/theme_provider.dart';
 import 'package:trackitapp/services/models/progress_modal.dart';
 
 class OverallProgress extends StatefulWidget {
-  
   const OverallProgress({super.key});
 
   @override
   OverallProgressState createState() => OverallProgressState();
 }
 
-
-
 class OverallProgressState extends State<OverallProgress> {
-
-
-
   Future<double> calculateOverallProgress() async {
     var hiveService = HiveService();
-    List<WeeklyProgress> weeklyProgressList = await hiveService.getWeeklyProgress();
+    List<WeeklyProgress> weeklyProgressList =
+        await hiveService.getWeeklyProgress();
 
     int totalPoints = 0;
     int totalPossiblePoints = 0;
@@ -30,6 +25,7 @@ class OverallProgressState extends State<OverallProgress> {
 
     for (var progress in weeklyProgressList) {
       totalPoints += progress.points;
+      // ignore: avoid_print
       print('Weekly Points: ${progress.points}, Total Points: $totalPoints');
     }
 
@@ -37,12 +33,14 @@ class OverallProgressState extends State<OverallProgress> {
 
     if (totalPossiblePoints > 0) {
       double overallProgress = (totalPoints / totalPossiblePoints) * 100;
+      // ignore: avoid_print
       print('Overall Progress: $overallProgress%');
       return overallProgress;
     }
 
     return 0;
   }
+
   @override
   void initState() {
     super.initState();
@@ -58,17 +56,17 @@ class OverallProgressState extends State<OverallProgress> {
       future: calculateOverallProgress(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); 
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
-          return Text("Error calculating progress"); 
+          return const Text("Error calculating progress");
         } else {
           double overallProgress = snapshot.data ?? 0.0;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 8),
                 child: Text(
                   'Overview',
                   style: TextStyle(
@@ -85,22 +83,21 @@ class OverallProgressState extends State<OverallProgress> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   child: Column(
                     children: [
                       Text(
                         'Overall Progress',
                         style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Fonts',
-                          fontWeight: FontWeight.bold,
-                          color: themeProvider.themeData.splashColor
-                        ),
+                            fontSize: 20,
+                            fontFamily: 'Fonts',
+                            fontWeight: FontWeight.bold,
+                            color: themeProvider.themeData.splashColor),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Container(
                         height: 250,
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.grey[200],
@@ -117,7 +114,11 @@ class OverallProgressState extends State<OverallProgress> {
                                     Color(0xFF73C5C5),
                                     Color(0xFF009596),
                                     Color(0xFF005F60),
-                                  ], stops: [0.1, 0.40, 0.80]),
+                                  ], stops: [
+                                    0.1,
+                                    0.40,
+                                    0.80
+                                  ]),
                                 ),
                               ],
                               axisLineStyle: AxisLineStyle(
@@ -132,7 +133,7 @@ class OverallProgressState extends State<OverallProgress> {
                                 GaugeAnnotation(
                                   widget: Text(
                                     overallProgress.toStringAsFixed(0),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
                                       fontFamily: 'Fonts',

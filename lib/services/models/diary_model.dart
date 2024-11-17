@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import 'package:hive/hive.dart';
 
 part 'diary_model.g.dart';

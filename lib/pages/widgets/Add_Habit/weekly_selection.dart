@@ -6,14 +6,15 @@ class WeeklySelectionWidget extends StatefulWidget {
   final int? selectedWeekdays;
   final Function(int?) onSelectWeekday;
 
+  // ignore: use_super_parameters
   const WeeklySelectionWidget({
     Key? key,
     required this.selectedWeekdays,
     required this.onSelectWeekday,
-    
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _WeeklySelectionWidgetState createState() => _WeeklySelectionWidgetState();
 }
 
@@ -25,38 +26,37 @@ class _WeeklySelectionWidgetState extends State<WeeklySelectionWidget> {
   void initState() {
     super.initState();
 
-   
     _selectedWeekday = widget.selectedWeekdays ?? 4;
 
-    
     _scrollController = ScrollController(
-      initialScrollOffset: (_selectedWeekday - 1) * 60.0, 
+      initialScrollOffset: (_selectedWeekday - 1) * 60.0,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-        final themeProvider = Provider.of<ThemeProvider>(context);
+    // ignore: unused_local_variable
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Select How Many Days Per Week:',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
+        // ignore: sized_box_for_whitespace
         Container(
-          height: 200, 
+          height: 200,
           child: _buildScrollableList(),
         ),
       ],
     );
   }
 
-
   Widget _buildScrollableList() {
-        final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     int itemCount = 7;
     return ListView.builder(
@@ -69,9 +69,9 @@ class _WeeklySelectionWidgetState extends State<WeeklySelectionWidget> {
         return GestureDetector(
           onTap: () {
             setState(() {
-              _selectedWeekday = index + 1; 
+              _selectedWeekday = index + 1;
             });
-            widget.onSelectWeekday(_selectedWeekday); 
+            widget.onSelectWeekday(_selectedWeekday);
           },
           child: Center(
             child: Text(
@@ -79,8 +79,11 @@ class _WeeklySelectionWidgetState extends State<WeeklySelectionWidget> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.blue : themeProvider.themeData.splashColor,
-                decoration: isSelected ? TextDecoration.underline : TextDecoration.none,
+                color: isSelected
+                    ? Colors.blue
+                    : themeProvider.themeData.splashColor,
+                decoration:
+                    isSelected ? TextDecoration.underline : TextDecoration.none,
               ),
             ),
           ),
@@ -91,7 +94,7 @@ class _WeeklySelectionWidgetState extends State<WeeklySelectionWidget> {
 
   @override
   void dispose() {
-    _scrollController.dispose(); 
+    _scrollController.dispose();
     super.dispose();
   }
 }

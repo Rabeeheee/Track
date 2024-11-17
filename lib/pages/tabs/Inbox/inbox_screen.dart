@@ -17,6 +17,7 @@ class InboxScreen extends StatefulWidget {
 }
 
 class _InboxScreenState extends State<InboxScreen> {
+  // ignore: prefer_final_fields
   DateTime _selectedDate = DateTime.now();
   final HiveService _hiveService = HiveService();
   List<Task> tasksForSelectedDate = [];
@@ -100,13 +101,13 @@ class _InboxScreenState extends State<InboxScreen> {
           onSave: () async {
             if (titleController.text.isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Title cannot be empty!')),
+                const SnackBar(content: Text('Title cannot be empty!')),
               );
               return;
             }
 
             if (taskToEdit == null) {
-              String uniqueId = Uuid().v4();
+              String uniqueId = const Uuid().v4();
               Task newTask = Task(
                 id: uniqueId,
                 likeToDo: titleController.text,
@@ -138,205 +139,210 @@ class _InboxScreenState extends State<InboxScreen> {
     _fetchTasksForDate(_selectedDate);
   }
 
- @override
-Widget build(BuildContext context) {
-  final themeProvider = Provider.of<ThemeProvider>(context);
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
-  return Scaffold(
-    backgroundColor: themeProvider.themeData.scaffoldBackgroundColor,
-    appBar: AppBar(
-      leading: isAnyTaskSelected
-          ? IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: _resetSelection,
-            )
-          : null,
-      title: isAnyTaskSelected
-          ? Text(
-              "Select Task",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Fonts',
-              ),
-            )
-          : Text(
-              "Inbox",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Fonts',
-              ),
-            ),
-      actions: isAnyTaskSelected
-          ? [
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () async {
-                  var selectedTask = tasksForSelectedDate
-                      .firstWhere((task) => task.isSelected);
+    return Scaffold(
+        backgroundColor: themeProvider.themeData.scaffoldBackgroundColor,
+        appBar: AppBar(
+          leading: isAnyTaskSelected
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: _resetSelection,
+                )
+              : null,
+          title: isAnyTaskSelected
+              ? const Text(
+                  "Select Task",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Fonts',
+                  ),
+                )
+              : const Text(
+                  "Inbox",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Fonts',
+                  ),
+                ),
+          actions: isAnyTaskSelected
+              ? [
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () async {
+                      var selectedTask = tasksForSelectedDate
+                          .firstWhere((task) => task.isSelected);
 
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        backgroundColor: themeProvider.themeData.cardColor,
-                        title: Text(
-                          "Confirm Deletion",
-                          style: TextStyle(
-                              color: themeProvider.themeData.splashColor),
-                        ),
-                        content: Text(
-                          "Are you sure you want to delete this task?",
-                          style: TextStyle(
-                              color: themeProvider.themeData.splashColor),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              "Cancel",
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: themeProvider.themeData.cardColor,
+                            title: Text(
+                              "Confirm Deletion",
                               style: TextStyle(
                                   color: themeProvider.themeData.splashColor),
                             ),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              await _hiveService.deleteTask(selectedTask.id!);
-                              _fetchTasksForDate(_selectedDate);
-                              _resetSelection();
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              "Delete",
-                              style: TextStyle(color: Colors.red),
+                            content: Text(
+                              "Are you sure you want to delete this task?",
+                              style: TextStyle(
+                                  color: themeProvider.themeData.splashColor),
                             ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  var selectedTask = tasksForSelectedDate
-                      .firstWhere((task) => task.isSelected);
-                  _showTaskDialog(context, taskToEdit: selectedTask);
-                },
-              ),
-            ]
-          : [],
-    ),
-    body: Padding(
-      padding: EdgeInsets.all(8),
-      child: tasksForSelectedDate.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/no_item.png',
-                    width: 150,
-                    height: 150,
-                  ),
-                 
-                 
-                ],
-              ),
-            )
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: tasksForSelectedDate.length,
-                    itemBuilder: (context, index) {
-                      final task = tasksForSelectedDate[index];
-                      return GestureDetector(
-                        onLongPress: () => _selectTask(task),
-                        onTap: _resetSelection,
-                        child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          decoration: BoxDecoration(
-                            color: task.isSelected
-                                ? Colors.grey
-                                : themeProvider.themeData.cardColor,
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                spreadRadius: 1,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  "Cancel",
+                                  style: TextStyle(
+                                      color:
+                                          themeProvider.themeData.splashColor),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  await _hiveService
+                                      .deleteTask(selectedTask.id!);
+                                  _fetchTasksForDate(_selectedDate);
+                                  _resetSelection();
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text(
+                                  "Delete",
+                                  style: TextStyle(color: Colors.red),
+                                ),
                               ),
                             ],
-                          ),
-                          child: ListTile(
-                            leading: Checkbox(
-                              checkColor: themeProvider.themeData.canvasColor,
-                              value: task.isCompleted,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  _toggleTaskCompletion(task);
-                                });
-                              },
-                              activeColor: themeProvider.themeData.primaryColor,
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 10.0),
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  task.likeToDo,
-                                  style: TextStyle(
-                                    color: themeProvider.themeData.splashColor,
-                                    decoration: task.isCompleted
-                                        ? TextDecoration.lineThrough
-                                        : TextDecoration.none,
-                                    decorationColor: task.isCompleted
-                                        ? themeProvider.themeData.canvasColor
-                                        : Colors.transparent,
-                                    decorationThickness: 2,
-                                  ),
-                                ),
-                                Text(
-                                  task.Descrition,
-                                  style: TextStyle(
-                                    color: themeProvider.themeData.splashColor,
-                                    decoration: task.isCompleted
-                                        ? TextDecoration.lineThrough
-                                        : TextDecoration.none,
-                                    decorationColor: task.isCompleted
-                                        ? themeProvider.themeData.canvasColor
-                                        : Colors.transparent,
-                                    decorationThickness: 2,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            trailing: Text(
-                              task.priority,
-                              style: TextStyle(
-                                color: themeProvider.themeData.splashColor,
-                              ),
-                            ),
-                          ),
-                        ),
+                          );
+                        },
                       );
                     },
                   ),
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      var selectedTask = tasksForSelectedDate
+                          .firstWhere((task) => task.isSelected);
+                      _showTaskDialog(context, taskToEdit: selectedTask);
+                    },
+                  ),
+                ]
+              : [],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8),
+          child: tasksForSelectedDate.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/no_item.png',
+                        width: 150,
+                        height: 150,
+                      ),
+                    ],
+                  ),
+                )
+              : Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: tasksForSelectedDate.length,
+                        itemBuilder: (context, index) {
+                          final task = tasksForSelectedDate[index];
+                          return GestureDetector(
+                            onLongPress: () => _selectTask(task),
+                            onTap: _resetSelection,
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                color: task.isSelected
+                                    ? Colors.grey
+                                    : themeProvider.themeData.cardColor,
+                                borderRadius: BorderRadius.circular(8),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: ListTile(
+                                leading: Checkbox(
+                                  checkColor:
+                                      themeProvider.themeData.canvasColor,
+                                  value: task.isCompleted,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      _toggleTaskCompletion(task);
+                                    });
+                                  },
+                                  activeColor:
+                                      themeProvider.themeData.primaryColor,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 10.0),
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      task.likeToDo,
+                                      style: TextStyle(
+                                        color:
+                                            themeProvider.themeData.splashColor,
+                                        decoration: task.isCompleted
+                                            ? TextDecoration.lineThrough
+                                            : TextDecoration.none,
+                                        decorationColor: task.isCompleted
+                                            ? themeProvider
+                                                .themeData.canvasColor
+                                            : Colors.transparent,
+                                        decorationThickness: 2,
+                                      ),
+                                    ),
+                                    Text(
+                                      task.Descrition,
+                                      style: TextStyle(
+                                        color:
+                                            themeProvider.themeData.splashColor,
+                                        decoration: task.isCompleted
+                                            ? TextDecoration.lineThrough
+                                            : TextDecoration.none,
+                                        decorationColor: task.isCompleted
+                                            ? themeProvider
+                                                .themeData.canvasColor
+                                            : Colors.transparent,
+                                        decorationThickness: 2,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                trailing: Text(
+                                  task.priority,
+                                  style: TextStyle(
+                                    color: themeProvider.themeData.splashColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-    ),
-    floatingActionButton: CustomFAB(onPressed: (){
-       _showTaskDialog(context);
-    })
-  );
-}
-
+        ),
+        floatingActionButton: CustomFAB(onPressed: () {
+          _showTaskDialog(context);
+        }));
+  }
 }

@@ -5,11 +5,13 @@ class FrequencySelectionWidget extends StatelessWidget {
   final String? selectedFrequency;
   final Function(String) onSelectFrequency;
 
-  const FrequencySelectionWidget({
-    Key? key,
-    required this.selectedFrequency,
-    required this.onSelectFrequency,z
-  }) : super(key: key);
+  // ignore: use_super_parameters
+  const FrequencySelectionWidget(
+      {Key? key,
+      required this.selectedFrequency,
+      required this.onSelectFrequency,
+      z})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class FrequencySelectionWidget extends StatelessWidget {
             onSelectFrequency('Daily');
           },
         ),
-        SizedBox(width: 16),
+        const SizedBox(width: 16),
         SelectableTextWidget(
           text: 'Weekly',
           isSelected: selectedFrequency == 'Weekly',
@@ -31,8 +33,7 @@ class FrequencySelectionWidget extends StatelessWidget {
             onSelectFrequency('Weekly');
           },
         ),
-        SizedBox(width: 16),
-        
+        const SizedBox(width: 16),
       ],
     );
   }

@@ -7,10 +7,11 @@ class SelectableTextWidget extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  const SelectableTextWidget({super.key, 
-  required this.text, 
-  required this.isSelected, 
-  required this.onTap, 
+  const SelectableTextWidget({
+    super.key,
+    required this.text,
+    required this.isSelected,
+    required this.onTap,
   });
 
   @override
@@ -24,7 +25,6 @@ class SelectableTextWidget extends StatelessWidget {
         style: TextStyle(
           fontSize: 18,
           color: isSelected ? Colors.blue : themeProvider.themeData.splashColor,
-          
         ),
       ),
     );

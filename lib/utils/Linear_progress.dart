@@ -1,3 +1,6 @@
+
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:trackitapp/utils/colors.dart';
 
@@ -5,9 +8,9 @@ class CommonProgressIndicator extends StatelessWidget {
   final double progressValue;
 
   const CommonProgressIndicator({
-    Key? key,
+    super.key,
     required this.progressValue,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class CommonProgressIndicator extends StatelessWidget {
         child: LinearProgressIndicator(
           value: progressValue,
           backgroundColor: Colors.transparent,
-          valueColor: AlwaysStoppedAnimation<Color>(AppColors.secondaryColor),
+          valueColor: const AlwaysStoppedAnimation<Color>(AppColors.secondaryColor),
         ),
       ),
     );

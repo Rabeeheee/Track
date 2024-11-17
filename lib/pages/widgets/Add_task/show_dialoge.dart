@@ -13,7 +13,7 @@ class TaskDialog extends StatefulWidget {
   final VoidCallback onSave;
 
   const TaskDialog({
-    Key? key,
+    super.key,
     required this.titleController,
     required this.descriptionController,
     required this.selectedPriority,
@@ -21,9 +21,10 @@ class TaskDialog extends StatefulWidget {
     required this.onPriorityChanged,
     required this.onDateChanged,
     required this.onSave,
-  }) : super(key: key);
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _TaskDialogState createState() => _TaskDialogState();
 }
 
@@ -40,7 +41,7 @@ class _TaskDialogState extends State<TaskDialog> {
 
   @override
   Widget build(BuildContext context) {
-        final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Center(
       child: Material(
@@ -62,44 +63,46 @@ class _TaskDialogState extends State<TaskDialog> {
                 controller: widget.titleController,
                 decoration: InputDecoration(
                   labelText: 'What would you like to do.',
-                  labelStyle: TextStyle(color: themeProvider.themeData.canvasColor),
+                  labelStyle:
+                      TextStyle(color: themeProvider.themeData.canvasColor),
                   filled: true,
                   fillColor: themeProvider.themeData.shadowColor,
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
+                    borderSide: const BorderSide(color: Colors.transparent),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
+                    borderSide: const BorderSide(color: Colors.transparent),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               TextField(
                 style: TextStyle(color: themeProvider.themeData.canvasColor),
                 controller: widget.descriptionController,
                 decoration: InputDecoration(
                   labelText: 'Description',
-                  labelStyle: TextStyle(color:themeProvider.themeData.canvasColor),
+                  labelStyle:
+                      TextStyle(color: themeProvider.themeData.canvasColor),
                   filled: true,
                   fillColor: themeProvider.themeData.shadowColor,
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
+                    borderSide: const BorderSide(color: Colors.transparent),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
+                    borderSide: const BorderSide(color: Colors.transparent),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
@@ -109,15 +112,19 @@ class _TaskDialogState extends State<TaskDialog> {
                 iconEnabledColor: Colors.blueGrey,
                 borderRadius: BorderRadius.circular(10),
                 value: selectedPriority,
-                
-                items: <String>['Top Priority', 'Necessary', 'Regular', 'Delete',]
-                    .map<DropdownMenuItem<String>>((String value) {
+                items: <String>[
+                  'Top Priority',
+                  'Necessary',
+                  'Regular',
+                  'Delete',
+                ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
-                    
                     value: value,
-                    child: Text(value,style: TextStyle(
-                      color: themeProvider.themeData.canvasColor
-                    ),),
+                    child: Text(
+                      value,
+                      style:
+                          TextStyle(color: themeProvider.themeData.canvasColor),
+                    ),
                   );
                 }).toList(),
                 onChanged: (String? newValue) {
@@ -132,7 +139,10 @@ class _TaskDialogState extends State<TaskDialog> {
                   Text(
                     selectedDateInDialog == null
                         ? "Today"
-                        : "${DateFormat.yMd().format(selectedDateInDialog!)}",style: TextStyle(color: themeProvider.themeData.canvasColor),
+                        // ignore: unnecessary_string_interpolations
+                        : "${DateFormat.yMd().format(selectedDateInDialog!)}",
+                    style:
+                        TextStyle(color: themeProvider.themeData.canvasColor),
                   ),
                   IconButton(
                     onPressed: () async {
@@ -149,10 +159,14 @@ class _TaskDialogState extends State<TaskDialog> {
                         widget.onDateChanged(picked);
                       }
                     },
-                    icon: Icon(Icons.calendar_today,color: themeProvider.themeData.canvasColor,),
+                    icon: Icon(
+                      Icons.calendar_today,
+                      color: themeProvider.themeData.canvasColor,
+                    ),
                   ),
                 ],
               ),
+              // ignore: sized_box_for_whitespace
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -166,7 +180,7 @@ class _TaskDialogState extends State<TaskDialog> {
                     widget.onSave();
                     Navigator.of(context).pop();
                   },
-                  child: Text(
+                  child: const Text(
                     'Save',
                     style: TextStyle(
                       fontSize: 16,

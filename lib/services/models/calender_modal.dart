@@ -16,8 +16,8 @@ class Task extends HiveObject {
   @HiveField(3)
   final DateTime date;
 
-  @HiveField(4) 
-  bool isCompleted; 
+  @HiveField(4)
+  bool isCompleted;
 
   @HiveField(5)
   final String? id;
@@ -30,7 +30,7 @@ class Task extends HiveObject {
     required this.Descrition,
     required this.date,
     required this.priority,
-    this.isCompleted = false, 
+    this.isCompleted = false,
     this.isSelected = false,
     this.id,
   });

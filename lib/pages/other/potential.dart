@@ -5,16 +5,16 @@ import 'package:trackitapp/utils/colors.dart';
 class PotentialScreen extends StatelessWidget {
   final Map<String, double> adjustedRatings;
 
-  const PotentialScreen({required this.adjustedRatings});
+  const PotentialScreen({super.key, required this.adjustedRatings});
 
   @override
   Widget build(BuildContext context) {
     // Get the screen dimensions
-     Size screenSize = MediaQuery.of(context).size;
+    Size screenSize = MediaQuery.of(context).size;
+    // ignore: deprecated_member_use
     double textScaleFactor = MediaQuery.of(context).textScaleFactor;
 
-        int crossAxisCount =
-        screenSize.width > 600 ? 3 : 2;
+    int crossAxisCount = screenSize.width > 600 ? 3 : 2;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -32,32 +32,26 @@ class PotentialScreen extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Fonts',
                 color: AppColors.secondaryColor,
-                fontSize: 26 *
-                    textScaleFactor *
-                    (screenSize.width > 600
-                        ? 1.2
-                        : 1.0),
+                fontSize:
+                    26 * textScaleFactor * (screenSize.width > 600 ? 1.2 : 1.0),
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Text(
               'Based on your answers, this is your potential TrackIt rating, reflecting your possible lifestyle and habits.',
               style: TextStyle(
                 color: Colors.white,
-                fontSize:14 *
-                    textScaleFactor *
-                    (screenSize.width > 600
-                        ? 1.2
-                        : 1.0),
+                fontSize:
+                    14 * textScaleFactor * (screenSize.width > 600 ? 1.2 : 1.0),
               ),
             ),
-            SizedBox(height: 30), 
+            const SizedBox(height: 30),
             Expanded(
               child: GridView.builder(
                 padding: const EdgeInsets.all(8.0),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount, 
+                  crossAxisCount: crossAxisCount,
                   crossAxisSpacing: 10.0,
                   mainAxisSpacing: 10.0,
                   childAspectRatio: 165 / 115,
@@ -141,10 +135,11 @@ class PotentialScreen extends StatelessWidget {
                                   child: Icon(
                                     Icons.gpp_good_rounded,
                                     color: textColor,
-                                    size: 25 * textScaleFactor, // Responsive icon size
+                                    size: 25 *
+                                        textScaleFactor, // Responsive icon size
                                   ),
                                 ),
-                                SizedBox(width: 5),
+                                const SizedBox(width: 5),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 5),
                                   child: Text(
@@ -153,49 +148,44 @@ class PotentialScreen extends StatelessWidget {
                                       color: textColor,
                                       fontSize: 18 *
                                           textScaleFactor *
-                                          (screenSize.width > 600
-                                              ? 1.2
-                                              : 1.0),
+                                          (screenSize.width > 600 ? 1.2 : 1.0),
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             Row(
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(left: 5),
                                   child: Text(
+                                    // ignore: unnecessary_string_interpolations
                                     '${(rating + 40).toStringAsFixed(0)}',
                                     style: TextStyle(
                                       color: textColor,
-                                      fontSize:  27 *
+                                      fontSize: 27 *
                                           textScaleFactor *
-                                          (screenSize.width > 600
-                                              ? 1.2
-                                              : 1.0),
+                                          (screenSize.width > 600 ? 1.2 : 1.0),
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 5),
+                                const SizedBox(width: 5),
                                 Text(
                                   '(+40)',
                                   style: TextStyle(
                                     color: addColor,
-                                    fontSize:  18 *
-                                          textScaleFactor *
-                                          (screenSize.width > 600
-                                              ? 1.2
-                                              : 1.0),
+                                    fontSize: 18 *
+                                        textScaleFactor *
+                                        (screenSize.width > 600 ? 1.2 : 1.0),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
                             ),
-                           const Spacer(),
+                            const Spacer(),
                             Container(
                               height: 10,
                               decoration: BoxDecoration(
@@ -207,7 +197,8 @@ class PotentialScreen extends StatelessWidget {
                                 child: LinearProgressIndicator(
                                   value: (rating + 40) / 100,
                                   backgroundColor: progressBack,
-                                  valueColor: AlwaysStoppedAnimation<Color>(progressColor),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      progressColor),
                                 ),
                               ),
                             ),
@@ -222,7 +213,7 @@ class PotentialScreen extends StatelessWidget {
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                padding: EdgeInsets.only(right: 8, bottom: 100, top: 8),
+                padding: const EdgeInsets.only(right: 8, bottom: 100, top: 8),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
@@ -249,11 +240,9 @@ class PotentialScreen extends StatelessWidget {
                         'View my program',
                         style: TextStyle(
                           color: AppColors.secondaryColor,
-                          fontSize:16 *
+                          fontSize: 16 *
                               textScaleFactor *
-                              (screenSize.width > 600
-                                  ? 1.2
-                                  : 1.0),
+                              (screenSize.width > 600 ? 1.2 : 1.0),
                           fontWeight: FontWeight.w600,
                         ),
                       ),

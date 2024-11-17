@@ -150,7 +150,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   borderRadius: BorderRadius.circular(12.0),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 'Save',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
@@ -182,6 +182,7 @@ class _AppDrawerState extends State<AppDrawer> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // ignore: sized_box_for_whitespace
                   Container(
                     width: 230,
                     child: Text(
@@ -201,28 +202,28 @@ class _AppDrawerState extends State<AppDrawer> {
                       onPressed: () {
                         _showEditDialog();
                       },
-                      icon: Icon(Icons.edit))
+                      icon: const Icon(Icons.edit))
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               GestureDetector(
                 onTap: onPickImage,
                 child: CircleAvatar(
                   radius: 50,
                   backgroundImage: imagePath != null
                       ? MemoryImage(base64Decode(imagePath!))
-                      : AssetImage('assets/images/default.jpg')
+                      : const AssetImage('assets/images/default.jpg')
                           as ImageProvider,
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Icon(
                     Icons.star_rate_rounded,
                     color: themeProvider.themeData.canvasColor,
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   Text(
                     'Theme',
                     style: TextStyle(
@@ -266,17 +267,17 @@ class _AppDrawerState extends State<AppDrawer> {
                   hoverColor: Colors.transparent,
                 ),
               ),
-              SizedBox(height: 70),
+              const SizedBox(height: 70),
               AboutSection(
                 isAboutExpanded: _isAboutExpanded,
                 toggleAboutSection: _toggleAboutSection,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
                   showLogoutDialog(context);
                 },
-                child: Text(
+                child: const Text(
                   'Restart',
                   style: TextStyle(
                     color: Colors.red,

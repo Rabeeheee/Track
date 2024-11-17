@@ -1,10 +1,10 @@
+// ignore: depend_on_referenced_packages
 import 'package:hive/hive.dart';
 
 part 'addhabit_modal.g.dart';
 
 @HiveType(typeId: 1)
 class AddhabitModal extends HiveObject {
-
   @HiveField(0)
   String? name;
 
@@ -18,16 +18,16 @@ class AddhabitModal extends HiveObject {
   String? selectedAvatarPath;
 
   @HiveField(4)
-  String? goalDays; 
+  String? goalDays;
 
   @HiveField(5)
-  String? frequency; 
+  String? frequency;
 
   @HiveField(6)
   String? partOfDay;
 
   @HiveField(7)
-  bool isCompleted = false;  
+  bool isCompleted = false;
 
   @HiveField(8)
   int? id;
@@ -40,18 +40,17 @@ class AddhabitModal extends HiveObject {
 
   AddhabitModal({
     this.goalDays = 'Forever',
-    this.frequency = 'Daily', 
+    this.frequency = 'Daily',
     required this.name,
     this.isCompleted = false,
     required this.id,
     this.partOfDay,
     this.quote,
-    this.selectedAvatarPath, 
-    String? image, 
+    this.selectedAvatarPath,
+    String? image,
     this.description,
     this.notificationId,
     this.completedDate,
-    
   });
 
   void assignId(int id) {

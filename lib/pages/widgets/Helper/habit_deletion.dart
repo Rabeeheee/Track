@@ -63,8 +63,6 @@
 //     habitsToDelete.addAll(handler.otherHabits.where((habit) =>
 //         handler.selectedOtherIndex.contains(handler.otherHabits.indexOf(habit))));
 
-        
-
 //     for (var habit in habitsToDelete) {
 //       await _hiveService.deleteHabit(habit as int);
 //     }

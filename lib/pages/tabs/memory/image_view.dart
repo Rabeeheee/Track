@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 
 class ImageFullScreen extends StatelessWidget {
   final String imagePath;
-  final Function(String) onDelete; 
+  final Function(String) onDelete;
 
-  const ImageFullScreen({super.key, required this.imagePath, required this.onDelete});
+  const ImageFullScreen(
+      {super.key, required this.imagePath, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -21,26 +22,26 @@ class ImageFullScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
-              
               showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: Text('Confirm Deletion'),
-                    content: Text('Are you sure you want to delete this image?'),
+                    title: const Text('Confirm Deletion'),
+                    content:
+                        const Text('Are you sure you want to delete this image?'),
                     actions: [
                       TextButton(
-                        child: Text('Cancel'),
+                        child: const Text('Cancel'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                       ),
                       TextButton(
-                        child: Text('Delete'),
+                        child: const Text('Delete'),
                         onPressed: () {
-                          onDelete(imagePath); 
-                          Navigator.of(context).pop(); 
-                          Navigator.of(context).pop(); 
+                          onDelete(imagePath);
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
                         },
                       ),
                     ],
@@ -52,11 +53,10 @@ class ImageFullScreen extends StatelessWidget {
         ],
       ),
       body: Center(
-  child: Image(
-    image: MemoryImage(base64Decode(imagePath)),
-  ),
-),
-
+        child: Image(
+          image: MemoryImage(base64Decode(imagePath)),
+        ),
+      ),
     );
   }
 }
